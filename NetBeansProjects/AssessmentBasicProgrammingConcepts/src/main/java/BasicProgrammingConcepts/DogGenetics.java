@@ -2,6 +2,9 @@
 Created by: Margaret Donin
 Date created: 04/22/20
 Date revised:
+
+Note:
+If you want to have an "other" category comment out lines 42-52 and uncomment 54-63
 */
 
 package BasicProgrammingConcepts;
@@ -37,15 +40,26 @@ public class DogGenetics{
         int sumOfPercents = 0;
         int percent;
 
-        for (String type : breed){
-            percent = randomNumber.nextInt(97 - sumOfPercents) + 0;
-            sumOfPercents += percent;
-            System.out.println(percent + "% " + type);
+        for (int i = 0; i < breed.length; i++){
+            if (i == breed.length - 1){
+                percent = 100 - sumOfPercents;
+            } else {
+                percent = randomNumber.nextInt(96 - sumOfPercents) + 1;
+                sumOfPercents += percent;
+            }
+            
+            System.out.println(percent + "% " + breed[i]);
         }
         
-        if (sumOfPercents != 100){
-            percent = 100 - sumOfPercents;
-            System.out.println(percent + "% Other");
-        }
+//        for (String type : breed){
+//            percent = randomNumber.nextInt(97 - sumOfPercents) + 0;
+//            sumOfPercents += percent;
+//            System.out.println(percent + "% " + type);
+//        }
+//        
+//        if (sumOfPercents != 100){
+//            percent = 100 - sumOfPercents;
+//            System.out.println(percent + "% Other");
+//        }
     }
 }
