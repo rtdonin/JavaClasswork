@@ -37,15 +37,15 @@ public class DogGenetics{
         int sumOfPercents = 0;
         int percent;
 
-        for (int i = 0; i < breed.length; i++){
-            if (i == breed.length - 1){
-                percent = 100 - sumOfPercents;
-            } else {
-                percent = randomNumber.nextInt(96 - sumOfPercents) + 1;
-                sumOfPercents += percent;
-            }
-            
-            System.out.println(percent + "% " + breed[i]);
+        for (String type : breed){
+            percent = randomNumber.nextInt(97 - sumOfPercents) + 0;
+            sumOfPercents += percent;
+            System.out.println(percent + "% " + type);
+        }
+        
+        if (sumOfPercents != 100){
+            percent = 100 - sumOfPercents;
+            System.out.println(percent + "% Other");
         }
     }
 }

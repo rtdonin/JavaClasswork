@@ -46,7 +46,7 @@ public class RockPaperScissors {
         int computerPlay; // what the computer plays this round
         int roundsTied = 0;
         int roundsUserWon = 0;
-        int roundsComputerWon;
+        int roundsComputerWon = 0;
         boolean keepPlaying;
 
         for(int currentRound = 1; currentRound <= totalRounds; currentRound++){
@@ -71,6 +71,14 @@ public class RockPaperScissors {
             System.out.println("Number of rounds user won: " + roundsUserWon);
             System.out.println("Number of rounds computer won: " + roundsComputerWon);
             System.out.println("Number of rounds tied: " + roundsTied);
+        }
+        
+        if (roundsUserWon > roundsComputerWon){
+            System.out.println("\nCongradulations! You won the game!");
+        } else if (roundsUserWon < roundsComputerWon){
+            System.out.println("\nAww.. The Computer won.");
+        } else {
+            System.out.println("\nIt was a tie!");
         }
 
         keepPlaying = checkPlay(); // are we playing another game?
@@ -111,7 +119,7 @@ public class RockPaperScissors {
         System.out.print("\nWould you like to play again? (y/n) ");
         String playAgain = input.next();
         
-        boolean check = playAgain.equals("y") ? true : false;
+        boolean check = playAgain.equals("y");
         
         return check;
     }
