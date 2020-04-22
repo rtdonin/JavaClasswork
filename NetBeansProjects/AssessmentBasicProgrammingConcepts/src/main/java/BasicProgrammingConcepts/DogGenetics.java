@@ -44,7 +44,7 @@ public class DogGenetics{
             if (i == breed.length - 1){
                 percent = 100 - sumOfPercents;
             } else {
-                percent = randomNumber.nextInt(96 - sumOfPercents) + 1;
+                percent = randomNumber.nextInt(100 - sumOfPercents + 1);
                 sumOfPercents += percent;
             }
             
