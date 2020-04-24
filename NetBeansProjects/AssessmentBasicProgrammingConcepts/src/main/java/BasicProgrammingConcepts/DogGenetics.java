@@ -52,7 +52,7 @@ public class DogGenetics{
         }
         
 //        for (String type : breed){
-//            percent = randomNumber.nextInt(97 - sumOfPercents) + 0;
+//            percent = randomNumber.nextInt(96 - sumOfPercents);
 //            sumOfPercents += percent;
 //            System.out.println(percent + "% " + type);
 //        }

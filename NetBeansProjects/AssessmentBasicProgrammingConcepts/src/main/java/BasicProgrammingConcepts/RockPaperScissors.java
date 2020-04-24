@@ -32,8 +32,8 @@ public class RockPaperScissors {
 
         // When to give us an error
         if (totalRounds < 1 || totalRounds > 10){
-            System.out.println("ERROR!!!!");
-            System.exit(0);
+            throw new IllegalArgumentException("ERROR!!!!"
+                    + "\nUser needs to provide a number from 1 - 10.");
         }
         return totalRounds;
     }
@@ -101,8 +101,7 @@ public class RockPaperScissors {
                 roundResult = (comp == 1) ? "You Lost." : "You won!";
                 break;
             default:
-                System.out.println("\nError! That was not an option.");
-                System.exit(0);
+                throw new IllegalArgumentException("\nError! That was not an option.");
         }
 
         // not included in switch result for readability

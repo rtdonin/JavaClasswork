@@ -1,17 +1,19 @@
 /*
 Created by: Margaret Donin
 Date created: 04/17/20
-Date revised:
+Date revised: 04/23/20
 */
 
 package WhilesAndDos;
 
+import java.util.Random;
 import java.util.Scanner;
 
 public class GuessMeFinally{
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        int myNumber = 14;
+        Random randomNumber = new Random();
+        int myNumber = randomNumber.nextInt(200) - 100;
         int guessedNumber;
         
         System.out.println("I've chosen a number. Betcha can't guess it!");
