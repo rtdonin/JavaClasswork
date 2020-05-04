@@ -1,55 +1,69 @@
 /*
 Created by: Margaret Donin
 Date created: 04/21/20
-Date revised:
+Date revised: 04/28/20
 */
 
-package BasicProgrammingConcepts;
+package RockPaperScissors;
 
 import java.util.Random;
 import java.util.Scanner;
 
 public class RockPaperScissors {
+    Scanner input = new Scanner(System.in);
+    private boolean areWePlaying = true;
+    private int totalRounds;
+    private int userPlay; // what the user plays this round
+    private int computerPlay; // what the computer plays this round
+    private int roundsTied;
+    private int roundsUserWon;
+    private int roundsComputerWon;
 
-    public static void main(String[] args) {
-
-        boolean areWePlaying = true;
-        int totalRounds;
-
+    //the entire operation.
+    public void game(){
         // unless we change areWePlaying to false, we keep playing.
-        while (areWePlaying){
-            totalRounds = startGame();
-            areWePlaying = playGame(totalRounds);
-            // plays game and then checks if
+        // basically plays game and then checks if we keep going
+        while (areWePlaying) {
+            setTotalRound();
+            playGame();
+            setAreWePlaying();
         }
+        // end of game!
         System.out.println("\nThank you for playing!");
     }
-    
-    public static int startGame(){
-        Scanner input = new Scanner(System.in);
-        System.out.print("How many rounds would you like to play? ");
-        int totalRounds = input.nextInt();
 
-        // When to give us an error
-        if (totalRounds < 1 || totalRounds > 10){
-            throw new IllegalArgumentException("ERROR!!!!"
-                    + "\nUser needs to provide a number from 1 - 10.");
-        }
-        return totalRounds;
+    public void setAreWePlaying() {
+        System.out.print("\nWould you like to play again? (y/n) ");
+        String playAgain = input.next();
+        
+        this.areWePlaying = playAgain.equals("y");
+    }
+
+    public boolean getAreWePlaying() {
+        return areWePlaying;
     }
     
-    public static boolean playGame(int totalRounds){
-        Scanner input = new Scanner(System.in);
-        Random randomValue = new Random();
+    public void setTotalRound(){
+        System.out.print("How many rounds would you like to play? ");
+        this.totalRounds = input.nextInt();
+        // When to give us an error
+        if (totalRounds < 1 || totalRounds > 10){
+            throw new IllegalArgumentException("ERROR!!!!\nUser needs to provide a number from 1 - 10.");
+        }
+    }
 
-        int userPlay; // what the user plays this round
-        int computerPlay; // what the computer plays this round
-        int roundsTied = 0;
-        int roundsUserWon = 0;
-        int roundsComputerWon = 0;
-        boolean keepPlaying;
+    public int getTotalRound() {
+        return this.totalRounds;
+    }
+    
+    public void playGame(){
+        Random randomValue = new Random();
+        roundsTied = 0;
+        roundsUserWon = 0;
+        roundsComputerWon = 0;
 
         for(int currentRound = 1; currentRound <= totalRounds; currentRound++){
+            
             System.out.println("\nChoose: (1) Rock, (2) Paper, or (3) Scissors");
             userPlay = input.nextInt();
 
@@ -61,7 +75,7 @@ public class RockPaperScissors {
                 roundsTied++;
                 System.out.println("Round was a tie!");
             } else {
-                roundsUserWon = whoWon(userPlay, computerPlay, roundsUserWon);
+                whoWon();
             }
 
             roundsComputerWon = currentRound - roundsUserWon - roundsTied;
@@ -81,24 +95,21 @@ public class RockPaperScissors {
             System.out.println("\nIt was a tie!");
         }
 
-        keepPlaying = checkPlay(); // are we playing another game?
-        
-        return keepPlaying;
     }
 
-    public static int whoWon(int user, int comp, int userWon){
+    public void whoWon(){
         String roundResult = "";
 
         // 1. rock 2. paper 3. scissors
-        switch(user){
+        switch(userPlay){
             case 1:
-                roundResult = (comp == 2) ? "You Lost." : "You won!";
+                roundResult = (computerPlay == 2) ? "You Lost." : "You won!";
                 break;
             case 2:
-                roundResult = (comp == 3) ? "You Lost." : "You won!";
+                roundResult = (computerPlay == 3) ? "You Lost." : "You won!";
                 break;
             case 3:
-                roundResult = (comp == 1) ? "You Lost." : "You won!";
+                roundResult = (computerPlay == 1) ? "You Lost." : "You won!";
                 break;
             default:
                 throw new IllegalArgumentException("\nError! That was not an option.");
@@ -106,20 +117,9 @@ public class RockPaperScissors {
 
         // not included in switch result for readability
         if (roundResult.equals("You won!")){
-             userWon++;
+            roundsUserWon++;
         }
 
         System.out.println(roundResult);
-        return userWon;
-    }
-
-    public static boolean checkPlay(){
-        Scanner input = new Scanner(System.in);
-        System.out.print("\nWould you like to play again? (y/n) ");
-        String playAgain = input.next();
-        
-        boolean check = playAgain.equals("y");
-        
-        return check;
     }
 }

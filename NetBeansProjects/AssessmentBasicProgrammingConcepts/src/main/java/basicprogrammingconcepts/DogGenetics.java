@@ -7,7 +7,7 @@ Note:
 If you want to have an "other" category comment out lines 42-52 and uncomment 54-63
 */
 
-package BasicProgrammingConcepts;
+package basicprogrammingconcepts;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -52,7 +52,7 @@ public class DogGenetics{
         }
         
 //        for (String type : breed){
-//            percent = randomNumber.nextInt(96 - sumOfPercents);
+//            percent = randomNumber.nextInt(100 - sumOfPercents + 1);
 //            sumOfPercents += percent;
 //            System.out.println(percent + "% " + type);
 //        }

@@ -9,7 +9,7 @@ Date revised:
 // Your maximum heart rate should be 170 beats per minute
 // Your target HR Zone is 85 - 145 beats per minute
 */
-package BasicProgrammingConcepts;
+package basicprogrammingconcepts;
 
 import java.util.Scanner;
 
@@ -28,7 +28,10 @@ public class HealthyHearts{
         minTargetHR = Math.round((float) (0.50 * maxHR)); // gives us 50% of max
         maxTargetHR = Math.round((float) (0.85 * maxHR)); // gives us 85% of max
         
-        System.out.println("Your maximum heart rate should be " + maxHR + " beats per minute");
-        System.out.println("Your target HR Zone is " + minTargetHR + " - " + maxTargetHR + " beats per minute");
+        System.out.println("Your maximum heart rate should be " + maxHR
+                + " beats per minute");
+        
+        System.out.println("Your target HR Zone is " + minTargetHR + " - "
+                + maxTargetHR + " beats per minute");
     }
 }

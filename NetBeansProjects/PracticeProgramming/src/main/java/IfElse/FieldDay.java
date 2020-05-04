@@ -28,14 +28,19 @@ public class FieldDay{
         
         if (lastName.compareTo("BAGGINS") < 0){
             teamName = "Red Dragon";
+
         } else if (lastName.compareTo("BAGGINS") >= 0 && lastName.compareTo("DRESDEN") < 0){
             teamName = "Dark Wizard";
+
         } else if (lastName.compareTo("DRESDEN") >= 0 && lastName.compareTo("HOWL") < 0){
             teamName = "Moving Castle";
+
         } else if (lastName.compareTo("HOWL") >= 0 && lastName.compareTo("POTTER") < 0){
             teamName = "Golden Snitches";
+
         } else if (lastName.compareTo("POTTER") >= 0 && lastName.compareTo("VIMES") < 0){
             teamName = "Night Guards";
+            
         } else{
             teamName = "Black Holes";
         }

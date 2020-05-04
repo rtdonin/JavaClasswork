@@ -20,11 +20,10 @@ public class HiddenNuts {
         // Nut finding code should go here!
         int locOfNut = -1;
 
-        while (locOfNut == -1){
-            for (int i = 0; i < hidingSpots.length; i++){ 
-                if (hidingSpots[i] != null){
-                    locOfNut = i;
-                }
+        for (int i = 0; i < hidingSpots.length; i++){ 
+            if ("Nut".equals(hidingSpots[i])){
+                locOfNut = i;
+                break;
             }
         }
         
