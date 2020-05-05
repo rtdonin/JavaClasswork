@@ -7,12 +7,12 @@ Date revised:
 */
 
 public class Rectangle extends Shape{
-    private int length;
-    private int width;
-    private int perimeter;
-    private int area;
+    private double length;
+    private double width;
+    private double perimeter;
+    private double area;
 
-    public Square(int length, int width) {
+    public Rectangle(double length, double width) {
         this.length = length;
         this.width = width;
     }
@@ -22,7 +22,7 @@ public class Rectangle extends Shape{
     }
     
     @Override
-    public int getPerimeter() {
+    public double getPerimeter() {
         return perimeter;
     }
 
@@ -31,7 +31,7 @@ public class Rectangle extends Shape{
     }
 
     @Override
-    public int getArea() {
+    public double getArea() {
         return area;
     }
 }

@@ -7,11 +7,11 @@ Date revised:
 */
 
 public class Circle extends Shape{
-    private int diameter;
+    private double diameter;
     private double perimeter;
     private double area;
 
-    public Circle(int diameter) {
+    public Circle(double diameter) {
         this.diameter = diameter;
     }
     

@@ -4,7 +4,7 @@ Date created: 05/04/20
 Date revised:
  */
 
-package rtdonin.userioclasslab;
+package M2.ListsAndMaps.UserIOClassLab;
 
 public interface UserIO {
     void print(String message);

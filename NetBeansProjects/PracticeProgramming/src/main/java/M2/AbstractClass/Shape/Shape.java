@@ -9,8 +9,8 @@ Date revised:
 public abstract class Shape {
     public String color;
 
-    public abstract int getPerimeter();
-    public abstract int getArea();
+    abstract double getPerimeter();
+    abstract double getArea();
     
 }
 

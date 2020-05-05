@@ -7,11 +7,11 @@ Date revised:
 */
 
 public class Square extends Shape{
-    private int side;
-    private int perimeter;
-    private int area;
+    private double side;
+    private double perimeter;
+    private double area;
 
-    public Square(int side) {
+    public Square(double side) {
         this.side = side;
     }
     
@@ -20,7 +20,7 @@ public class Square extends Shape{
     }
     
     @Override
-    protected int getPerimeter() {
+    protected double getPerimeter() {
         return perimeter;
     }
 
@@ -29,7 +29,7 @@ public class Square extends Shape{
     }
 
     @Override
-    protected int getArea() {
+    protected double getArea() {
         return area;
     }
 }

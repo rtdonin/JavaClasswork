@@ -7,13 +7,13 @@ Date revised:
 */
 
 public class Triangle extends Shape{
-    private int sideA;
-    private int sideB;
-    private int angleC;
+    private double sideA;
+    private double sideB;
+    private double angleC;
     private double perimeter;
     private double area;
 
-    public Triangle(int sideA, int sideB, int angleC) {
+    public Triangle(double sideA, double sideB, double angleC) {
         this.sideA = sideA;
         this.sideB = sideB;
         this.angleC = angleC;
@@ -21,8 +21,7 @@ public class Triangle extends Shape{
     
     // Law of Cosine was used.
     protected void setPerimeter() {
-        this.perimeter = sideA + sideB + Math.sqrt(Math.pow(sideA, 2) + Math.pow(sideB, 2) - 2 * sideA * sideB * Math.cos(angleC)
-        );
+        this.perimeter = sideA + sideB + Math.sqrt(Math.pow(sideA, 2) + Math.pow(sideB, 2) - 2 * sideA * sideB * Math.cos(angleC));
     }
     
     @Override

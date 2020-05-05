@@ -4,7 +4,7 @@ Date created: 05/04/20
 Date revised:
  */
 
-package rtdonin.userioclasslab;
+package M2.ListsAndMaps.UserIOClassLab;
 
 import static java.lang.Double.parseDouble;
 import static java.lang.Float.parseFloat;
@@ -44,7 +44,7 @@ public class UserIOImpl implements UserIO{
         do{
             input = readInt(prompt);
             
-            if(input > min && input < max) {
+            if(input >= min && input <= max) {
                 inRange = true;
             }
         } while (!inRange);
@@ -68,7 +68,7 @@ public class UserIOImpl implements UserIO{
         do{
             input = readInt(prompt);
             
-            if(input > min && input < max) {
+            if(input >= min && input <= max) {
                 inRange = true;
             }
         } while (!inRange);
@@ -92,7 +92,7 @@ public class UserIOImpl implements UserIO{
         do{
             input = readInt(prompt);
             
-            if(input > min && input < max) {
+            if(input >= min && input <= max) {
                 inRange = true;
             }
         } while (!inRange);
@@ -116,7 +116,7 @@ public class UserIOImpl implements UserIO{
         do{
             input = readInt(prompt);
             
-            if(input > min && input < max) {
+            if(input >= min && input <= max) {
                 inRange = true;
             }
         } while (!inRange);
