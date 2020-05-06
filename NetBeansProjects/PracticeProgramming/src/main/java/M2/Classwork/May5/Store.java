@@ -4,16 +4,19 @@
 
 package M2.Classwork.May5;
 
-import java.util.HashMap;
-import java.util.Map;
+//import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-public class Store implements StoreInterface{
-    Scanner input = new Scanner(System.in);
+public class Store implements StoreInterface {
+    public Scanner input = new Scanner(System.in);
     public String name;
     public String shopkeeper;
     public int capacity;
-    public Map<String, String, Double> items = new HashMap<>();
+    //Map<String, Double, Integer> inventory = new HashMap<>();
+    
+    List<Item> inventory= new ArrayList<>();
     
     @Override
     public void sell(){
@@ -51,12 +54,12 @@ public class Store implements StoreInterface{
         return capacity;
     }
 
-    public void setItems(String object, String detail, double price){
-        this.items.put(object, detail, price);
+    public void setInventory(String name, Double price, Integer quantity){
+        this.inventory.add(new Item(name, price, quantity));
     }
     
-    public Double getItem(String key){
-        return items.get(key);
+    public Item getInventory(int i){
+        return inventory.get(i);
     }
     
     

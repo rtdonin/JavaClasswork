@@ -7,12 +7,12 @@ package M2.Classwork.May5;
 public class InventoryMapper{
     private static final String DELIMITER = "::";
     
-    public static String marshallInventory(Inventory item){
+    public static String marshallInventory(Item item){
         String itemString = "";
         
-        itemString += item.name + DELIMITER;
-        itemString += item.detail + DELIMITER;
-        itemString += Double.toString(item.getPrice());
+        itemString += item.getName() + DELIMITER;
+        itemString += Double.toString(item.getPrice()) + DELIMITER;
+        itemString += Integer.toString(item.getQuantity());
         
         return itemString;
     }
