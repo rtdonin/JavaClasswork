@@ -4,6 +4,8 @@
 
 package M2.Classwork.May5;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Store implements StoreInterface{
@@ -11,7 +13,7 @@ public class Store implements StoreInterface{
     public String name;
     public String shopkeeper;
     public int capacity;
-    public Inventory items[];
+    public Map<String, String, Double> items = new HashMap<>();
     
     @Override
     public void sell(){
@@ -49,15 +51,13 @@ public class Store implements StoreInterface{
         return capacity;
     }
 
-    public Inventory[] getItems() {
-        return items;
-    }
-
-    public void setItems(Inventory[] items) {
-        this.items = items;
+    public void setItems(String object, String detail, double price){
+        this.items.put(object, detail, price);
     }
     
-    
+    public Double getItem(String key){
+        return items.get(key);
+    }
     
     
 }
