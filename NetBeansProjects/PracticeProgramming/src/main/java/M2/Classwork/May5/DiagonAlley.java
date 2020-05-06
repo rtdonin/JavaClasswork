@@ -22,14 +22,13 @@ public class DiagonAlley{
 //        olivanders.findWand();
 //        olivanders.sell();
 //        olivanders.exit();
-
+        //Open a file
         for (int i = 0; i < olivanders.getWandInventory().size(); i++){
             System.out.println(WandStore.marshallWands(olivanders.getWand(i)));
         }
 //        flourishAndBlottsBookseller.enter();
 //        flourishAndBlottsBookseller.sell();
 //        flourishAndBlottsBookseller.exit();
-       int x = 2;
        
     }
 }
