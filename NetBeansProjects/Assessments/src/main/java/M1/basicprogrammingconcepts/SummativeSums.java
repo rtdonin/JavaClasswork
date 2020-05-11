@@ -13,7 +13,7 @@ Expected output:
 
 */
 
-package basicprogrammingconcepts;
+package M1.basicprogrammingconcepts;
 
 public class SummativeSums{
     public static void main(String[] args) {

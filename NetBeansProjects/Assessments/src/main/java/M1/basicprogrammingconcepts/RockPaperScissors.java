@@ -4,7 +4,7 @@ Date created: 04/21/20
 Date revised:
 */
 
-package basicprogrammingconcepts;
+package M1.basicprogrammingconcepts;
 
 import java.util.Random;
 import java.util.Scanner;

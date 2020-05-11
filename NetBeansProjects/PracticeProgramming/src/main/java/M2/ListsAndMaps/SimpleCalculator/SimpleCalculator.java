@@ -1,27 +1,28 @@
 /*
 Created by: Margaret Donin
 Date created: 04/28/20
-Date revised: 04/29/20
+Date revised: 05/07/20
 */
 
 package M2.ListsAndMaps.SimpleCalculator;
 import M2.ListsAndMaps.UserIOClassLab.UserIOImpl;
 
 public class SimpleCalculator{
+    UserIOImpl userIO = new UserIOImpl();
     private int numberOne;
     private int numberTwo;
     private int operation;
 
     public void setNumberOne(String numberOne){
-        this.numberOne = UserIOImpl.readInt(numberOne);
+        this.numberOne = userIO.readInt(numberOne);
     }
 
     public void setNumberTwo(String numberTwo) {
-        this.numberTwo = UserIOImpl.readInt(numberTwo);
+        this.numberTwo = userIO.readInt(numberTwo);
     }
     
     public void setOperation(String operation){
-        this.operation = UserIOImpl.readInt(operation, 1, 5);
+        this.operation = userIO.readInt(operation, 1, 5);
 
         if (this.operation == 5){
                 System.out.println("Thank you!");

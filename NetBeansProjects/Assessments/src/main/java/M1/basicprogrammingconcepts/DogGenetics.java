@@ -7,7 +7,7 @@ Note:
 If you want to have an "other" category comment out lines 42-52 and uncomment 54-63
 */
 
-package basicprogrammingconcepts;
+package M1.basicprogrammingconcepts;
 
 import java.util.Random;
 import java.util.Scanner;

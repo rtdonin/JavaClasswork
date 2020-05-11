@@ -9,7 +9,7 @@ Date revised:
 // Your maximum heart rate should be 170 beats per minute
 // Your target HR Zone is 85 - 145 beats per minute
 */
-package basicprogrammingconcepts;
+package M1.basicprogrammingconcepts;
 
 import java.util.Scanner;
 
