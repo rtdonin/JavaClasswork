@@ -39,6 +39,7 @@ public interface ClassRosterDao {
     @param studentId ID of the student to retrieve
     @return the Student object associated with the given student id,  
     null if no such student exists
+    @throws ClassRosterDaoException
     */
     Student getStudent(String studentId) throws ClassRosterDaoException;
 

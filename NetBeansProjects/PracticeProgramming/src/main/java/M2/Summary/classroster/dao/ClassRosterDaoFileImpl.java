@@ -53,7 +53,7 @@ public class ClassRosterDaoFileImpl implements ClassRosterDao {
     }
     
     private Student unmarshallStudent(String studentAsText) {
-        // splits strings into an assary of strings split at delimiter
+        // splits strings into an arrary of strings split at delimiter
         String[] studentTokens = studentAsText.split(DELIMITER);
         // first it the ID, next the first name, then last name and finally the cohort
         String studentId = studentTokens[0];
@@ -94,7 +94,6 @@ public class ClassRosterDaoFileImpl implements ClassRosterDao {
         
         return studentAsText;
     }
-    
     
     /*
     Writes all students in the roster out to a ROSTER_FILE.  See loadRoster for file format.
