@@ -24,7 +24,7 @@ public class DVDLibraryController {
         this.view = view;
     }
 
-    public void run() {
+    public void run() throws DVDLibraryDaoException {
         boolean keepGoing = true;
         int menuSelection = 0;
         
@@ -91,38 +91,48 @@ public class DVDLibraryController {
         DVD dvdToEdit = dao.getDVD(dvdTitleToEdit);
         view.displayDVD(dvdToEdit, false);
         
-        int menuSelection = view.printEditMenuAndGetSelection();
-        String edit;
-        
-        switch(menuSelection) {
-            case 1:
-                // Special case. The title is the key
-                // we remove the key from the Map and create a new key and value
-                edit = view.getDVDEdit("title");
-                dao.removeDVD(dvdTitleToEdit);
-                dao.editTitle(dvdToEdit, edit);
-                dvdToEdit = dao.getDVD(edit);
-                break;
-            case 2:
-                edit = view.getDVDEdit("release date");
-                dao.editReleaseDate(dvdToEdit, edit);
-                break;
-            case 3:
-                edit = view.getDVDEdit("MPAA Rating");
-                dao.editMPAARating(dvdToEdit, edit);
-                break;
-            case 4:
-                edit = view.getDVDEdit("studio");
-                dao.editStudio(dvdToEdit, edit);
-                break;
-            case 5:
-                edit = view.getDVDEdit("user rating");
-                dao.editUserRating(dvdToEdit, edit);
-                break;
-            default: unknownCommand();
+        if (dvdToEdit != null) {
+            int menuSelection = view.printEditMenuAndGetSelection();
+            String edit;
+            
+            try {
+                switch(menuSelection) {
+                    case 1:
+                        // Special case. The title is the key
+                        // we remove the key from the Map and create a new key and value
+                        edit = view.getDVDEdit("title");
+                        dao.removeDVD(dvdTitleToEdit);
+                        dao.editTitle(dvdToEdit, edit);
+                        dvdToEdit = dao.getDVD(edit);
+                        break;
+                    case 2:
+                        edit = view.getDVDEdit("release date");
+                        dao.editReleaseDate(dvdToEdit, edit);
+                        break;
+                    case 3:
+                        edit = view.getDVDEdit("MPAA Rating");
+                        dao.editMPAARating(dvdToEdit, edit);
+                        break;
+                    case 4:
+                        edit = view.getDVDEdit("studio");
+                        dao.editStudio(dvdToEdit, edit);
+                        break;
+                    case 5:
+                        edit = view.getDVDEdit("user rating");
+                        dao.editUserRating(dvdToEdit, edit);
+                        break;
+                    default: unknownCommand();
+                }
+                
+                view.displayEditSuccessBanner();
+                view.displayDVD(dvdToEdit, false);
+                
+            } catch (DVDLibraryDaoException e) {
+                throw new DVDLibraryDaoException("Could not make edit.", e);
+            }
+        } else {
+            view.createPause();
         }
-        view.displayDVD(dvdToEdit, false);
-        view.displayEditSuccessBanner(); 
     }
     
     private void unknownCommand() {

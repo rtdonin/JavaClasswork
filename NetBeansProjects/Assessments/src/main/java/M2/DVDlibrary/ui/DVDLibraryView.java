@@ -1,8 +1,8 @@
 /*
 Created by: Margaret Donin
-Date created: 
+Date created: 05/11/20
 Date revised:
- */
+*/
 
 package M2.DVDlibrary.ui;
 
@@ -86,7 +86,7 @@ public class DVDLibraryView {
             io.print("Notes: " + dvd.getUserRating());
             io.print("");
         } else {
-            io.print("No such DVD.");
+            io.print("No such DVD. ");
         }
         
         if (prompt){
@@ -143,4 +143,7 @@ public class DVDLibraryView {
         io.print(errorMsg);
     }
     
+    public void createPause() {
+        io.readString("Please hit enter to continue");
+    }
 }
