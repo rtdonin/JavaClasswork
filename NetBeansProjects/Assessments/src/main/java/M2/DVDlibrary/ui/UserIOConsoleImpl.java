@@ -12,7 +12,7 @@ import static java.lang.Integer.parseInt;
 import static java.lang.Long.parseLong;
 import java.util.Scanner;
 
-public class UserIOConsoleImpl implements UserIO{
+public class UserIOConsoleImpl implements UserIO {
     Scanner scanInput = new Scanner(System.in);
 
     @Override
@@ -29,15 +29,21 @@ public class UserIOConsoleImpl implements UserIO{
     }
 
     @Override
-    public int readInt(String prompt) {
-        print(prompt);
-        int input = parseInt(scanInput.nextLine());
+    public int readInt(String prompt) throws NumberFormatException {
+        int input = 0;
+        
+        try {
+            print(prompt);
+            input = parseInt(scanInput.nextLine());
+        } catch(NumberFormatException ex) {
+            print("\nCould not parse interger.");
+        }
         
         return input;
     }
 
     @Override
-    public int readInt(String prompt, int min, int max) {
+    public int readInt(String prompt, int min, int max) throws NumberFormatException {
         boolean inRange = false;
         int input;
         
@@ -53,15 +59,21 @@ public class UserIOConsoleImpl implements UserIO{
     }
 
     @Override
-    public double readDouble(String prompt) {
-        print(prompt);
-        double input = parseDouble(scanInput.nextLine());
+    public double readDouble(String prompt) throws NumberFormatException {
+        double input = 0;
+        
+        try {
+            print(prompt);
+            input = parseDouble(scanInput.nextLine());
+        } catch(NumberFormatException ex) {
+            print("\nCould not parse double.");
+        }
         
         return input;
     }
 
     @Override
-    public double readDouble(String prompt, double min, double max) {
+    public double readDouble(String prompt, double min, double max) throws NumberFormatException {
         boolean inRange = false;
         double input;
         
@@ -77,15 +89,21 @@ public class UserIOConsoleImpl implements UserIO{
     }
 
     @Override
-    public float readFloat(String prompt) {
-        print(prompt);
-        float input = parseFloat(scanInput.nextLine());
+    public float readFloat(String prompt) throws NumberFormatException {
+        float input = 0;
+        
+        try {
+            print(prompt);
+            input = parseFloat(scanInput.nextLine());
+        } catch(NumberFormatException ex) {
+            print("\nCould not parse float.");
+        }
         
         return input;
     }
 
     @Override
-    public float readFloat(String prompt, float min, float max) {
+    public float readFloat(String prompt, float min, float max) throws NumberFormatException {
         boolean inRange = false;
         float input;
         
@@ -101,15 +119,21 @@ public class UserIOConsoleImpl implements UserIO{
     }
 
     @Override
-    public long readLong(String prompt) {
-        print(prompt);
-        long input = parseLong(scanInput.nextLine());
+    public long readLong(String prompt) throws NumberFormatException {
+        long input = 0;
+        
+        try {
+            print(prompt);
+            input = parseLong(scanInput.nextLine());
+        } catch(NumberFormatException ex) {
+            print("\nCould not parse long.");
+        }
         
         return input;
     }
 
     @Override
-    public long readLong(String prompt, long min, long max) {
+    public long readLong(String prompt, long min, long max) throws NumberFormatException {
         boolean inRange = false;
         long input;
         
