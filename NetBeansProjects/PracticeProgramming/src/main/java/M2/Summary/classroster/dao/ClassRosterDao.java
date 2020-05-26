@@ -22,7 +22,7 @@ public interface ClassRosterDao {
     student id if it exists, null otherwise
     @throws ClassRosterDaoException
     */
-    Student addStudent(String studentId, Student student) throws ClassRosterDaoException;
+    Student addStudent(String studentId, Student student) throws ClassRosterPersistenceException;
 
     /*
     Returns a List of all Students on the roster. 
@@ -30,7 +30,7 @@ public interface ClassRosterDao {
     @return Student List containing all students on the roster.
     @throws ClassRosterDaoException
     */
-    List<Student> getAllStudents() throws ClassRosterDaoException;
+    List<Student> getAllStudents() throws ClassRosterPersistenceException;
 
     /*
     Returns the student object associated with the given student id.
@@ -41,7 +41,7 @@ public interface ClassRosterDao {
     null if no such student exists
     @throws ClassRosterDaoException
     */
-    Student getStudent(String studentId) throws ClassRosterDaoException;
+    Student getStudent(String studentId) throws ClassRosterPersistenceException;
 
     /*
     Removes from the roster the student associated with the given id. 
@@ -53,6 +53,6 @@ public interface ClassRosterDao {
     was associated with the given student id
     @throws ClassRosterDaoException
     */
-    Student removeStudent(String studentId) throws ClassRosterDaoException;
+    Student removeStudent(String studentId) throws ClassRosterPersistenceException;
     
 }
