@@ -98,7 +98,7 @@ public class ClassRosterDaoFileImpl implements ClassRosterDao {
     /*
     Writes all students in the roster out to a ROSTER_FILE.  See loadRoster for file format.
      
-    @throws ClassRosterDaoException if an error occurs writing to the file
+    @throws ClassRosterPersistenceException if an error occurs writing to the file
     */
     private void writeRoster() throws ClassRosterPersistenceException {
         PrintWriter out;

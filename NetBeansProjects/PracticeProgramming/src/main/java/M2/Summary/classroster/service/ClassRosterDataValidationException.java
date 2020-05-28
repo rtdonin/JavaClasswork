@@ -11,7 +11,7 @@ of code so I branched this off to work on M3.
 
 package M2.Summary.classroster.service;
 
-class ClassRosterDataValidationException extends Exception {
+public class ClassRosterDataValidationException extends Exception {
 
     public ClassRosterDataValidationException(String message) {
         super(message);

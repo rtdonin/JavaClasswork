@@ -1,0 +1,84 @@
+@startuml
+
+title Create a Student
+actor View
+View -> Controller
+Controller -> View : displayCreateStudentBanner()
+View --> Constroller : void
+Controller -> View : getNewStudentsInfo()
+View --> Controller : Student
+Controller -> Service : createStudent()
+Service -> Service : validates Student
+
+Service -> Dao : createStudent()
+Dao --> Service : void
+Service -> AuditDao : writeAuditEntry()
+AuditDao --> Service :  void
+Service --> Controller : void
+Controller -> View: displayCreateSuccessBanner()
+
+@enduml
+
+
+@startuml
+
+title List Student
+View -> Controller
+
+Controller -> View : displayDisplayAllBanner()
+View --> Controller : void
+Controller -> Service : getAllStudents()
+Service -> Dao : getAllStudents()
+Dao --> Service : List<Student>
+Service --> Controller : List<Student>
+Controller -> View : displayStudentList
+
+@enduml
+
+@startuml
+
+title List Student
+View -> Controller
+
+Controller -> View : displayDisplayStudentBanner()
+View --> Controller : void
+Controller -> View : getStudentIdChoice()
+View --> Controller : String
+Controller -> Service : getStudent
+Service -> Dao : getStudent()
+Dao --> Service : Student
+Service --> Controller : Student
+Controller --> View : Student
+
+@enduml
+
+@startuml
+
+title Remove Student
+
+View -> Controller
+Controller -> View : displayStudentBanner()
+View --> Controller : void
+Controller -> View : getStudentIdChoice()
+View --> Controller : String
+Controller -> Service : removeStudent()
+Service -> Dao : removeStudent()
+Dao --> Service : Student
+Service -> AuditDao : writeAuditEntry()
+AuditDao --> Service : void
+Service --> Controller : Student
+Controller -> View : displayRemoveResult()
+View --> Controller : void
+
+@enduml
+
+@startuml
+
+title Get Menu Selection
+
+View -> Controller
+Controller -> View : printMenuAndGetSelection()
+View --> Controller : int
+
+@enduml
+

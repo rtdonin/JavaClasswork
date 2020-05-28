@@ -7,6 +7,7 @@ Date revised: 05/26/20 For M3
 package M2.Summary.classroster.controller;
 import M2.Summary.classroster.dao.ClassRosterPersistenceException;
 import M2.Summary.classroster.dto.Student;
+import M2.Summary.classroster.service.ClassRosterDataValidationException;
 import M2.Summary.classroster.service.ClassRosterDuplicateIdException;
 import M2.Summary.classroster.ui.ClassRosterView;
 import M2.Summary.classroster.ui.UserIO;
@@ -70,7 +71,7 @@ public class ClassRosterController {
                 hasErrors = true;
                 view.displayErrorMessage(e.getMessage());
             }
-        } while(hasErrors);
+        } while (hasErrors);
     }
     
     private void listStudents() throws ClassRosterPersistenceException {
@@ -80,6 +81,7 @@ public class ClassRosterController {
     }
     
     private void viewStudent() throws ClassRosterPersistenceException {
+        //FIX THIS LATER
         view.displayDisplayAllBanner();
         String studentId = view.getStudentIdChoice();
         Student student = service.getStudent(studentId);

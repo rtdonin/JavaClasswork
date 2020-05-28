@@ -11,7 +11,7 @@ of code so I branched this off to work on M3.
 
 package M2.Summary.classroster.service;
 
-class ClassRosterDuplicateIdException extends Exception {
+public class ClassRosterDuplicateIdException extends Exception {
 
     public ClassRosterDuplicateIdException(String message) {
         super(message);
