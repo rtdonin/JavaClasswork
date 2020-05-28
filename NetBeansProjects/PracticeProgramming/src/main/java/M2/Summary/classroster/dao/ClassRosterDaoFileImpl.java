@@ -1,7 +1,7 @@
 /*
 Created by: Margaret Donin
 Date created: 05/10/20
-Date revised:
+Date revised: 05/28/20 for M3
 */
 
 package M2.Summary.classroster.dao;
@@ -21,8 +21,16 @@ import java.util.Scanner;
 
 public class ClassRosterDaoFileImpl implements ClassRosterDao {
     private Map<String, Student> students = new HashMap<>();
-    public static final String ROSTER_FILE = "roster.txt";
+    public final String ROSTER_FILE;
     public static final String DELIMITER = "::";
+    
+    public ClassRosterDaoFileImpl() {
+        ROSTER_FILE = "roster.txt";
+    }
+    
+    public ClassRosterDaoFileImpl(String rosterTextFile) {
+        ROSTER_FILE = rosterTextFile;
+    }
 
     @Override
     public Student addStudent(String studentId, Student student) throws ClassRosterPersistenceException {

@@ -28,7 +28,7 @@ public class ArrayExerciseDTest {
         int result = pointFree(arr);
         
         // ASSERT
-        assertEquals(expResult, result, "We expected " + expResult + " you got " + result);
+        assertEquals(expResult, result);
     }
     
     @Test
@@ -37,7 +37,7 @@ public class ArrayExerciseDTest {
         double[] arr = {.039, 20, .005005};
         int expResult = 5005;
         
-        // ACT - 
+        // ACT
         int result = pointFree(arr);
         
         // ASSERT

@@ -5,30 +5,38 @@
 package unittesting.arrays;
 
 import static java.lang.Double.parseDouble;
-import java.util.Arrays;
 
-/**
- *
- * @author ahill
- */
 public class ArrayExerciseD {
-    
+    public static void main(String[] args) {
+        double[] arr = {.039, 20, .005005};
+        
+        System.out.println(pointFree(arr));
+    }
     /*
     * Given an array of doubles, return the biggest number of the lot, as if the decimal had gone missing!
     *
     * pointFree( [1.1, .22]  ) ->  22
-    * pointFree( [ .039, 20, .005005 ]  ) ->  5005
+    * pointFree( [.039, 20, .005005]  ) ->  5005
     * pointFree( [ -9.9, -700, -.5  ]  ) ->  -5
     * 
     * @param numbers
     * @return int
     */
-    public static int pointFree(double[] numbers){
+    
+    public static int pointFree(double[] numbers) {
         for(int i = 0; i < numbers.length; i++){
-            String numString = String.valueOf(numbers[i]);
-            String[] numDecimalRemoved = numString.split(".");
-            numString = Arrays.toString(numDecimalRemoved);
-            numbers[i] = parseDouble(numString);
+            double element = numbers[i];
+            String num = String.valueOf(element);
+            boolean found = false;
+            int length = num.length();
+            
+            for(int j = 0; j < length && !found; j++) {
+                if(num.charAt(j) == '.') {
+                    element *= Math.pow(10, length - j - 1);
+                    found = true;
+                }
+            }
+            numbers[i] = element;
         }
         
         double greatest = numbers[0];
