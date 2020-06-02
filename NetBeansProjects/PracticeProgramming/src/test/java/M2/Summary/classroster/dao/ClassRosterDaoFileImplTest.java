@@ -23,14 +23,14 @@ public class ClassRosterDaoFileImplTest {
     @BeforeEach
     public void setUp() throws Exception {
         String testFile = "testroster.txt";
-        // User the FileWrite to quickly blank the file
+        // Uses the FileWrite to quickly blank the file
         new FileWriter(testFile);
         testDao = new ClassRosterDaoFileImpl(testFile);
     }
     
     @Test
     public void testAddGetStudent() throws Exception {
-        // Create out method test inputs
+        // Create our method test inputs
         String studentId = "0001";
         Student student = new Student(studentId);
         student.setFirstName("Ada");
@@ -74,7 +74,7 @@ public class ClassRosterDaoFileImplTest {
         assertNotNull(allStudents, "The list of students must not be null.");
         assertEquals(2, allStudents.size(), "List of student should have 2 students.");
         
-        // The the specifics
+        // Then the specifics
         assertTrue(testDao.getAllStudents().contains(firstStudent), "The list of students should include Ada.");
         assertTrue(testDao.getAllStudents().contains(secondStudent), "The list of students should include Charles.");
     }
@@ -111,7 +111,7 @@ public class ClassRosterDaoFileImplTest {
 
         // Then the specifics
         assertFalse(allStudents.contains(firstStudent), "All students should NOT include Ada.");
-        assertTrue(allStudents.contains(secondStudent), "All students should NOT include Charles.");    
+        assertTrue(allStudents.contains(secondStudent), "All students should include Charles.");    
 
         // Remove the second student
         removedStudent = testDao.removeStudent(secondStudent.getStudentId());
