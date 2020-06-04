@@ -12,14 +12,27 @@ import java.time.Period;
 import java.util.Scanner;
 
 public class BirthdayCalculator {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
         Scanner input = new Scanner(System.in);
         
         System.out.println("Welcome to the Magical BirthDAY Calculator!\n");
         System.out.println("When is your birthday?");
-        String userBirthday = input.nextLine(); // gets user input
-        LocalDate birthDate = LocalDate.parse(userBirthday); // converts to date
         
+        boolean keepTrying = true;
+        String userBirthday = "";
+        LocalDate birthDate = LocalDate.now();
+        
+        do{
+            try{
+                userBirthday = input.nextLine(); // gets user input
+                birthDate = LocalDate.parse(userBirthday); // converts to date
+                keepTrying = false;
+                
+            } catch(Exception e) {
+                throw new Exception ("Try an actual date.");
+            }
+        } while (keepTrying);
+                
         LocalDate today = LocalDate.now(); // today
         DayOfWeek birthDayOfWeek = birthDate.getDayOfWeek(); // the day of the week
         
