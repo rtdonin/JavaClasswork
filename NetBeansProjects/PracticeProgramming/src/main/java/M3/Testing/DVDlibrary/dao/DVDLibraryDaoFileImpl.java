@@ -1,7 +1,7 @@
 /*
 Created by: Margaret Donin
 Date created: 05/11/20
-Date revised: 05/21/20
+Date revised: 06/04/20
 */
 
 package M3.Testing.DVDlibrary.dao;
@@ -14,6 +14,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import static java.lang.Integer.parseInt;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -71,7 +73,7 @@ public class DVDLibraryDaoFileImpl implements DVDLibraryDao{
     
     @Override
     public void editReleaseDate(DVD dvd, String newReleaseDate) throws DVDLibraryDaoException {
-        dvd.setReleaseDate(newReleaseDate);
+        dvd.setReleaseDate(Year.of(parseInt(newReleaseDate)));
         writeLibrary();
     }
     
@@ -105,7 +107,7 @@ public class DVDLibraryDaoFileImpl implements DVDLibraryDao{
         // first it the ID, next the first name, then last name and finally the cohort
         String dvdTitle = dvdTokens[0];
         DVD dvdFromFile = new DVD(dvdTitle);
-        dvdFromFile.setReleaseDate(dvdTokens[1]);
+        dvdFromFile.setReleaseDate(Year.of(parseInt(dvdTokens[1])));
         dvdFromFile.setMPAARating(dvdTokens[2]);
         dvdFromFile.setDirector(dvdTokens[3]);
         dvdFromFile.setStudio(dvdTokens[4]);
@@ -137,7 +139,7 @@ public class DVDLibraryDaoFileImpl implements DVDLibraryDao{
     
     private String marshallDVD(DVD aDVD) {
         String dvdAsText = aDVD.getTitle() + DELIMITER;
-        dvdAsText += aDVD.getReleaseDate() + DELIMITER;
+        dvdAsText += aDVD.getReleaseDate().toString() + DELIMITER;
         dvdAsText += aDVD.getMPAARating() + DELIMITER;
         dvdAsText += aDVD.getDirector() + DELIMITER;
         dvdAsText += aDVD.getStudio() + DELIMITER;

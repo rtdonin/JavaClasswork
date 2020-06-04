@@ -1,16 +1,17 @@
 /*
 Created by: Margaret Donin
-Date created: 
-Date revised:
+Date created: 05/11/20
+Date revised: 06/04/20
  */
 
 package M3.Testing.DVDlibrary.dto;
 
+import java.time.Year;
 import java.util.Objects;
 
 public class DVD {
     private String title;
-    private String releaseDate;
+    private Year releaseDate;
     private String MPAARating;
     private String director;
     private String studio;
@@ -28,11 +29,11 @@ public class DVD {
         this.title = title;
     }
 
-    public String getReleaseDate() {
+    public Year getReleaseDate() {
         return releaseDate;
     }
     
-    public void setReleaseDate(String releaseDate) {
+    public void setReleaseDate(Year releaseDate) {
             this.releaseDate = releaseDate;
     }
     
@@ -115,7 +116,7 @@ public class DVD {
 
     @Override
     public String toString() {
-        return "DVD{" + "title=" + title + ", releaseDate=" + releaseDate + ", MPAARating=" + MPAARating + ", director=" + director + ", studio=" + studio + ", userRating=" + userRating + '}';
+        return "DVD{" + "title=" + title + ", releaseDate=" + releaseDate.toString() + ", MPAARating=" + MPAARating + ", director=" + director + ", studio=" + studio + ", userRating=" + userRating + '}';
     }
     
 }

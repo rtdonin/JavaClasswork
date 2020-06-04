@@ -8,6 +8,7 @@ package M3.Testing.DVDlibrary.dao;
 
 import M3.Testing.DVDlibrary.dto.DVD;
 import java.io.FileWriter;
+import java.time.Year;
 import java.util.List;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,7 +32,7 @@ public class DVDLibraryDaoFileImplTest {
         // Create our method test inputs.
         String title = "Finding Nemo";
         DVD dvd = new DVD(title);
-        dvd.setReleaseDate("2003");
+        dvd.setReleaseDate(Year.of(2003));
         dvd.setMPAARating("G");
         dvd.setDirector("Andrew Stanton");
         dvd.setStudio("Walt Disney Picture, Pixar Animation Studios");
@@ -56,7 +57,7 @@ public class DVDLibraryDaoFileImplTest {
     public void testAddGetAllStudents() throws Exception {
         // Create our first DVD
         DVD firstDVD = new DVD("Finding Nemo");
-        firstDVD.setReleaseDate("2003");
+        firstDVD.setReleaseDate(Year.of(2003));
         firstDVD.setMPAARating("G");
         firstDVD.setDirector("Andrew Stanton");
         firstDVD.setStudio("Walt Disney Picture, Pixar Animation Studios");
@@ -64,7 +65,7 @@ public class DVDLibraryDaoFileImplTest {
         
         // Create our second DVD
         DVD secondDVD = new DVD("Finding Dory");
-        secondDVD.setReleaseDate("2016");
+        secondDVD.setReleaseDate(Year.of(2016));
         secondDVD.setMPAARating("PG");
         secondDVD.setDirector("Andrew Stanton");
         secondDVD.setStudio("Walt Disney Picture, Pixar Animation Studios");
@@ -91,7 +92,7 @@ public class DVDLibraryDaoFileImplTest {
         // Create two new DVDs
         String firstTitle = "Finding Nemo";
         DVD firstDVD = new DVD(firstTitle);
-        firstDVD.setReleaseDate("2003");
+        firstDVD.setReleaseDate(Year.of(2003));
         firstDVD.setMPAARating("G");
         firstDVD.setDirector("Andrew Stanton");
         firstDVD.setStudio("Walt Disney Picture, Pixar Animation Studios");
@@ -99,7 +100,7 @@ public class DVDLibraryDaoFileImplTest {
         
         String secondTitle = "Finding Dory";
         DVD secondDVD = new DVD(secondTitle);
-        secondDVD.setReleaseDate("2016");
+        secondDVD.setReleaseDate(Year.of(2016));
         secondDVD.setMPAARating("PG");
         secondDVD.setDirector("Andrew Stanton");
         secondDVD.setStudio("Walt Disney Picture, Pixar Animation Studios");

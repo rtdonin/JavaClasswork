@@ -7,6 +7,7 @@ Date revised: 05/21/20
 package M3.Testing.DVDlibrary.ui;
 
 import M3.Testing.DVDlibrary.dto.DVD;
+import java.time.Year;
 import java.util.List;
 
 public class DVDLibraryView {
@@ -30,7 +31,7 @@ public class DVDLibraryView {
     
     public DVD getNewDVDInfo() {
         String title = io.readString("Please enter DVD name");
-        String releaseDate = io.readString("Please enter release date");
+        int releaseDate = io.readInt("Please enter release date");
         String MPAARating = io.readString("Please enter MPAA rating");
         String director = io.readString("Please enter director name");
         String studio = io.readString("Please enter studio");
@@ -38,7 +39,7 @@ public class DVDLibraryView {
 
         DVD currentDVD = new DVD(title);
         
-        currentDVD.setReleaseDate(releaseDate);
+        currentDVD.setReleaseDate(Year.of(releaseDate));
         currentDVD.setMPAARating(MPAARating);
         currentDVD.setDirector(director);
         currentDVD.setStudio(studio);
@@ -59,7 +60,7 @@ public class DVDLibraryView {
         for(DVD currentDVD : dvdList) {
             String dvdInfo = String.format("%s (%s)",
                     currentDVD.getTitle(),
-                    currentDVD.getReleaseDate());
+                    currentDVD.getReleaseDate().toString());
             io.print(dvdInfo);
         }
         io.readString("Please hit enter to continue.");
@@ -79,7 +80,7 @@ public class DVDLibraryView {
     
     public void displayDVD(DVD dvd, boolean prompt) {
         if(dvd != null) {
-            io.print(dvd.getTitle() + " " + dvd.getReleaseDate());
+            io.print(dvd.getTitle() + " " + dvd.getReleaseDate().toString());
             io.print("Directed by " + dvd.getDirector());
             io.print("Rated " + dvd.getMPAARating());
             io.print(dvd.getStudio());
