@@ -4,7 +4,7 @@ Date created: 05/04/20
 Date revised:
  */
 
-package M2.DVDlibrary.ui;
+package M3.vendingmachine.ui;
 
 import static java.lang.Double.parseDouble;
 import static java.lang.Float.parseFloat;
