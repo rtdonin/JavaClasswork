@@ -1,0 +1,56 @@
+/'
+Created by: Margaret Donin
+Date created: 06/07/20
+Date revised: 06/09/20
+'/
+
+@startuml
+
+title VendingMachine
+
+actor View
+View -> Controller
+Controller -> Controller : getMenu()
+Controller -> Service : getAllCandyforSale()
+Service -> Dao : getAllCandy()
+Dao --> Service : Map<String, Candy>
+Service --> Controller : Map<Integer, Candy>
+Controller -> View : showMenuGetCash(Map<Integer, Candy>)
+View --> Controller : String
+
+alt Exit
+    Controller -> View : displayGoodBye()
+    View --> Controller : void
+else Buying Candy
+    Controller -> Controller : buyCandy(Map<Integer, Candy>, int, String)
+    Controller -> Service : getCandy(Map<Integer, Candy>, int)
+    Service --> Controller : Candy
+
+/' there are two do while loops in code '/
+
+    alt Can't create BigDecimal
+        Controller -> View : getCashInt()
+        View --> Controller : String
+    else
+        Controller -> Service : buyCandy(Candy, BigDecimal)
+        Service --> Controller : boolean
+        Controller -> View : displayCashInserted(BigDecimal)
+        View --> Controller : void
+
+        alt not enough cash
+            Controller -> View : getMoreCashIn()
+            View --> Controller : String
+        end
+    end
+
+    Controller -> Service : getChange(Candy, BigDecimal)
+    Service -> Change : createChange(BigDecimal)
+    Change --> Service : List<BigDecimal>
+    Service --> Controller : List<BigDecimal>
+    Controller -> View : displayChange(List<BigDecimal>, Candy)
+    View --> Controller : void
+
+end
+
+
+@enduml

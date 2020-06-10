@@ -15,14 +15,16 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import static java.lang.Integer.parseInt;
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Collection;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class VendingMachineDaoImpl implements VendingMachineDao {
 
-    private List<Candy> sugaryTreats;
-    public final String SNACK_FILE;
-    public static final String DELIMITER = "::";
+    private Map<String, Candy> sugaryTreats = new HashMap<>();
+    private final String SNACK_FILE;
+    private static final String DELIMITER = "::";
     
     public VendingMachineDaoImpl() {
         SNACK_FILE = "snackfile.txt";
@@ -33,15 +35,16 @@ public class VendingMachineDaoImpl implements VendingMachineDao {
     }
     
     @Override
-    public List<Candy> getAllCandy() throws VendingMachinePersistenceException {
+    public Map<String, Candy> getAllCandy() throws VendingMachinePersistenceException {
         loadInventory();
         return sugaryTreats;
     }
 
     @Override
-    public Candy editCandy(Candy purchasedCandy) throws VendingMachinePersistenceException{
+    public Candy editCandy(Candy purchasedCandy) throws VendingMachinePersistenceException {
         loadInventory();
-        sugaryTreats.add(purchasedCandy);
+        sugaryTreats.remove(purchasedCandy.getName());
+        sugaryTreats.put(purchasedCandy.getName(), purchasedCandy);
         writeInventory();
         return purchasedCandy;
     }
@@ -62,7 +65,7 @@ public class VendingMachineDaoImpl implements VendingMachineDao {
         while(scanner.hasNextLine()) {
             currentLine = scanner.nextLine();
             currentCandy = unmarshallCandy(currentLine);
-            sugaryTreats.add(currentCandy);
+            sugaryTreats.put(currentCandy.getName(), currentCandy);
         }
         // close scanner
         scanner.close();
@@ -79,8 +82,10 @@ public class VendingMachineDaoImpl implements VendingMachineDao {
             throw new VendingMachinePersistenceException("Could not save yummy treats.", e);
         }
         
-        sugaryTreats.stream()
-                        .forEach((c) -> { out.println(marshallCandy(c));
+        Collection<Candy> treats = sugaryTreats.values();
+        
+        treats.stream()
+                .forEach((c) -> { out.println(marshallCandy(c));
                                           out.flush();});
 
         out.close();
@@ -106,6 +111,12 @@ public class VendingMachineDaoImpl implements VendingMachineDao {
         Candy newCandy = new Candy(name, price, inventory);
         
         return newCandy;
+    }
+
+    @Override
+    public Candy getCandy(String name) throws VendingMachinePersistenceException{
+        loadInventory();
+        return sugaryTreats.get(name);
     }
 
 }

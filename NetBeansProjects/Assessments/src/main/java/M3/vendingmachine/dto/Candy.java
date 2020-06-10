@@ -1,6 +1,6 @@
 /*
 Created by: Margaret Donin
-Date created:
+Date created: 06/07/20
 Date revised:
 */
 
@@ -35,6 +35,13 @@ public class Candy {
     public void setInventory(int inventory) {
         this.inventory = inventory;
     }
+
+    @Override
+    public String toString() {
+        return "Candy " + name + " $" + price + " with " + inventory + " in stock.";
+    }
+    
+    
 
     @Override
     public int hashCode() {

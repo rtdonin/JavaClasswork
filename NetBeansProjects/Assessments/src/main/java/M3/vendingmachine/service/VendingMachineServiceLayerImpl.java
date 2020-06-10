@@ -6,20 +6,19 @@ Date revised:
 
 package M3.vendingmachine.service;
 
-import M3.vendingmachine.dao.VendingMachineAuditDao;
-import M3.vendingmachine.dao.VendingMachineDao;
-import M3.vendingmachine.dao.VendingMachinePersistenceException;
+import M3.vendingmachine.dao.*;
 import M3.vendingmachine.dto.Candy;
-import M3.vendingmachine.dto.Coins;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 
 public class VendingMachineServiceLayerImpl implements VendingMachineServiceLayer {
 
-    private VendingMachineDao dao;
-    private VendingMachineAuditDao auditDao;
+    private final VendingMachineDao dao;
+    private final VendingMachineAuditDao auditDao;
     
     public VendingMachineServiceLayerImpl(VendingMachineDao dao, VendingMachineAuditDao auditDao) {
         this.dao = dao;
@@ -28,33 +27,57 @@ public class VendingMachineServiceLayerImpl implements VendingMachineServiceLaye
 
     @Override
     public Map<Integer, Candy> getAllCandyForSale() throws VendingMachinePersistenceException {
-        List<Candy> allCandy  = dao.getAllCandy();
+        Map<String, Candy> allCandy  = dao.getAllCandy();
+        
+        Collection<Candy> justCandy = allCandy.values();
         
         Map<Integer, Candy> availableCandy = new HashMap<>();
                 
-        allCandy.stream()
+        justCandy.stream()
                 .filter((candy) -> (candy.getInventory() > 0))
-                .forEachOrdered((candy) -> {
-                    availableCandy.put(availableCandy.size() + 1, candy);
-                });
+                .forEachOrdered((candy) -> {availableCandy.put(availableCandy.size() + 1, candy);});
         
         return availableCandy;
+    }
+
+    @Override
+    public boolean buyCandy(Candy candyToPurchase, BigDecimal cashIn) throws VendingMachinePersistenceException {
+        BigDecimal price = candyToPurchase.getPrice();
+        boolean enoughCash = (cashIn.compareTo(price) >= 0);
+        
+        if (enoughCash) {
+            String entry = "Purchasing " + candyToPurchase.getName();
+            entry += " for " + candyToPurchase.getPrice() + ".";
+            auditDao.writeAuditEntry(entry);
+            
+            candyToPurchase.setInventory(candyToPurchase.getInventory() -1);
+            
+            try {
+                dao.editCandy(candyToPurchase);
+            } catch (VendingMachinePersistenceException e) {
+                throw new VendingMachinePersistenceException ("Had trouble updating inventory.", e);
+            }
+            
+            entry = "Updated Inventory: " + candyToPurchase.toString();
+            auditDao.writeAuditEntry(entry);
+                    
+        }
+        
+        return enoughCash;
+    }
+
+    @Override
+    public Candy getCandy(Map<Integer, Candy> availableCandy, int menuSelection) {
+        return availableCandy.get(menuSelection);
+    }
+
+    @Override
+    public List<BigDecimal> getChange(Candy candySelected, BigDecimal cashInserted) {
+        MathContext mc = new MathContext(2);
+        BigDecimal jingle = cashInserted.subtract(candySelected.getPrice(), mc);
+        
+        return Change.createChange(jingle);
         
     }
-
-    @Override
-    public Candy getCandy() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Map<Coins, Integer> getChange() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void checkValidity(Candy candy) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+      
 }

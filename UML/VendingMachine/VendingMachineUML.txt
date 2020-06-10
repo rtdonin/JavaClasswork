@@ -1,0 +1,142 @@
+/'
+Created by: Margaret Donin
+Date created: 06/07/20
+Date revised: 06/09/20
+'/
+
+@startuml
+
+title VendingMachine
+
+class Candy {
+    -int inventory
+    -String name
+    -BigDecimal price
+    +Candy(String, BigDecimal, int)
+    +String getName()
+    +BigDecimal getPrice()
+    +int getInventory()
+    +void setInventory(int)
+    +String toString()
+    +int hashCode
+    +boolean equals
+    /' hashCode and equals are for testing purposes '/
+}
+
+class VendingMachineController{
+    -VendingMachineServiceLayer service
+    -VendingMachineView view
+    +VendingMachineController(VendingMachineServiceLayer, VendingMachineView)
+    +void run()
+    -Map<Integer, Candy> getMenu()
+        /' I know this looks weird, but it is so that I can list only the items we have and still keep it in the file.
+        I'm pretty sure that I can technically use a linked list instead. '/
+    -String getCashOrExit(Map<Integer, Candy>)
+    -void buyCandy(Map<Integer, Candy>, int, String)
+}
+
+class VendingMachineView {
+    -UserIO io
+    +VendingMachineView(UserIO)
+    +String showMenuGetCash(Map<Integer, Candy)
+    +int getCandySelection(int)
+    +String getCashIn()
+    +void displayCashInserted(BigDecimal)
+    +void displayChange(List<BigDecimal>, Candy)
+    +void displayGoodBye()
+    +void displayErrorMessage(String)
+    +String getMoreCashIn()
+}
+
+interface VendingMachineServiceLayer{
+    +Map<Integer, Candy> getAllCandyForSale()
+    +boolean buyCandy(Candy, BigDecimal)
+    +Candy getCandy(Map<Integer, Candy>, int)
+    +List<BigDecimal> getChange(Candy, BigDecimal)
+}
+
+class VendingMachineServiceLayerImpl{
+    -VendingMachineDao dao
+    -VendingMAchineAuditDao audtiDao
+    +VendingMachineServiceLayerImpl(VendingMachineDao, VendingMachineAuditDao)
+    +Map<Integer, Candy> getAllCandyForSale()
+    +boolean buyCandy(Candy, BigDecimal)
+    +Candy getCandy(Map<Integer, Candy>, int)
+    +List<BigDecimal> getChange(Candy, BigDecimal)
+}
+
+class Change {
+    +List<BigDecimal> createChange(BigDecimal)
+}
+
+enum Coin {
+    QUARTER,
+    DIME,
+    NICKLE,
+    PENNY
+    
+    +BigDecimal value
+    -Coin(String)
+
+}
+
+interface VendingMachineDao {
+    +Map<String, Candy> getAllCandy()
+    +Candy editCandy(Candy)
+    +void loadInventory()
+    +void writeInventory()
+    +String marshallCandy(Candy)
+    +Candy unmarshallCandy(String)
+    +Candy getCandy(String)
+}
+
+class VendingMachineDaoImpl {
+    -Map<String, Candy> sugaryTreats
+    -String SNACK_FILE
+    -String DELIMITER
+    +VendingMachineDaoImpl()
+    +VendingMachineDaoImpl(String)
+    +Map<String, Candy> getAllCandy()
+    +Candy editCandy(Candy)
+    +void loadInventory()
+    +void writeInventory()
+    +String marshallCandy(Candy)
+    +Candy unmarshallCandy(String)
+    +Candy getCandy(String)
+}
+
+interface VendingMachineAuditDao{
+    +void writeAuditEntry(String)
+}
+
+class VendingMachineAuditDaoImpl{
+    +String AUDIT_FILE
+    +void writeAuditEntry(String)
+}
+
+class VendingMachinePersistenceException {
+    +VendingMachinePersistenceException(String)
+    +VendingMachinePersistenceException(String, Throwable)
+}
+
+class Exceptions
+interface UserIO
+class UserIOConsoleImpl
+
+Candy -[hidden]down-> Change /' formatting '/
+Change -[hidden]down-> Coin /' formatting '/
+
+Exceptions<|--VendingMachinePersistenceException : Extends
+Exceptions<|--InsufficientFundsException : Extends
+
+VendingMachineController "l" *-- VendingMachineServiceLayer
+VendingMachineController "l" *-- VendingMachineView
+VendingMachineServiceLayer "l" *-- VendingMachineDao
+VendingMachineServiceLayer "l" *-- VendingMachineAuditDao
+
+VendingMachineDao <|-- VendingMachineDaoImpl
+VendingMachineAuditDao <|-- VendingMachineAuditDaoImpl
+VendingMachineServiceLayer <|-- VendingMachineServiceLayerImpl
+UserIO <|-- UserIOConsoleImpl
+
+@enduml

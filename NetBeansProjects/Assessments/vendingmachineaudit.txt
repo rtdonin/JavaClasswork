@@ -1,0 +1,4 @@
+2020-06-09T20:27:19.290581100 : Purchasing Charleston Chew for 0.75.
+2020-06-09T20:27:19.326112100 : Updated Inventory: Candy Charleston Chew $0.75 with 0 in stock.
+2020-06-09T20:27:39.223159700 : Purchasing Raisinets for 0.73.
+2020-06-09T20:27:39.228832900 : Updated Inventory: Candy Raisinets $0.73 with 1 in stock.
