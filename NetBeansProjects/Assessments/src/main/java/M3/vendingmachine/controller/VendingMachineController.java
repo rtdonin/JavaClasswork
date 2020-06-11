@@ -12,7 +12,6 @@ import M3.vendingmachine.service.VendingMachineServiceLayer;
 import M3.vendingmachine.ui.VendingMachineView;
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.util.List;
 import java.util.Map;
 
 public class VendingMachineController {
@@ -28,66 +27,72 @@ public class VendingMachineController {
         boolean keepGoing = true;
         
         try {
-            while(keepGoing){
-                Map<Integer, Candy> availableCandy = getMenu();
-                String cash = getCashOrExit(availableCandy).toUpperCase();
-                if (cash.equals("EXIT")){
+            while (keepGoing) {
+                // get the List of Candy
+                Map<Integer, Candy> availableCandy = service.getAllCandyForSale();
+                String cashString = view.showMenuGetCash(availableCandy);
+                
+                if (cashString.equalsIgnoreCase("EXIT")){
                     view.displayGoodBye();
                     keepGoing = false;
                 } else {
+                    // We got cash, now we need a candy selection
                     int candyChoice = view.getCandySelection(availableCandy.size());
-                    buyCandy(availableCandy, candyChoice, cash);
+
+                    // Get Candy selection
+                    Candy candySelected = service.getCandy(availableCandy, candyChoice);
+                    
+                    BigDecimal cashIn = null; // inserted cash in this instance
+                    BigDecimal totalCashIn = BigDecimal.ZERO; // total cash inserted
+                    boolean isNotPurchased = true; // do we have enough cash?
+                    boolean hasError = true; // could we create a BigDecimal
+
+                    MathContext mc = new MathContext(2);
+
+                    do {
+
+                        do {
+
+                            // NumberFormatException - Makes sure String can be used as BigDecimal
+                            // ArrayIndexOutOfBoundsException - maked sure you didn't just hit enter
+                            
+                            try {
+                                cashIn = new BigDecimal(cashString, mc);
+                                hasError = false; // only false if not exception is thrown.
+                            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                                hasError = true;
+                                view.displayErrorMessage("That was not cash.");
+                                cashString = view.getCashIn();
+                            }
+
+                            // Keep trying until there is no error.
+                        } while (hasError);
+
+                        // calculate total cash in
+                        totalCashIn = totalCashIn.add(cashIn, mc);
+
+                        // returns true (and converted to false) if we have enough cash to purchase the Candy
+                        isNotPurchased = !service.buyCandy(candySelected, totalCashIn);
+                        view.displayCashInserted(totalCashIn);
+
+                        // if we still don't have enough cash ask for more
+                        if (isNotPurchased) {
+                            cashString = view.getMoreCashIn();
+                        }
+
+                        // go back up, check to make sure it's a String we can convert to BigDecimal
+                        // add and check if we can purchase the Candy
+                    } while (isNotPurchased);
+
+                    // Get change
+                    Map<Coin, Integer> change = service.getChange(candySelected, totalCashIn);
+                    // Display change
+                    view.displayChange(change, candySelected);
                 }
             }
         } catch (VendingMachinePersistenceException e) {
             throw new VendingMachinePersistenceException("Could not get menu.", e);
         }
-        
-    }
-    
-    private Map<Integer, Candy> getMenu() throws VendingMachinePersistenceException{
-        Map<Integer, Candy> availableCandy = service.getAllCandyForSale();
-        return availableCandy;
-    }
-
-    private String getCashOrExit(Map<Integer, Candy> availableCandy) {
-        return view.showMenuGetCash(availableCandy);
-    }
-
-    private void buyCandy(Map<Integer, Candy> availableCandy, int candyChoice, String cashString) throws VendingMachinePersistenceException {
-        Candy candySelected = service.getCandy(availableCandy, candyChoice);
-        BigDecimal cashIn = null;
-        BigDecimal totalCashIn = BigDecimal.ZERO;
-        boolean isNotPurchased = true;
-        MathContext mc = new MathContext(2);
-        
-        do {
-            boolean hasError = true;
-
-            do {
-                try {
-                    cashIn = new BigDecimal(cashString, mc);
-                    hasError = false;
-                } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                    hasError = true;
-                    view.displayErrorMessage("That was not cash.");
-                    cashString = view.getCashIn();
-                }
-                
-            } while (hasError);
-            
-            totalCashIn = totalCashIn.add(cashIn, mc);
-            isNotPurchased = !service.buyCandy(candySelected, totalCashIn);
-            view.displayCashInserted(totalCashIn);
-
-            if(isNotPurchased) {
-                cashString = view.getMoreCashIn();
-            }
-                        
-        } while (isNotPurchased);
-        
-        List<BigDecimal> change = service.getChange(candySelected, totalCashIn);
-        view.displayChange(change, candySelected);
         
     }
 

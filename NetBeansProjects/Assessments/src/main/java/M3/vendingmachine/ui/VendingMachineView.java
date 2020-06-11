@@ -9,9 +9,7 @@ package M3.vendingmachine.ui;
 import M3.vendingmachine.dto.Candy;
 import M3.vendingmachine.dto.Coin;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class VendingMachineView {
     private final UserIO io;
@@ -31,7 +29,7 @@ public class VendingMachineView {
     }
 
     public int getCandySelection(int size) {
-        return io.readInt("Please select one of the above options", 1, size);
+        return io.readInt("Please select one of the above snack options.", 1, size);
     }
     
     public String getCashIn() {
@@ -42,13 +40,19 @@ public class VendingMachineView {
         io.print("You've inserted $" + cashInserted);
     }
 
-    public void displayChange(List<BigDecimal> change, Candy candy) { 
+    public void displayChange(Map<Coin, Integer> change, Candy candy) { 
         io.print("You're change is: ");
-        int i = 0;
+        
         for (Coin c : Coin.values()) {
-            io.print(c + " - " + change.indexOf(i));
-            i++;
+            int numCoin = change.get(c);
+            
+            if (numCoin > 0) {
+                io.print(c + " - " + numCoin);
+
+            }
+        
         }
+        
         io.print("Enjoy your " + candy.getName() + "!");
         io.readString("Please press enter to collect your change.");
     }

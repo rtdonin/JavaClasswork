@@ -8,11 +8,12 @@ package M3.vendingmachine.service;
 
 import M3.vendingmachine.dao.*;
 import M3.vendingmachine.dto.Candy;
+import M3.vendingmachine.dto.Coin;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import static java.math.RoundingMode.HALF_DOWN;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class VendingMachineServiceLayerImpl implements VendingMachineServiceLayer {
@@ -72,9 +73,10 @@ public class VendingMachineServiceLayerImpl implements VendingMachineServiceLaye
     }
 
     @Override
-    public List<BigDecimal> getChange(Candy candySelected, BigDecimal cashInserted) {
-        MathContext mc = new MathContext(2);
-        BigDecimal jingle = cashInserted.subtract(candySelected.getPrice(), mc);
+    public Map<Coin, Integer> getChange(Candy candySelected, BigDecimal cashInserted) {
+        MathContext mc = new MathContext(2, HALF_DOWN);
+        BigDecimal price = candySelected.getPrice();
+        BigDecimal jingle = cashInserted.subtract(price, mc);
         
         return Change.createChange(jingle);
         

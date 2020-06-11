@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class VendingMachineAuditDaoImpl implements VendingMachineAuditDao {
 
@@ -26,7 +27,8 @@ public class VendingMachineAuditDaoImpl implements VendingMachineAuditDao {
     }
 
     LocalDateTime timestamp = LocalDateTime.now();
-    out.println(timestamp.toString() + " : " + entry);
+    String formatted = timestamp.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
+    out.println(formatted + " : " + entry);
     out.flush();
     }
 }

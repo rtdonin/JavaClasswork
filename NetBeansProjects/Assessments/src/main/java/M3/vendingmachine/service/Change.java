@@ -9,21 +9,28 @@ package M3.vendingmachine.service;
 import M3.vendingmachine.dto.Coin;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Change {
-    public static List<BigDecimal> createChange(BigDecimal change){
-        List<BigDecimal> changeToReturn = new LinkedList<>();
+    public static Map<Coin, Integer> createChange(BigDecimal change){
+        Map<Coin, Integer> changeToReturn = new HashMap<>();
         
         // gets rid of decimal for easier math
         change = change.movePointRight(2);
         
         for (Coin c : Coin.values()) {
-            // divide change by value fo coin, then set change to whats left
-            BigDecimal numCoins = change.divide(c.value, 0, RoundingMode.FLOOR);
-            changeToReturn.add(numCoins);
-            change = change.remainder(c.value);
+            // get value of coin
+            BigDecimal coinValue = new BigDecimal(c.getCents());
+            
+            // divide change by value of coin
+            BigDecimal numCoins = change.divide(coinValue, 0, RoundingMode.FLOOR);
+            
+            // put into List
+            changeToReturn.put(c, numCoins.intValue());
+            
+            // then set change to whats left
+            change = change.remainder(coinValue);
         }
         
         return changeToReturn;        

@@ -2,6 +2,7 @@
 Created by: Margaret Donin
 Date created: 06/07/20
 Date revised: 06/09/20
+Date revised: 06/10/20
 '/
 
 @startuml
@@ -28,11 +29,6 @@ class VendingMachineController{
     -VendingMachineView view
     +VendingMachineController(VendingMachineServiceLayer, VendingMachineView)
     +void run()
-    -Map<Integer, Candy> getMenu()
-        /' I know this looks weird, but it is so that I can list only the items we have and still keep it in the file.
-        I'm pretty sure that I can technically use a linked list instead. '/
-    -String getCashOrExit(Map<Integer, Candy>)
-    -void buyCandy(Map<Integer, Candy>, int, String)
 }
 
 class VendingMachineView {
@@ -126,17 +122,17 @@ class UserIOConsoleImpl
 Candy -[hidden]down-> Change /' formatting '/
 Change -[hidden]down-> Coin /' formatting '/
 
-Exceptions<|--VendingMachinePersistenceException : Extends
-Exceptions<|--InsufficientFundsException : Extends
+Exceptions<|-down-VendingMachinePersistenceException : Extends
 
-VendingMachineController "l" *-- VendingMachineServiceLayer
+VendingMachineController "l" *-left- VendingMachineServiceLayerImpl
 VendingMachineController "l" *-- VendingMachineView
-VendingMachineServiceLayer "l" *-- VendingMachineDao
-VendingMachineServiceLayer "l" *-- VendingMachineAuditDao
+VendingMachineServiceLayerImpl "l" *-- VendingMachineDaoImpl
+VendingMachineServiceLayerImpl "l" *-left- VendingMachineAuditDaoImpl
+VendingMachineView "l" *-- UserIOConsoleImpl
 
-VendingMachineDao <|-- VendingMachineDaoImpl
-VendingMachineAuditDao <|-- VendingMachineAuditDaoImpl
-VendingMachineServiceLayer <|-- VendingMachineServiceLayerImpl
-UserIO <|-- UserIOConsoleImpl
+VendingMachineDao <|-up- VendingMachineDaoImpl
+VendingMachineAuditDao <|-up- VendingMachineAuditDaoImpl
+VendingMachineServiceLayer <|-down- VendingMachineServiceLayerImpl
+UserIO <|-up- UserIOConsoleImpl
 
 @enduml

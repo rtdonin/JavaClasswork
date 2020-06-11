@@ -36,7 +36,7 @@ public class UserIOConsoleImpl implements UserIO {
             print(prompt);
             input = parseInt(scanInput.nextLine());
         } catch(NumberFormatException ex) {
-            print("\nCould not parse integer.");
+            print("Could not read number.");
         }
         
         return input;
@@ -66,7 +66,7 @@ public class UserIOConsoleImpl implements UserIO {
             print(prompt);
             input = parseDouble(scanInput.nextLine());
         } catch(NumberFormatException ex) {
-            print("\nCould not parse double.");
+            print("Could not read number.");
         }
         
         return input;
@@ -96,7 +96,7 @@ public class UserIOConsoleImpl implements UserIO {
             print(prompt);
             input = parseFloat(scanInput.nextLine());
         } catch(NumberFormatException ex) {
-            print("\nCould not parse float.");
+            print("Could not read number.");
         }
         
         return input;
@@ -126,7 +126,7 @@ public class UserIOConsoleImpl implements UserIO {
             print(prompt);
             input = parseLong(scanInput.nextLine());
         } catch(NumberFormatException ex) {
-            print("\nCould not parse long.");
+            print("Could not read number.");
         }
         
         return input;

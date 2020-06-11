@@ -8,43 +8,73 @@ package M3.vendingmachine.service;
 
 import M3.vendingmachine.dao.*;
 import M3.vendingmachine.dto.Candy;
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Map;
 
 public class VendingMachineDaoStubImpl implements VendingMachineDao {
+    public Candy onlyCandy;
+    
+    public VendingMachineDaoStubImpl() {
+        String name = "Whatchamacallit";
+        BigDecimal price = new BigDecimal("1.23");
+        int inventory = 2;
+        onlyCandy = new Candy(name, price, inventory);
+    }
+
+    public VendingMachineDaoStubImpl(Candy testCandy) {
+        this.onlyCandy = testCandy;
+    }
 
     @Override
     public Map<String, Candy> getAllCandy() throws VendingMachinePersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<String, Candy> candyList = new HashMap<>();
+        candyList.put(onlyCandy.getName(), onlyCandy);
+
+        return candyList;
     }
 
     @Override
     public Candy editCandy(Candy purchasedCandy) throws VendingMachinePersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (purchasedCandy.getName().equals(onlyCandy.getName())) {
+            int oldInventory = purchasedCandy.getInventory();
+            purchasedCandy.setInventory(oldInventory - 1);
+
+            return purchasedCandy;
+        } else {
+            return null;
+        }
     }
 
     @Override
     public void loadInventory() throws VendingMachinePersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // do nothing
     }
 
     @Override
     public void writeInventory() throws VendingMachinePersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // do nothing
     }
 
     @Override
     public String marshallCandy(Candy candyToMarshall) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // do nothing
+        return null;
     }
 
     @Override
     public Candy unmarshallCandy(String marshalledCandy) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // do nothing
+        return null;
     }
 
     @Override
     public Candy getCandy(String name) throws VendingMachinePersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (name.equals(onlyCandy.getName())) {
+            return onlyCandy;
+        } else {
+            return null;
+        }
     }
 
 }
