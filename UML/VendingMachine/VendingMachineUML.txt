@@ -3,6 +3,7 @@ Created by: Margaret Donin
 Date created: 06/07/20
 Date revised: 06/09/20
 Date revised: 06/10/20
+Date revised: 06/12/20
 '/
 
 @startuml
@@ -42,6 +43,7 @@ class VendingMachineView {
     +void displayGoodBye()
     +void displayErrorMessage(String)
     +String getMoreCashIn()
+    +void noChangeEnjoy(Candy)
 }
 
 interface VendingMachineServiceLayer{
@@ -49,6 +51,7 @@ interface VendingMachineServiceLayer{
     +boolean buyCandy(Candy, BigDecimal)
     +Candy getCandy(Map<Integer, Candy>, int)
     +List<BigDecimal> getChange(Candy, BigDecimal)
+    +boolean dispenseChange(Candy, BigDecimal)
 }
 
 class VendingMachineServiceLayerImpl{
@@ -59,6 +62,8 @@ class VendingMachineServiceLayerImpl{
     +boolean buyCandy(Candy, BigDecimal)
     +Candy getCandy(Map<Integer, Candy>, int)
     +List<BigDecimal> getChange(Candy, BigDecimal)
+    +boolean dispenseChange(Candy, BigDecimal)
+
 }
 
 class Change {

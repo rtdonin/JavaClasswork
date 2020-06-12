@@ -8,6 +8,7 @@ package M3.vendingmachine.controller;
 
 import M3.vendingmachine.dao.VendingMachinePersistenceException;
 import M3.vendingmachine.dto.*;
+import M3.vendingmachine.service.NotEnoughCashInsertedException;
 import M3.vendingmachine.service.VendingMachineServiceLayer;
 import M3.vendingmachine.ui.VendingMachineView;
 import java.math.BigDecimal;
@@ -84,10 +85,25 @@ public class VendingMachineController {
                         // add and check if we can purchase the Candy
                     } while (isNotPurchased);
 
-                    // Get change
-                    Map<Coin, Integer> change = service.getChange(candySelected, totalCashIn);
-                    // Display change
-                    view.displayChange(change, candySelected);
+                    boolean doWeGetChange = true;
+                    
+                    try {
+                        // Do we need change?
+                        doWeGetChange = service.doWeDispenseChange(candySelected, totalCashIn);
+                    } catch (NotEnoughCashInsertedException e) {
+                        view.displayErrorMessage("Something went wrong with our earlier calculations."
+                                + "\nPlease take your returned chash.");
+                        System.exit(1);
+
+                    }
+                    if (doWeGetChange) {
+                        // Get change
+                        Map<Coin, Integer> change = service.getChange(candySelected, totalCashIn);
+                        // Display change
+                        view.displayChange(change, candySelected);
+                    } else {
+                        view.noChangeEnjoy(candySelected);
+                    }
                 }
             }
         } catch (VendingMachinePersistenceException e) {

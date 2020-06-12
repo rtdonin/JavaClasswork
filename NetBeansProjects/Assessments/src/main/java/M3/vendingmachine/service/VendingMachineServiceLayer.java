@@ -17,4 +17,5 @@ public interface VendingMachineServiceLayer {
     public boolean buyCandy(Candy purchasing, BigDecimal cashIn) throws VendingMachinePersistenceException;
     public Candy getCandy(Map<Integer, Candy> availableCandy, int menuSelection);
     public Map<Coin, Integer> getChange(Candy candySelected, BigDecimal cashInserted);
+    public boolean doWeDispenseChange(Candy candySelected, BigDecimal cashInserted) throws NotEnoughCashInsertedException;
 }

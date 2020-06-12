@@ -13,33 +13,37 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class VendingMachineDaoStubImpl implements VendingMachineDao {
-    public Candy onlyCandy;
+    public Candy candyOne;
+    public Candy candyTwo;
     
     public VendingMachineDaoStubImpl() {
         String name = "Whatchamacallit";
-        BigDecimal price = new BigDecimal("1.23");
+        BigDecimal price = new BigDecimal("1.26");
         int inventory = 2;
-        onlyCandy = new Candy(name, price, inventory);
+        candyOne = new Candy(name, price, inventory);
+
+        name = "Snickers";
+        price = new BigDecimal("0.73");
+        inventory = 0;
+        candyTwo = new Candy(name, price, inventory);
     }
 
     public VendingMachineDaoStubImpl(Candy testCandy) {
-        this.onlyCandy = testCandy;
+        this.candyOne = testCandy;
     }
 
     @Override
     public Map<String, Candy> getAllCandy() throws VendingMachinePersistenceException {
         Map<String, Candy> candyList = new HashMap<>();
-        candyList.put(onlyCandy.getName(), onlyCandy);
+        candyList.put(candyOne.getName(), candyOne);
+        candyList.put(candyTwo.getName(), candyTwo);
 
         return candyList;
     }
 
     @Override
     public Candy editCandy(Candy purchasedCandy) throws VendingMachinePersistenceException {
-        if (purchasedCandy.getName().equals(onlyCandy.getName())) {
-            int oldInventory = purchasedCandy.getInventory();
-            purchasedCandy.setInventory(oldInventory - 1);
-
+        if (purchasedCandy.getName().equals(candyOne.getName())) {
             return purchasedCandy;
         } else {
             return null;
@@ -70,8 +74,10 @@ public class VendingMachineDaoStubImpl implements VendingMachineDao {
 
     @Override
     public Candy getCandy(String name) throws VendingMachinePersistenceException {
-        if (name.equals(onlyCandy.getName())) {
-            return onlyCandy;
+        if (name.equals(candyOne.getName())) {
+            return candyOne;
+        } else if (name.equals(candyTwo.getName())){
+            return candyTwo;
         } else {
             return null;
         }

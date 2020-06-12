@@ -2,7 +2,8 @@
 Created by: Margaret Donin
 Date created: 06/07/20
 Date revised: 06/09/20
-Date revised: 06/010/20
+Date revised: 06/10/20
+Date revised: 06/12/20
 '/
 
 @startuml
@@ -25,6 +26,8 @@ Controller -> Service : buyCandy(Candy, BigDecimal)
 Service --> Controller : boolean
 Controller -> View : displayCashInserted(BigDecimal)
 View --> Controller : void
+Controller --> Service : dispenseChange(Candy, BigDecimal)
+Service --> Controller : boolean
 Controller -> Service : getChange(Candy, BigDecimal)
 Service -> Change : createChange(BigDecimal)
 Change --> Service : List<BigDecimal>

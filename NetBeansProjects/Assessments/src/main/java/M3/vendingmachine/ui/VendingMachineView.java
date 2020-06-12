@@ -69,4 +69,8 @@ public class VendingMachineView {
         return io.readString("Please insert more cash.");
     }
 
+    public void noChangeEnjoy(Candy candy) {
+        io.print("Enjoy your " + candy.getName() + "!");
+    }
+
 }

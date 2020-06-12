@@ -44,7 +44,8 @@ public class VendingMachineServiceLayerImpl implements VendingMachineServiceLaye
     @Override
     public boolean buyCandy(Candy candyToPurchase, BigDecimal cashIn) throws VendingMachinePersistenceException {
         BigDecimal price = candyToPurchase.getPrice();
-        boolean enoughCash = (cashIn.compareTo(price) >= 0);
+        int comparison = cashIn.compareTo(price);
+        boolean enoughCash = comparison >= 0;
         
         if (enoughCash) {
             String entry = "Purchasing " + candyToPurchase.getName();
@@ -69,7 +70,15 @@ public class VendingMachineServiceLayerImpl implements VendingMachineServiceLaye
 
     @Override
     public Candy getCandy(Map<Integer, Candy> availableCandy, int menuSelection) {
-        return availableCandy.get(menuSelection);
+        Candy selected = availableCandy.get(menuSelection);
+        if (selected != null) {
+            return selected;
+        } else {
+            // really shouldn't happen at all.
+            // Like ever. Because of the IO class.
+            // But you never know
+            return null;
+        }
     }
 
     @Override
@@ -80,6 +89,22 @@ public class VendingMachineServiceLayerImpl implements VendingMachineServiceLaye
         
         return Change.createChange(jingle);
         
+    }
+
+    @Override
+    public boolean doWeDispenseChange(Candy candySelected, BigDecimal cashInserted) throws NotEnoughCashInsertedException {
+        boolean returnChange = candySelected.getPrice().equals(cashInserted);
+        
+        BigDecimal price = candySelected.getPrice();
+        boolean enoughCash = (cashInserted.compareTo(price) >= 0);
+        
+        if (!returnChange && !enoughCash) {
+            throw new NotEnoughCashInsertedException("Something went terribly wrong with our calculations.");
+        }
+        
+        // if it's true -> no change
+        // if it's false -> change
+        return !returnChange;
     }
       
 }
