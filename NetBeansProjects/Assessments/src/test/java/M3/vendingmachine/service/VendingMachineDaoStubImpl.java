@@ -83,4 +83,9 @@ public class VendingMachineDaoStubImpl implements VendingMachineDao {
         }
     }
 
+    @Override
+    public void adminAddCandyInventory(Map<String, Candy> updatedCandy) throws VendingMachinePersistenceException {
+        // do nothing
+    }
+
 }

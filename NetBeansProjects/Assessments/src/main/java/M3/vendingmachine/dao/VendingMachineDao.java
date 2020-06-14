@@ -43,10 +43,12 @@ public interface VendingMachineDao {
     public String marshallCandy(Candy candyToMarshall);
     public Candy unmarshallCandy(String marshalledCandy);
 
-    /**
-    
-    @param name of Candy we want to retrieve
-    @return Candy
+    /*
+     *@param name of Candy we want to retrieve
+     *@return Candy
+     *@throws VendingMachinePersistenceException
     */
     public Candy getCandy(String name) throws VendingMachinePersistenceException;
+
+    public void adminAddCandyInventory(Map<String, Candy> updatedCandy) throws VendingMachinePersistenceException;
 }

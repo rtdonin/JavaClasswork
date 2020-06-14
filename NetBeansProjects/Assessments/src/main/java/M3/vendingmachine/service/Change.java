@@ -6,6 +6,8 @@ Date revised:
 
 package M3.vendingmachine.service;
 
+import M3.vendingmachine.dao.VendingMachineDrawerDao;
+import M3.vendingmachine.dao.VendingMachinePersistenceException;
 import M3.vendingmachine.dto.Coin;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -13,9 +15,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Change {
-    public static Map<Coin, Integer> createChange(BigDecimal change){
+    public static Map<Coin, Integer> createChange(BigDecimal change) throws VendingMachinePersistenceException {
+        VendingMachineDrawerDao drawerDao = new VendingMachineDrawerDao();
         Map<Coin, Integer> changeToReturn = new HashMap<>();
+        Map<Coin, Integer> changeInDrawer;
         
+        try {
+            changeInDrawer = drawerDao.getDrawer();
+        } catch (VendingMachinePersistenceException ex) {
+            return null;
+        }
         // gets rid of decimal for easier math
         change = change.movePointRight(2);
         
@@ -24,15 +33,26 @@ public class Change {
             BigDecimal coinValue = new BigDecimal(c.getCents());
             
             // divide change by value of coin
-            BigDecimal numCoins = change.divide(coinValue, 0, RoundingMode.FLOOR);
+            BigDecimal numCoinsNeeded = change.divide(coinValue, RoundingMode.FLOOR);
+            
+            // check we have enough
+            BigDecimal numCoinsWeHave = new BigDecimal(changeInDrawer.get(c));
+            
+            if (numCoinsWeHave.compareTo(numCoinsNeeded) < 0) {
+                numCoinsNeeded = numCoinsWeHave;
+            }
             
             // put into List
-            changeToReturn.put(c, numCoins.intValue());
+            changeToReturn.put(c, numCoinsNeeded.intValue());
             
             // then set change to whats left
-            change = change.remainder(coinValue);
+            change = change.subtract(numCoinsNeeded.multiply(coinValue));
         }
         
-        return changeToReturn;        
+        if (change.equals(BigDecimal.ZERO)) {
+            return changeToReturn;
+        } else {
+            return null;
+        }      
     }
 }

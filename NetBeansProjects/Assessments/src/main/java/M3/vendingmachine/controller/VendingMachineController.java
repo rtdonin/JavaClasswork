@@ -7,13 +7,20 @@ Date revised:
 package M3.vendingmachine.controller;
 
 import M3.vendingmachine.dao.VendingMachinePersistenceException;
-import M3.vendingmachine.dto.*;
+import M3.vendingmachine.dto.Candy;
+import M3.vendingmachine.dto.Coin;
 import M3.vendingmachine.service.NotEnoughCashInsertedException;
+import M3.vendingmachine.service.NotValidCandyException;
 import M3.vendingmachine.service.VendingMachineServiceLayer;
 import M3.vendingmachine.ui.VendingMachineView;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+
+
 
 public class VendingMachineController {
     private final VendingMachineServiceLayer service;
@@ -36,6 +43,27 @@ public class VendingMachineController {
                 if (cashString.equalsIgnoreCase("EXIT")){
                     view.displayGoodBye();
                     keepGoing = false;
+                } else if (cashString.equalsIgnoreCase("admin")){
+                    boolean keepGoingAdmin = true;
+                    
+                    while(keepGoingAdmin) {
+                        int adminSelection = view.displayAdminMenu();
+
+                        switch(adminSelection) {
+                            case 1: checkCandyInventory();
+                                break;
+                            case 2: restockCandy();
+                                break;
+                            case 3: checkDrawerInventory();
+                                break;
+                            case 4: restockDrawer();
+                                break;
+                            case 5: totalSales();
+                                break;
+                            case 6: keepGoingAdmin = false;
+                                break;
+                        }
+                    }
                 } else {
                     // We got cash, now we need a candy selection
                     int candyChoice = view.getCandySelection(availableCandy.size());
@@ -99,17 +127,77 @@ public class VendingMachineController {
                     if (doWeGetChange) {
                         // Get change
                         Map<Coin, Integer> change = service.getChange(candySelected, totalCashIn);
-                        // Display change
-                        view.displayChange(change, candySelected);
+                        
+                        if(change != null) {
+                            // Display change
+                            view.displayChange(change, candySelected);
+                        } else {
+                            view.displayErrorMessage("Unfortunatly we do not have enough change, please take your $" + totalCashIn +  " below.");
+                        }
+                        
                     } else {
                         view.noChangeEnjoy(candySelected);
                     }
                 }
             }
         } catch (VendingMachinePersistenceException e) {
-            throw new VendingMachinePersistenceException("Could not get menu.", e);
+            view.displayErrorMessage("Could not get menu.");
         }
         
+    }
+
+    private void checkCandyInventory() throws VendingMachinePersistenceException {
+        List<Candy> allCandy = service.getAllCandy();
+        view.displayAllCandy(allCandy);
+    }
+
+    private void restockCandy() throws VendingMachinePersistenceException {
+        List<Candy> allCandy = service.getAllCandy();
+        Iterator iterator = allCandy.iterator();
+        Map<Candy, Integer> updatedCandy = new HashMap<>();
+        
+        while(iterator.hasNext()) {
+            Candy addedCandy = (Candy) iterator.next();
+            int newInventory = view.adminAddedCandyInvetory(addedCandy);
+            updatedCandy.put(addedCandy, newInventory);
+        }
+       boolean newCandy = true;
+        
+       while (newCandy) {
+           String areWe = view.getAreWeAddingNewCandy();
+           newCandy = areWe.equalsIgnoreCase("YES");
+
+           if (newCandy) {
+               try {
+                    Candy createdCandy = view.createNewCandy();
+                    service.validateNewCandy(createdCandy);
+                    updatedCandy.put(createdCandy, 0);
+               } catch (NotValidCandyException | NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                    view.displayErrorMessage("Than was not a valid candy." + "\nPlease try again.");
+               }
+           }
+       }
+        service.adminAddedCandyInvetory(updatedCandy);
+    }
+
+    private void checkDrawerInventory() throws VendingMachinePersistenceException {
+        Map<Coin, Integer> jingle = service.getDrawerInventory();
+        view.displayCashInventory(jingle);
+    }
+
+    private void restockDrawer() throws VendingMachinePersistenceException {
+        Map<Coin, Integer> addedChange = view.adminAddedChangeInventory();
+        service.adminAddedChangeInventory(addedChange);
+    }
+
+    private void totalSales() throws VendingMachinePersistenceException {
+        BigDecimal sales = service.getTotalSales();
+        view.displayTotalSales(sales);
+        String reset = view.getResetSales();
+        
+        if (reset.equalsIgnoreCase("Reset")) {
+            service.resetSales();
+        }
     }
 
 }
