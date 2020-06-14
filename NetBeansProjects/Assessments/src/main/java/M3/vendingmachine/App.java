@@ -6,10 +6,19 @@ Date revised:
 
 package M3.vendingmachine;
 
+import M3.vendingmachine.ui.UserIO;
+import M3.vendingmachine.ui.UserIOConsoleImpl;
 import M3.vendingmachine.controller.VendingMachineController;
-import M3.vendingmachine.dao.*;
-import M3.vendingmachine.service.*;
-import M3.vendingmachine.ui.*;
+import M3.vendingmachine.dao.VendingMachineAuditDao;
+import M3.vendingmachine.dao.VendingMachineAuditDaoImpl;
+import M3.vendingmachine.dao.VendingMachineDao;
+import M3.vendingmachine.dao.VendingMachineDaoImpl;
+import M3.vendingmachine.dao.VendingMachinePersistenceException;
+import M3.vendingmachine.service.VendingMachineServiceLayer;
+import M3.vendingmachine.service.VendingMachineServiceLayerImpl;
+import M3.vendingmachine.ui.VendingMachineView;
+
+
 
 public class App {
     public static void main(String[] args) throws VendingMachinePersistenceException {

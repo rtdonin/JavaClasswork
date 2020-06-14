@@ -9,6 +9,8 @@ package M3.vendingmachine.ui;
 import M3.vendingmachine.dto.Candy;
 import M3.vendingmachine.dto.Coin;
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class VendingMachineView {
@@ -71,6 +73,70 @@ public class VendingMachineView {
 
     public void noChangeEnjoy(Candy candy) {
         io.print("Enjoy your " + candy.getName() + "!");
+    }
+
+    public int displayAdminMenu() {
+        io.print("==== Administrative Menu ====");
+        io.print("1. Check candy inventory");
+        io.print("2. Restock Candy");
+        io.print("3. Check the cash inventory");
+        io.print("4. Restock change");
+        io.print("5. Total Sales");
+        io.print("6. Exit menu");
+        
+        return io.readInt("Select one of the above options.");
+    }
+
+    public void displayAllCandy(List<Candy> allCandy) {
+        allCandy.forEach((current) -> {io.print(current.toString());});
+        io.readString("Press enter to continue.");
+
+    }
+
+    public int adminAddedCandyInvetory(Candy addedCandy) {
+        return io.readInt("How many " + addedCandy.getName() + " are you adding?");
+    }
+
+    public void displayCashInventory(Map<Coin, Integer> jingle) {
+        for(Coin c : Coin.values()) {
+            io.print(jingle.get(c) + " - " + c);
+        }
+        
+        io.readString("Press enter to continue.");
+
+    }
+
+    public Map<Coin, Integer> adminAddedChangeInventory() {
+        Map<Coin, Integer> addedJingle = new HashMap<>();
+        
+        for(Coin c : Coin.values()) {
+            int added = io.readInt("How many " + c + " are you adding?");
+            addedJingle.put(c, added);
+        }
+        return addedJingle;
+    }
+
+    public void displayTotalSales(BigDecimal sales) {
+        io.print("Total sales are $" + sales.toString());
+        io.readString("Press enter to continue.");
+    }
+
+    public String getResetSales() {
+        return io.readString("If you would like to reset your sales, please enter \"RESET\"."
+                + "\nIf not, please enter.");
+    }
+
+    public String getAreWeAddingNewCandy() {
+        return io.readString("Would you like to add new Candy? (yes/no)");
+    }
+
+    public Candy createNewCandy() {
+        String name = io.readString("Please enter the name of the candy:");
+        String priceString = io.readString("Please enter the price of " + name + ":");
+        BigDecimal price = new BigDecimal(priceString);
+        int inventory = io.readInt("How mant " + name + " are you adding?");
+        
+        return new Candy(name, price, inventory);
     }
 
 }

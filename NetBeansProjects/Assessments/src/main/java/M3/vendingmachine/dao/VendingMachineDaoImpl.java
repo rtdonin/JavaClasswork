@@ -119,4 +119,10 @@ public class VendingMachineDaoImpl implements VendingMachineDao {
         return sugaryTreats.get(name);
     }
 
+    @Override
+    public void adminAddCandyInventory(Map<String, Candy> updatedCandy) throws VendingMachinePersistenceException {
+        sugaryTreats = updatedCandy;
+        writeInventory();
+    }
+
 }
