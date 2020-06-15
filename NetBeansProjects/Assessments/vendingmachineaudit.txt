@@ -1,0 +1,44 @@
+06-15-20 10:41:18 : Purchasing Raisinets for 0.73.
+		Updated Inventory: Candy Raisinets $0.73 with 9 in stock.
+		Dispensed: 1 - QUARTER, 0 - DIME, 0 - NICKLE, 2 - PENNY
+
+06-15-20 10:41:28 : Purchasing Raisinets for 0.73.
+		Updated Inventory: Candy Raisinets $0.73 with 8 in stock.
+		Dispensed: 1 - QUARTER, 0 - DIME, 0 - NICKLE, 2 - PENNY
+
+06-15-20 10:41:51 : Purchasing Raisinets for 0.73.
+		Updated Inventory: Candy Raisinets $0.73 with 7 in stock.
+		Dispensed: 1 - QUARTER, 0 - DIME, 0 - NICKLE, 2 - PENNY
+
+06-15-20 10:46:28 : Purchasing Raisinets for 0.73.
+		Updated Inventory: Candy Raisinets $0.73 with 6 in stock.
+		Dispensed: 1 - QUARTER, 0 - DIME, 0 - NICKLE, 2 - PENNY
+
+06-15-20 10:46:36 : Purchasing Raisinets for 0.73.
+		Updated Inventory: Candy Raisinets $0.73 with 5 in stock.
+		Dispensed: 1 - QUARTER, 0 - DIME, 0 - NICKLE, 2 - PENNY
+
+06-15-20 10:51:08 : Purchasing Goo Goo Cluster for 1.52.
+		Updated Inventory: Candy Goo Goo Cluster $1.52 with 9 in stock.
+		Dispensed: 1 - QUARTER, 2 - DIME, 0 - NICKLE, 3 - PENNY
+
+06-15-20 11:21:29 : Purchasing Raisinets for 0.73.
+		Updated Inventory: Candy Raisinets $0.73 with 4 in stock.
+		Dispensed: 0 - QUARTER, 0 - DIME, 0 - NICKLE, 2 - PENNY
+
+06-15-20 11:26:31 : Purchasing Raisinets for 0.73.
+		Updated Inventory: Candy Raisinets $0.73 with 0 in stock.
+		Dispensed: 1 - QUARTER, 0 - DIME, 0 - NICKLE, 2 - PENNY
+
+06-15-20 12:03:27 : Purchasing Kit Kat for 0.89.
+		Updated Inventory: Candy Kit Kat $0.89 with 6 in stock.
+		Dispensed: 0 - QUARTER, 1 - DIME, 0 - NICKLE, 1 - PENNY
+
+06-15-20 12:03:29 : Purchasing Charleston Chew for 0.75.
+		Updated Inventory: Candy Charleston Chew $0.75 with 5 in stock.
+		Dispensed: 1 - QUARTER, 0 - DIME, 0 - NICKLE, 0 - PENNY
+
+06-15-20 12:03:31 : Purchasing Kit Kat for 0.89.
+		Updated Inventory: Candy Kit Kat $0.89 with 5 in stock.
+		Dispensed: 0 - QUARTER, 1 - DIME, 0 - NICKLE, 1 - PENNY
+

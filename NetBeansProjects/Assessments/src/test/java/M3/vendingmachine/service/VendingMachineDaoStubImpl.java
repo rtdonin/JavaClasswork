@@ -88,4 +88,10 @@ public class VendingMachineDaoStubImpl implements VendingMachineDao {
         // do nothing
     }
 
+    @Override
+    public String getDelimiter() {
+        return null;
+        // do nothing
+    }
+
 }

@@ -1,6 +1,6 @@
-Raisinets::0.73::10
-Charleston Chew::0.75::8
-Kit Kat::0.89::8
+Raisinets::0.73::1
+Charleston Chew::0.75::5
+Kit Kat::0.89::5
 Starburst::0.33::10
 Twizzlers::0.50::10
-Goo Goo Cluster::1.52::10
+Goo Goo Cluster::1.52::9

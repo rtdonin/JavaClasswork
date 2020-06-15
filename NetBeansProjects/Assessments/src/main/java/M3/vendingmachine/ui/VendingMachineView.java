@@ -9,7 +9,6 @@ package M3.vendingmachine.ui;
 import M3.vendingmachine.dto.Candy;
 import M3.vendingmachine.dto.Coin;
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,11 +41,11 @@ public class VendingMachineView {
         io.print("You've inserted $" + cashInserted);
     }
 
-    public void displayChange(Map<Coin, Integer> change, Candy candy) { 
+    public void displayChange(int[] change, Candy candy) { 
         io.print("You're change is: ");
         
         for (Coin c : Coin.values()) {
-            int numCoin = change.get(c);
+            int numCoin = change[c.ordinal()];
             
             if (numCoin > 0) {
                 io.print(c + " - " + numCoin);
@@ -97,21 +96,21 @@ public class VendingMachineView {
         return io.readInt("How many " + addedCandy.getName() + " are you adding?");
     }
 
-    public void displayCashInventory(Map<Coin, Integer> jingle) {
+    public void displayCashInventory(int[] jingle) {
         for(Coin c : Coin.values()) {
-            io.print(jingle.get(c) + " - " + c);
+            io.print(jingle[c.ordinal()] + " - " + c);
         }
         
         io.readString("Press enter to continue.");
 
     }
 
-    public Map<Coin, Integer> adminAddedChangeInventory() {
-        Map<Coin, Integer> addedJingle = new HashMap<>();
+    public int[] adminAddedChangeInventory() {
+        int[] addedJingle = new int[4];
         
         for(Coin c : Coin.values()) {
             int added = io.readInt("How many " + c + " are you adding?");
-            addedJingle.put(c, added);
+            addedJingle[c.ordinal()] = added;
         }
         return addedJingle;
     }
@@ -127,7 +126,7 @@ public class VendingMachineView {
     }
 
     public String getAreWeAddingNewCandy() {
-        return io.readString("Would you like to add new Candy? (yes/no)");
+        return io.readString("If you would like to add Candy enter \"YES\" or press enter to continue.");
     }
 
     public Candy createNewCandy() {
@@ -137,6 +136,11 @@ public class VendingMachineView {
         int inventory = io.readInt("How mant " + name + " are you adding?");
         
         return new Candy(name, price, inventory);
+    }
+
+    public void dislpayWasReset() {
+        io.print("Total sales are now $0.00");
+        io.readString("Please press enter to continue.");
     }
 
 }

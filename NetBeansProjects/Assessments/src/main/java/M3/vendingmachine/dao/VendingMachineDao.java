@@ -51,4 +51,7 @@ public interface VendingMachineDao {
     public Candy getCandy(String name) throws VendingMachinePersistenceException;
 
     public void adminAddCandyInventory(Map<String, Candy> updatedCandy) throws VendingMachinePersistenceException;
+
+    public String getDelimiter();
+
 }

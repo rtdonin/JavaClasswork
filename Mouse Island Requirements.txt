@@ -1,0 +1,41 @@
+Mouse Island Requirements:
+
+A mouse is stuck on an island(land surrounded by water) with a cat. On the island, there are also a block of cheese, a mouse hole, and 2 bridges that lead off the island. Oh golly, I hope the mouse can survive and get off the island!
+
+
+Requirements:
+1. The map will be stored in a text file and read in at the beginning of the run. I will supply this. You can ask the user to enter the file name or have it hard coded. Here is the map file format:
+  Line 1   : Map Name
+  Line 2   : Number of simulations to be run
+  Line 3   : Width of Map
+  Line 4   : Height of Map
+  Lines 5+ : Map with each space represented by a number
+    0 = Water               |     0 0 0 2 0 0 0 0 0 0
+    1 = Land                |     0 1 1 1 1 1 1 1 1 0
+    2 = Bridge              |     0 1 1 3 1 1 6 1 1 0
+    3 = Mouse hole          |     0 1 1 5 1 1 1 1 1 0
+    4 = Cheese              |     0 1 1 1 1 4 1 1 1 2
+    5 = Mouse               |     0 1 1 1 1 1 1 1 1 0
+    6 = Cat                 |     0 0 0 0 0 0 0 0 0 0
+2. The Cat and Mouse both move in a random direction. The random should be created with a seed, so that a simulation could be ran again using the seed to produce the exact same result. You may allow the user to create a seed or create one randomly(but store it).
+3. The Cat will never go into the water or on the bridge. Essentially the Cat will never try to leave the island.
+4. The Mouse can die many die a few different ways.
+  The Mouse will die if it goes for more than 100 rounds without eating.
+  The Mouse will die if the cat moves onto the same location as the mouse, unless it is on the same space as the mouse hole.
+  The Mouse will also die if it goes into the water. I know mice can swim, but this guy can't.
+5. The game ends when:
+  The Cat eats the Mouse.
+  The Mouse dies of starvation.
+  The Mouse drowns.
+  The Mouse enters a bridge, escaping the island!
+6. Run the simulation as many times as the file specified and tally up the number of times for each different way the game can end. Results should be output to a file with the format "Results - {Seed#} - {DateTime Run}" and the file should be formatted to look like this:
+  Line 1    : "Map Name: {Map Name}"
+  Line 2    : "Number of Simulations: {Number Ran}"
+  Line 3    : "Random Seed: {Random Seed Used}"
+  Line 4    : "Mouse Escapes: {Num of times mouse escaped} | {% of times escaped, calculated as Big Decimal}"
+  Line 5    : "Mouse Eaten:   {Num of times the cat ate mouse} | {% of times eaten, calculated as Big Decimal}"
+  Line 6    : "Mouse Drowns:  {Num of times mouse entered water} | {% of times drown, calculated as Big Decimal}"
+  Line 7    : "Mouse Starves: {Num of times mouse died of starvation} | {% of times starved, calculated as Big Decimal}"
+  Line 8    : "Tile Frequency Map:"
+  Line 9    : "Each number represents the number of times the mouse visited the tile"
+  Lines 10+ : {Map of frequency that the mouse }

@@ -11,15 +11,15 @@ import M3.vendingmachine.dao.VendingMachinePersistenceException;
 import M3.vendingmachine.dto.Coin;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Change {
-    public static Map<Coin, Integer> createChange(BigDecimal change) throws VendingMachinePersistenceException, OutOfChangeException {
+    public static int[] createChange(BigDecimal change) throws VendingMachinePersistenceException, OutOfChangeException {
         VendingMachineDrawerDao drawerDao = new VendingMachineDrawerDao();
-        Map<Coin, Integer> changeToReturn = new HashMap<>();
-        Map<Coin, Integer> changeInDrawer;
+        int[] changeToReturn = new int[4];
+        int[] changeInDrawer;
         
+        int[] denomination = {25, 10, 5, 1};
+
         try {
             changeInDrawer = drawerDao.getDrawer();
         } catch (VendingMachinePersistenceException ex) {
@@ -30,20 +30,21 @@ public class Change {
         
         for (Coin c : Coin.values()) {
             // get value of coin
-            BigDecimal coinValue = new BigDecimal(c.getCents());
+            int den = denomination[c.ordinal()];
+            BigDecimal coinValue = new BigDecimal(den);
             
             // divide change by value of coin
             BigDecimal numCoinsNeeded = change.divide(coinValue, RoundingMode.FLOOR);
             
             // check we have enough
-            BigDecimal numCoinsWeHave = new BigDecimal(changeInDrawer.get(c));
+            BigDecimal numCoinsWeHave = new BigDecimal(changeInDrawer[c.ordinal()]);
             
             if (numCoinsWeHave.compareTo(numCoinsNeeded) < 0) {
                 numCoinsNeeded = numCoinsWeHave;
             }
             
             // put into List
-            changeToReturn.put(c, numCoinsNeeded.intValue());
+            changeToReturn[c.ordinal()] = numCoinsNeeded.intValue();
             
             // then set change to whats left
             change = change.subtract(numCoinsNeeded.multiply(coinValue));

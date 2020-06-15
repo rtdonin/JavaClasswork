@@ -10,9 +10,12 @@ rewrite the file to have two known strings and therefore known
 candy objects.
 
 Methods we are testing:
-Map<String, Candy> getAllCandy()
-Candy editCandy(Candy)
-Candy getCandy(String name)
+    Map<String, Candy> getAllCandy()
+    Candy editCandy(Candy)
+    Candy getCandy(String name)
+
+TESTS WERE ONLY WRITTEN FOR METHODS THAT WERE REQUIRED FOR ASSESSMENT
+
 */
 
 package M3.vendingmachine.dao;

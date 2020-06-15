@@ -18,8 +18,6 @@ import M3.vendingmachine.service.VendingMachineServiceLayer;
 import M3.vendingmachine.service.VendingMachineServiceLayerImpl;
 import M3.vendingmachine.ui.VendingMachineView;
 
-
-
 public class App {
     public static void main(String[] args) throws VendingMachinePersistenceException {
         // Instantiate the UserIO implementation

@@ -6,8 +6,12 @@ Date revised:
 
 package M3.vendingmachine.service;
 
-import M3.vendingmachine.dao.*;
-import M3.vendingmachine.dto.*;
+import M3.vendingmachine.dao.VendingMachineAuditDao;
+import M3.vendingmachine.dao.VendingMachineDao;
+import M3.vendingmachine.dao.VendingMachineDrawerDao;
+import M3.vendingmachine.dao.VendingMachinePersistenceException;
+import M3.vendingmachine.dto.Candy;
+import M3.vendingmachine.dto.Coin;
 import static M3.vendingmachine.dto.Coin.PENNY;
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -18,6 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+
 
 public class VendingMachineServiceLayerImpl implements VendingMachineServiceLayer {
     private final VendingMachineDrawerDao drawerDao = new VendingMachineDrawerDao();
@@ -71,13 +77,13 @@ public class VendingMachineServiceLayerImpl implements VendingMachineServiceLaye
     }
 
     @Override
-    public Map<Coin, Integer> getChange(Candy candySelected, BigDecimal cashInserted) {
+    public int[] getChange(Candy candySelected, BigDecimal cashInserted) {
         MathContext mc = new MathContext(2, HALF_DOWN);
         BigDecimal price = candySelected.getPrice();
         BigDecimal jingle = cashInserted.subtract(price, mc);
 
         try {
-            Map<Coin, Integer> returnJingle = Change.createChange(jingle);
+            int[] returnJingle = Change.createChange(jingle);
             
             
             candySelected.setInventory(candySelected.getInventory() -1);
@@ -90,7 +96,7 @@ public class VendingMachineServiceLayerImpl implements VendingMachineServiceLaye
             entry += "\n\t\tDispensed: ";
             
             for (Coin c : Coin.values()) {
-                entry += returnJingle.get(c) + " - " + c;
+                entry += returnJingle[c.ordinal()] + " - " + c;
                 
                 if (!c.equals(PENNY)){
                     entry += ", ";
@@ -121,6 +127,7 @@ public class VendingMachineServiceLayerImpl implements VendingMachineServiceLaye
         return !returnChange;
     }
 
+    @Override
     public List<Candy> getAllCandy() throws VendingMachinePersistenceException {
         Map<String, Candy> allCandy = dao.getAllCandy();
         Set<String> candyName = allCandy.keySet();
@@ -149,12 +156,12 @@ public class VendingMachineServiceLayerImpl implements VendingMachineServiceLaye
     }
 
     @Override
-    public Map<Coin, Integer> getDrawerInventory() throws VendingMachinePersistenceException {
+    public int[] getDrawerInventory() throws VendingMachinePersistenceException {
         return drawerDao.getDrawer();
     }
 
     @Override
-    public void adminAddedChangeInventory(Map<Coin, Integer> addedChange) throws VendingMachinePersistenceException{
+    public void adminAddedChangeInventory(int[] addedChange) throws VendingMachinePersistenceException{
         drawerDao.restockDrawer(addedChange);
     }
     
@@ -168,6 +175,7 @@ public class VendingMachineServiceLayerImpl implements VendingMachineServiceLaye
     public void validateNewCandy(Candy candy) throws NotValidCandyException{
         if(candy.getName() == null
                 || candy.getName().trim().length() == 0
+                || !candy.getName().contains(dao.getDelimiter())
                 || candy.getPrice().compareTo(BigDecimal.ZERO) != 1) {
         
             throw new NotValidCandyException("e");

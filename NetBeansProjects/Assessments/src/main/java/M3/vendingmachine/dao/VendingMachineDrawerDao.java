@@ -15,40 +15,38 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import static java.lang.Integer.parseInt;
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 public class VendingMachineDrawerDao {
-    private Map<Coin, Integer> changeInDrawer = new HashMap<>();
+    private int[] changeInDrawer = new int[4];
     private static final String DELIMITER = "::";
     private static final String DRAWER_FILE = "drawer.txt";
     private BigDecimal totalSales;
     
-    public Map<Coin, Integer> getDrawer() throws VendingMachinePersistenceException {
+    public int[] getDrawer() throws VendingMachinePersistenceException {
         loadDrawer();
         return changeInDrawer;
     }
     
-    public void editAmount(Map<Coin, Integer> given, BigDecimal sale) throws VendingMachinePersistenceException {
+    public void editAmount(int[] given, BigDecimal sale) throws VendingMachinePersistenceException {
         loadDrawer();
         totalSales = totalSales.add(sale);
         
         for(Coin c : Coin.values()) {
-            int amount = changeInDrawer.get(c) - given.get(c);
-            changeInDrawer.put(c, amount);
+            int amount = changeInDrawer[c.ordinal()] - given[c.ordinal()];
+            changeInDrawer[c.ordinal()] = amount;
         }
         
         writeDrawer();
 
     }
     
-    public Map<Coin, Integer> restockDrawer(Map<Coin, Integer> additional) throws VendingMachinePersistenceException {
+    public int[] restockDrawer(int[] additional) throws VendingMachinePersistenceException {
         loadDrawer();
         for(Coin c : Coin.values()) {
-            int newAmount = changeInDrawer.get(c) + additional.get(c);
+            int newAmount = changeInDrawer[c.ordinal()] + additional[c.ordinal()];
             
-            changeInDrawer.put(c, newAmount);
+            changeInDrawer[c.ordinal()] = newAmount;
         }
         writeDrawer();
         
@@ -70,7 +68,8 @@ public class VendingMachineDrawerDao {
 
             } else {
                 String[] tokens = scanner.nextLine().split(DELIMITER);
-                changeInDrawer.put(Coin.valueOf(tokens[0]), parseInt(tokens[1]));
+                int i = Coin.valueOf(tokens[0]).ordinal();
+                changeInDrawer[i] = parseInt(tokens[1]);
             }
         }
         // close scanner
@@ -92,7 +91,7 @@ public class VendingMachineDrawerDao {
         out.flush();
         
         for(Coin c : Coin.values()) {
-            newLine = c + DELIMITER + changeInDrawer.get(c);
+            newLine = c + DELIMITER + changeInDrawer[c.ordinal()];
             out.println(newLine);
             out.flush();
         }

@@ -8,7 +8,6 @@ package M3.vendingmachine.controller;
 
 import M3.vendingmachine.dao.VendingMachinePersistenceException;
 import M3.vendingmachine.dto.Candy;
-import M3.vendingmachine.dto.Coin;
 import M3.vendingmachine.service.NotEnoughCashInsertedException;
 import M3.vendingmachine.service.NotValidCandyException;
 import M3.vendingmachine.service.OutOfCandyException;
@@ -89,10 +88,10 @@ public class VendingMachineController {
                             
                             try {
                                 cashIn = new BigDecimal(cashString, mc);
-                                hasError = false; // only false if not exception is thrown.
+                                hasError = false; // only false if no exception is thrown.
                             } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
                                 hasError = true;
-                                view.displayErrorMessage("That was not cash.");
+                                view.displayErrorMessage("You have not entered cash.");
                                 cashString = view.getCashIn();
                             }
 
@@ -132,11 +131,13 @@ public class VendingMachineController {
                         try {
                         
                             // Get change
-                            Map<Coin, Integer> change = service.getChange(candySelected, totalCashIn);
-
+                            int[] change = service.getChange(candySelected, totalCashIn);
+                            
                             if(change == null) {
                                 throw new OutOfChangeException("e");
                             }
+                            
+                            view.displayChange(change, candySelected);
                         } catch (OutOfChangeException e){
                             view.displayErrorMessage("Unfortunatly we do not have enough change, please take your $" + totalCashIn +  " below.");
                         }
@@ -190,12 +191,12 @@ public class VendingMachineController {
     }
 
     private void checkDrawerInventory() throws VendingMachinePersistenceException {
-        Map<Coin, Integer> jingle = service.getDrawerInventory();
+        int[] jingle = service.getDrawerInventory();
         view.displayCashInventory(jingle);
     }
 
     private void restockDrawer() throws VendingMachinePersistenceException {
-        Map<Coin, Integer> addedChange = view.adminAddedChangeInventory();
+        int[] addedChange = view.adminAddedChangeInventory();
         service.adminAddedChangeInventory(addedChange);
     }
 
@@ -206,6 +207,7 @@ public class VendingMachineController {
         
         if (reset.equalsIgnoreCase("Reset")) {
             service.resetSales();
+            view.dislpayWasReset();
         }
     }
 

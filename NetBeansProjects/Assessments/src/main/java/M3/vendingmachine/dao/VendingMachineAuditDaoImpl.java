@@ -28,7 +28,7 @@ public class VendingMachineAuditDaoImpl implements VendingMachineAuditDao {
 
         LocalDateTime timestamp = LocalDateTime.now();
         String formatted = timestamp.format(DateTimeFormatter.ofPattern("MM-dd-yy HH:mm:ss"));
-        out.println(formatted + " : " + entry);
+        out.println(formatted + " : " + entry + "\n");
         out.flush();
     }
 }

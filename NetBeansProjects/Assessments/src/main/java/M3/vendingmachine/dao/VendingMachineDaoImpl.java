@@ -125,4 +125,8 @@ public class VendingMachineDaoImpl implements VendingMachineDao {
         writeInventory();
     }
 
+    @Override
+    public String getDelimiter() {
+        return DELIMITER;
+    }
 }

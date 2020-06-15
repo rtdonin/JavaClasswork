@@ -13,21 +13,21 @@ Methods we want to test:
     Candy getCandy(Map<Integer, Candy>, int)
     Map<Coin, Integer> getChange(Candy, BigDecimal)
     boolean dispenseChange(Candy, BigDecimal)
+
+TESTS WERE ONLY WRITTEN FOR METHODS THAT WERE REQUIRED FOR ASSESSMENT
 */
 
 package M3.vendingmachine.service;
 
 import M3.vendingmachine.dao.*;
 import M3.vendingmachine.dto.*;
-import static M3.vendingmachine.dto.Coin.*;
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class VendingMachineServiceLayerImplTest {
-    private VendingMachineServiceLayer service;
+    private final VendingMachineServiceLayer service;
 
     public VendingMachineServiceLayerImplTest() {
         VendingMachineDao dao = new VendingMachineDaoStubImpl();
@@ -147,43 +147,27 @@ public class VendingMachineServiceLayerImplTest {
         BigDecimal cashInserted = new BigDecimal(2);
 
         // create expected map of change
-        Map<Coin, Integer> testJingle = new HashMap<>();
-        testJingle.put(QUARTER, 2);
-        testJingle.put(DIME, 2);
-        testJingle.put(NICKLE, 0);
-        testJingle.put(PENNY, 4);
+        int[] testJingle = {2, 2, 0, 4};
 
         // get change
-        Map<Coin, Integer> retrievedJingle = service.getChange(candyOne, cashInserted);
+        int[] retrievedJingle = service.getChange(candyOne, cashInserted);
 
-        // check that map and what is has
+        // check the array is not null and is the same.
         assertNotNull(retrievedJingle, "We need change.");
-        assertEquals(4, retrievedJingle.size(), "We need some coins of each type.");
-        assertEquals(testJingle.get(QUARTER).intValue(), retrievedJingle.get(QUARTER).intValue(), "We should have 2 quarters.");
-        assertEquals(testJingle.get(DIME).intValue(), retrievedJingle.get(DIME).intValue(), "We should have 2 dimes.");
-        assertEquals(testJingle.get(NICKLE).intValue(), retrievedJingle.get(NICKLE).intValue(), "We should have 0 nickles.");
-        assertEquals(testJingle.get(PENNY).intValue(), retrievedJingle.get(PENNY).intValue(), "We should have 4 pennies.");
-
+        assertArrayEquals(testJingle, retrievedJingle, "Both arrays should be that same.");
         // test if we get change when perfect change
         // should never happen but still need to check
         cashInserted = candyOne.getPrice();
         
-        testJingle.put(QUARTER, 0);
-        testJingle.put(DIME, 0);
-        testJingle.put(NICKLE, 0);
-        testJingle.put(PENNY, 0);
+        testJingle = new int[] {0, 0, 0, 0};
         
         // get change
         retrievedJingle = service.getChange(candyOne, cashInserted);
 
         // check that map and what is has
         assertNotNull(retrievedJingle, "We need change.");
-        
-        assertEquals(4, retrievedJingle.size(), "We need some coins of each type.");
-        assertEquals(testJingle.get(QUARTER).intValue(), retrievedJingle.get(QUARTER).intValue(), "We should have 0 quarters.");
-        assertEquals(testJingle.get(DIME).intValue(), retrievedJingle.get(DIME).intValue(), "We should have 0 dimes.");
-        assertEquals(testJingle.get(NICKLE).intValue(), retrievedJingle.get(NICKLE).intValue(), "We should have 0 nickles.");
-        assertEquals(testJingle.get(PENNY).intValue(), retrievedJingle.get(PENNY).intValue(), "We should have 0 pennies.");
+        assertArrayEquals(testJingle, retrievedJingle, "both arrays should be that same.");
+
     }
     
     
