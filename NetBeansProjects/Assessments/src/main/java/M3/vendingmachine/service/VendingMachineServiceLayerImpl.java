@@ -18,8 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class VendingMachineServiceLayerImpl implements VendingMachineServiceLayer {
     private final VendingMachineDrawerDao drawerDao = new VendingMachineDrawerDao();
@@ -32,7 +30,7 @@ public class VendingMachineServiceLayerImpl implements VendingMachineServiceLaye
     }
 
     @Override
-    public Map<Integer, Candy> getAllCandyForSale() throws VendingMachinePersistenceException {
+    public Map<Integer, Candy> getAllCandyForSale() throws VendingMachinePersistenceException, OutOfCandyException {
         Map<String, Candy> allCandy  = dao.getAllCandy();
         
         Collection<Candy> justCandy = allCandy.values();
@@ -42,6 +40,10 @@ public class VendingMachineServiceLayerImpl implements VendingMachineServiceLaye
         justCandy.stream()
                 .filter((candy) -> (candy.getInventory() > 0))
                 .forEachOrdered((candy) -> {availableCandy.put(availableCandy.size() + 1, candy);});
+        
+        if (availableCandy.isEmpty()) {
+            throw new OutOfCandyException("We are out of Candy.");
+        }
         
         return availableCandy;
     }
@@ -77,6 +79,7 @@ public class VendingMachineServiceLayerImpl implements VendingMachineServiceLaye
         try {
             Map<Coin, Integer> returnJingle = Change.createChange(jingle);
             
+            
             candySelected.setInventory(candySelected.getInventory() -1);
             dao.editCandy(candySelected);
             drawerDao.editAmount(returnJingle, candySelected.getPrice());
@@ -97,7 +100,7 @@ public class VendingMachineServiceLayerImpl implements VendingMachineServiceLaye
             auditDao.writeAuditEntry(entry);
             
             return returnJingle;
-        } catch (VendingMachinePersistenceException ex) {
+        } catch (VendingMachinePersistenceException | OutOfChangeException ex) {
             return null;
         }
     }

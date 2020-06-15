@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Change {
-    public static Map<Coin, Integer> createChange(BigDecimal change) throws VendingMachinePersistenceException {
+    public static Map<Coin, Integer> createChange(BigDecimal change) throws VendingMachinePersistenceException, OutOfChangeException {
         VendingMachineDrawerDao drawerDao = new VendingMachineDrawerDao();
         Map<Coin, Integer> changeToReturn = new HashMap<>();
         Map<Coin, Integer> changeInDrawer;
@@ -52,7 +52,7 @@ public class Change {
         if (change.equals(BigDecimal.ZERO)) {
             return changeToReturn;
         } else {
-            return null;
+            throw new OutOfChangeException("e");
         }      
     }
 }

@@ -11,6 +11,8 @@ import M3.vendingmachine.dto.Candy;
 import M3.vendingmachine.dto.Coin;
 import M3.vendingmachine.service.NotEnoughCashInsertedException;
 import M3.vendingmachine.service.NotValidCandyException;
+import M3.vendingmachine.service.OutOfCandyException;
+import M3.vendingmachine.service.OutOfChangeException;
 import M3.vendingmachine.service.VendingMachineServiceLayer;
 import M3.vendingmachine.ui.VendingMachineView;
 import java.math.BigDecimal;
@@ -124,14 +126,18 @@ public class VendingMachineController {
                         System.exit(1);
 
                     }
+                    
                     if (doWeGetChange) {
-                        // Get change
-                        Map<Coin, Integer> change = service.getChange(candySelected, totalCashIn);
                         
-                        if(change != null) {
-                            // Display change
-                            view.displayChange(change, candySelected);
-                        } else {
+                        try {
+                        
+                            // Get change
+                            Map<Coin, Integer> change = service.getChange(candySelected, totalCashIn);
+
+                            if(change == null) {
+                                throw new OutOfChangeException("e");
+                            }
+                        } catch (OutOfChangeException e){
                             view.displayErrorMessage("Unfortunatly we do not have enough change, please take your $" + totalCashIn +  " below.");
                         }
                         
@@ -142,6 +148,9 @@ public class VendingMachineController {
             }
         } catch (VendingMachinePersistenceException e) {
             view.displayErrorMessage("Could not get menu.");
+        } catch (OutOfCandyException e) {
+            view.displayErrorMessage("We are out of Candy.");
+            view.displayGoodBye();
         }
         
     }
