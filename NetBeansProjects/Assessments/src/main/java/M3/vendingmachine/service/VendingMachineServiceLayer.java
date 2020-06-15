@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface VendingMachineServiceLayer {
-    public Map<Integer, Candy> getAllCandyForSale() throws VendingMachinePersistenceException;
+    public Map<Integer, Candy> getAllCandyForSale() throws VendingMachinePersistenceException, OutOfCandyException;
     public boolean buyCandy(Candy purchasing, BigDecimal cashIn) throws VendingMachinePersistenceException;
     public Candy getCandy(Map<Integer, Candy> availableCandy, int menuSelection);
     public Map<Coin, Integer> getChange(Candy candySelected, BigDecimal cashInserted);

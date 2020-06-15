@@ -35,7 +35,7 @@ public class VendingMachineDrawerDao {
         totalSales = totalSales.add(sale);
         
         for(Coin c : Coin.values()) {
-            int amount = given.get(c) + changeInDrawer.get(c);
+            int amount = changeInDrawer.get(c) - given.get(c);
             changeInDrawer.put(c, amount);
         }
         

@@ -37,7 +37,7 @@ public class VendingMachineServiceLayerImplTest {
     }
     
     @Test
-    public void testGetAllCandyForSale() throws VendingMachinePersistenceException {
+    public void testGetAllCandyForSale() throws VendingMachinePersistenceException, OutOfCandyException {
         // create both candies
         String name = "Whatchamacallit";
         BigDecimal price = new BigDecimal("1.26");
