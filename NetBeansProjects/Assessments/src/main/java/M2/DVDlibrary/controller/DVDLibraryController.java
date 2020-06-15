@@ -1,7 +1,7 @@
 /*
 Created by: Margaret Donin
-Date created: 
-Date revised:
+Date created: 05/11/20
+Date revised:05/21/20
 */
 
 package M2.DVDlibrary.controller;
@@ -81,7 +81,7 @@ public class DVDLibraryController {
     private void removeDVD() throws DVDLibraryDaoException {
         view.displayRemoveDVDBanner();
         String dvdTitle = view.getDVDTitleChoice();
-        DVD removedDVD = dao.getDVD(dvdTitle);
+        DVD removedDVD = dao.removeDVD(dvdTitle);
         view.displayRemoveResult(removedDVD);
     }
     
@@ -92,47 +92,50 @@ public class DVDLibraryController {
         view.displayDVD(dvdToEdit, false);
         
         if (dvdToEdit != null) {
-            int menuSelection = view.printEditMenuAndGetSelection();
+            boolean keepGoing = true;
             String edit;
             
             try {
-                switch(menuSelection) {
-                    case 1:
-                        // Special case. The title is the key
-                        // we remove the key from the Map and create a new key and value
-                        edit = view.getDVDEdit("title");
-                        dao.removeDVD(dvdTitleToEdit);
-                        dao.editTitle(dvdToEdit, edit);
-                        dvdToEdit = dao.getDVD(edit);
-                        break;
-                    case 2:
-                        edit = view.getDVDEdit("release date");
-                        dao.editReleaseDate(dvdToEdit, edit);
-                        break;
-                    case 3:
-                        edit = view.getDVDEdit("MPAA Rating");
-                        dao.editMPAARating(dvdToEdit, edit);
-                        break;
-                    case 4:
-                        edit = view.getDVDEdit("studio");
-                        dao.editStudio(dvdToEdit, edit);
-                        break;
-                    case 5:
-                        edit = view.getDVDEdit("user rating");
-                        dao.editUserRating(dvdToEdit, edit);
-                        break;
-                    default: unknownCommand();
+                while(keepGoing) {
+                    int menuSelection = view.printEditMenuAndGetSelection();
+                    switch(menuSelection) {
+                        case 1:
+                            // Special case. The title is the key
+                            // we remove the key from the Map and create a new key and value
+                            // v0 has it here, v1 has it in the DAO where it should be.
+                            edit = view.getDVDEdit("title");
+                            dao.editTitle(dvdToEdit, edit);
+                            break;
+                        case 2:
+                            edit = view.getDVDEdit("release date");
+                            dao.editReleaseDate(dvdToEdit, edit);
+                            break;
+                        case 3:
+                            edit = view.getDVDEdit("MPAA Rating");
+                            dao.editMPAARating(dvdToEdit, edit);
+                            break;
+                        case 4:
+                            edit = view.getDVDEdit("studio");
+                            dao.editStudio(dvdToEdit, edit);
+                            break;
+                        case 5:
+                            edit = view.getDVDEdit("user rating");
+                            dao.editUserRating(dvdToEdit, edit);
+                            break;
+                        case 6:
+                            keepGoing = false;
+                            break;
+                        default: unknownCommand();
+                    }
+                    view.displayDVD(dvdToEdit, false);
                 }
-                
-                view.displayEditSuccessBanner();
-                view.displayDVD(dvdToEdit, false);
-                
             } catch (DVDLibraryDaoException e) {
                 throw new DVDLibraryDaoException("Could not make edit.", e);
             }
         } else {
             view.createPause();
         }
+        view.displayEditSuccessBanner();
     }
     
     private void unknownCommand() {

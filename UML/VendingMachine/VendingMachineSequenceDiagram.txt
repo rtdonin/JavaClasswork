@@ -1,0 +1,38 @@
+/'
+Created by: Margaret Donin
+Date created: 06/07/20
+Date revised: 06/09/20
+Date revised: 06/10/20
+Date revised: 06/12/20
+'/
+
+@startuml
+
+title VendingMachine
+
+actor View
+View -> Controller
+Controller -> Service : getAllCandyforSale()
+Service -> Dao : getAllCandy()
+Dao --> Service : Map<String, Candy>
+Service --> Controller : Map<Integer, Candy>
+Controller -> View : showMenuGetCash(Map<Integer, Candy>)
+View --> Controller : String
+Controller ->  View : getCandySelection(int)
+View --> Controller : int
+Controller -> Service : getCandy(Map<Integer, Candy>, int)
+Service --> Controller : Candy
+Controller -> Service : buyCandy(Candy, BigDecimal)
+Service --> Controller : boolean
+Controller -> View : displayCashInserted(BigDecimal)
+View --> Controller : void
+Controller --> Service : dispenseChange(Candy, BigDecimal)
+Service --> Controller : boolean
+Controller -> Service : getChange(Candy, BigDecimal)
+Service -> Change : createChange(BigDecimal)
+Change --> Service : List<BigDecimal>
+Service --> Controller : List<BigDecimal>
+Controller -> View : displayChange(List<BigDecimal>, Candy)
+View --> Controller : void
+
+@enduml

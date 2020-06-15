@@ -1,7 +1,7 @@
 /*
 Created by: Margaret Donin
 Date created: 05/11/20
-Date revised:
+Date revised: 05/21/20
 */
 
 package M2.DVDlibrary.dao;
@@ -54,6 +54,8 @@ public class DVDLibraryDaoFileImpl implements DVDLibraryDao{
     
     @Override
     public void editTitle(DVD dvd, String newTitle) throws DVDLibraryDaoException{
+        loadLibrary();
+        dvds.remove(dvd.getTitle());
         dvd.setTitle(newTitle);
         dvds.put(newTitle, dvd);
         writeLibrary();
@@ -110,7 +112,7 @@ public class DVDLibraryDaoFileImpl implements DVDLibraryDao{
         try {
             scanner = new Scanner(new BufferedReader(new FileReader(LIBRARY_FILE)));
         } catch(FileNotFoundException e) {
-            throw new DVDLibraryDaoException("-_- Could not load roster data into memory.", e);
+            throw new DVDLibraryDaoException("-_- Could not load library data into memory.", e);
         }
         
         String currentLine;

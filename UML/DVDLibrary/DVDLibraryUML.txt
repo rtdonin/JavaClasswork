@@ -1,0 +1,115 @@
+@startuml
+
+title DVDLibrary
+
+class DVD {
+    -String title
+    -String releaseDate
+    -String MPAARating
+    -String director
+    -String studio
+    -String userRating
+    +DVD(String)
+    +String getTitle()
+    +void setTitle()
+    +String getReleaseDate()
+    +void setReleaseDate(String)
+    +String getMPAARating()
+    +void setMPAARating(String)
+    +String getDirector()
+    +void setDirector(String)
+    +String getStudio()
+    +void setStudio(String)
+    +String getUserRating()
+    +void hsetUserRating(String)
+}
+
+class DVDLibraryView {
+    -UserIO io
+    +DVDLibraryView(UserIO)
+    +int printMenuAndGetMenuSelection()
+    +DVD getNewDVDInfo()
+    +void displayCreateDVDBanner()
+    +void displayCreateSuccessBanner()
+    +void displayDVDList(List<DVD>)
+    +void displayAllBanner()
+    +void displayDisplayAllBanner()
+    +String getDVDNameChoice()
+    +void displayDVD(DVD, boolean)
+    +void displayRemoveDVDBanner()
+    +void displayRemoveResult(DVD)
+    +void displayEditDVDBanner()
+    +int printEditMenuAndGetSelection()
+    +String getDVDEdit()
+    +void displayEditSuccessBanner()
+    +void displayExitBanner()
+    +void displayUnknownCommandBanner()
+    +void displayErrorMessage(String)
+}
+
+interface DVDLibraryDao {
+    +DVD addDVD(String, DVD)
+    +List<DVD> getAllDVD()
+    +DVD getDVD(String)
+    +DVD removeDVD(String)
+    +void editTitle(DVD, String)
+    +void editReleaseDate(DVD, String)
+    +void editMPAARating(DVD, String)
+    +void editDirector(DVD, String)
+    +void editStudio(DVD, String)
+    +void editUserRating(DVD, String)
+}
+
+class DVDLibraryDaoFileImpl {
+    -Map<String, DVD> DVD
+    +String DVD_FILE
+    +Strin DELIMITER
+    +DVD addDVD(String, DVD)
+    +List<DVD> getAllDVD() : List<DVD>
+    +DVD getDVD(String)
+    +DVD removeDVD(String)
+    +void editTitle(DVD, String)
+    +void editReleaseDate(DVD, String)
+    +void editMPAARating(DVD, String)
+    +void editDirector(DVD, String)
+    +void editStudio(DVD, String)
+    +void editUserRating(DVD, String)
+    -DVD unmarshallDVD(String)
+    -void loadLibrary()
+    -String marshallDVD(DVD)
+    -void writeLibrary()
+}
+
+class DVDLibraryController {
+    -UserIO io
+    -DVDLibraryView view
+    -DVDLibraryDao dao
+    +DVDLibraryController(DVDLibraryDao, DVDLibraryView)
+    +void run()
+    -int getMenuSelection()
+    -void createDVD()
+    -void listDVDs()
+    -void viewDVD()
+    -void removeDVD()
+    -void editDVD()
+    -void unknownCommand()
+    -void exitMessage()
+}
+
+class DVDLibraryDaoException {
+    +DVDLibraryDaoException(String)
+    +DVDLibraryDaoException(String, Throwable)
+}
+
+class Exceptions
+interface UserIO
+class UserIOConsoleImpl
+
+Exceptions <|-- DVDLibraryDaoException : Extends
+DVDLibraryController "1" *-- DVDLibraryDao
+DVDLibraryController "1" *-- DVDLibraryView
+DVDLibraryView "1" *-- UserIO
+DVDLibraryDao ()- DVDLibraryDaoFileImpl
+UserIO ()- UserIOConsoleImpl
+
+@enduml

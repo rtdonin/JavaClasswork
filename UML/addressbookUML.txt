@@ -1,0 +1,115 @@
+@startuml
+
+firstName AddressBook
+
+class Address {
+    -String firstName
+    -String lastName
+    -String streetAddress
+    -String city
+    -String state
+    -String zip
+    +Address(String)
+    +String getFirstName()
+    +void setFirstName()
+    +String getLastName()
+    +void setLastName(String)
+    +String getStreetAddress()
+    +void setStreetAddress(String)
+    +String getCity()
+    +void setCity(String)
+    +String getState()
+    +void setState(String)
+    +String getZip()
+    +void setZip(String)
+}
+
+class AddressBookView {
+    -UserIO io
+    +AddressBookView(UserIO)
+    +int printMenuAndGetMenuSelection()
+    +Address getNewAddressInfo()
+    +void displayCreateAddressBanner()
+    +void displayCreateSuccessBanner()
+    +void displayAddressList(List<Address>)
+    +void displayAllBanner()
+    +void displayDisplayAllBanner()
+    +String getAddressNameChoice()
+    +void displayAddress(Address, boolean)
+    +void displayRemoveAddressBanner()
+    +void displayRemoveResult(Address)
+    +void displayEditAddressBanner()
+    +int printEditMenuAndGetSelection()
+    +String getAddressEdit()
+    +void displayEditSuccessBanner()
+    +void displayExitBanner()
+    +void displayUnknownCommandBanner()
+    +void displayErrorMessage(String)
+}
+
+interface AddressBookDao {
+    +Address addAddress(String, Address)
+    +List<Address> getAllAddress()
+    +Address getAddress(String)
+    +Address removeAddress(String)
+    +void editFirstName(Address, String)
+    +void editLastName(Address, String)
+    +void editStreetAddress(Address, String)
+    +void editCity(Address, String)
+    +void editState(Address, String)
+    +void editZip(Address, String)
+}
+
+class AddressBookDaoFileImpl {
+    -Map<String, Address> Address
+    +String Address_FILE
+    +Strin DELIMITER
+    +Address addAddress(String, Address)
+    +List<Address> getAllAddress() : List<Address>
+    +Address getAddress(String)
+    +Address removeAddress(String)
+    +void editFirstName(Address, String)
+    +void editLastName(Address, String)
+    +void editStreetAddress(Address, String)
+    +void editCity(Address, String)
+    +void editState(Address, String)
+    +void editZip(Address, String)
+    -Address unmarshallAddress(String)
+    -void loadBook()
+    -String marshallAddress(Address)
+    -void writeBook()
+}
+
+class AddressBookController {
+    -UserIO io
+    -AddressBookView view
+    -AddressBookDao dao
+    +AddressBookController(AddressBookDao, AddressBookView)
+    +void run()
+    -int getMenuSelection()
+    -void createAddress()
+    -void listAddresses()
+    -void viewAddress()
+    -void removeAddress()
+    -void editAddress()
+    -void unknownCommand()
+    -void exitMessage()
+}
+
+class AddressBookDaoException {
+    +AddressBookDaoException(String)
+    +AddressBookDaoException(String, Throwable)
+}
+
+class Exceptions
+interface UserIO
+class UserIOConsoleImpl
+
+Exceptions <|-- AddressBookDaoException : Extends
+AddressBookController "1" *-- AddressBookDao
+AddressBookController "1" *-- AddressBookView
+AddressBookView "1" *-- UserIO
+AddressBookDao ()- AddressBookDaoFileImpl
+UserIO ()- UserIOConsoleImpl
+
+@enduml

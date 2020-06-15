@@ -36,7 +36,7 @@ public class UserIOConsoleImpl implements UserIO {
             print(prompt);
             input = parseInt(scanInput.nextLine());
         } catch(NumberFormatException ex) {
-            print("\nCould not parse interger.");
+            print("\nCould not parse integer.");
         }
         
         return input;

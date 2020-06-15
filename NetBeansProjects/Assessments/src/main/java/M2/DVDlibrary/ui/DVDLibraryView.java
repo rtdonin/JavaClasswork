@@ -1,7 +1,7 @@
 /*
 Created by: Margaret Donin
 Date created: 05/11/20
-Date revised:
+Date revised: 05/21/20
 */
 
 package M2.DVDlibrary.ui;
@@ -118,8 +118,9 @@ public class DVDLibraryView {
         io.print("3. Edit MPAA Rating");
         io.print("4. Edit Studio");
         io.print("5. Edit User Rating");
+        io.print("6. Exit editing");
 
-        return io.readInt("Please select from the above choices.", 1, 5);
+        return io.readInt("Please select from the above choices.", 1, 6);
     }
     
     public String getDVDEdit(String toEdit) {
