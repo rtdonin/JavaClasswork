@@ -1,7 +1,7 @@
 /*
 Created by: Margaret Donin
 Date created: 06/07/20
-Date revised:
+Date revised: 06/17/20
 */
 
 package M3.vendingmachine.dao;
@@ -19,7 +19,9 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Scanner;
+import org.springframework.stereotype.Component;
 
+// @Component
 public class VendingMachineDaoImpl implements VendingMachineDao {
 
     private Map<String, Candy> sugaryTreats = new HashMap<>();

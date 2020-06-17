@@ -16,22 +16,22 @@
           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
 
     <!-- Bean definitions go here -->
-   <bean id = "userIO" class = " rtdon.classroster.ui.UserIOConsoleImpl" />
+   <bean id = "userIO" class = " M2.Summary.classroster.ui.UserIOConsoleImpl" />
    
-   <bean id = "view" class = " rtdon.classroster.ui.ClassRosterView">
+   <bean id = "view" class = " M2.Summary.classroster.ui.ClassRosterView">
        <constructor-arg ref = "userIO" />
    </bean>
    
-   <bean id = "classRosterDao" class = " rtdon.classroster.dao.ClassRosterDaoFileImpl"/>
+   <bean id = "classRosterDao" class = " M2.Summary.classroster.dao.ClassRosterDaoFileImpl"/>
    
-    <bean id = "auditDao" class = " rtdon.classroster.dao.ClassRosterAuditDaoFileImpl"/>
+    <bean id = "auditDao" class = " M2.Summary.classroster.dao.ClassRosterAuditDaoFileImpl"/>
    
-    <bean id = "serviceLayer" class = " rtdon.classroster.service.ClassRosterServiceLayerImpl">
+    <bean id = "serviceLayer" class = " M2.Summary.classroster.service.ClassRosterServiceLayerImpl">
         <constructor-arg ref = "classRosterDao"/>
         <constructor-arg ref = "auditDao"/>           
     </bean>
    
-    <bean id = "controller" class = " rtdon.classroster.controller.ClassRosterController">
+    <bean id = "controller" class = " M2.Summary.classroster.controller.ClassRosterController">
         <constructor-arg ref = "serviceLayer"/>
         <constructor-arg ref = "view"/>
     </bean>

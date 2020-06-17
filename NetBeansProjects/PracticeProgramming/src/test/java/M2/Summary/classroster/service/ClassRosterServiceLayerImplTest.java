@@ -21,8 +21,8 @@ public class ClassRosterServiceLayerImplTest {
 //        ClassRosterAuditDao auditDao = new ClassRosterAuditDaoStubImpl();
 //
 //        service = new ClassRosterServiceLayerImpl(dao, auditDao);
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
-        service = ctx.getBean("serviceLayer", ClassRosterServiceLayer.class);
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("app.xml");
+        this.service = ctx.getBean("serviceLayer", ClassRosterServiceLayer.class);
     }
     
     @Test

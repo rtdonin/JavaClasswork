@@ -16,13 +16,13 @@
           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
 
     <!-- Bean definitions go here -->
-    <bean id = "classRosterDao" class = "com.sg.classroster.dao.ClassRosterDaoFileImpl"/>
+    <bean id = "classRosterDao" class = "M2.Summary.classroster.dao.ClassRosterDaoFileImpl"/>
+   
+    <bean id = "classRosterDaoStub" class = "M2.Summary.classroster.service.ClassRosterDaoStubImpl"/>
+   
+    <bean id = "auditDaoStub" class = "M2.Summary.classroster.service.ClassRosterAuditDaoStubImpl"/>
 
-    <bean id = "classRosterDaoStub" class = "com.sg.classroster.dao.ClassRosterDaoStubImpl"/>
-
-    <bean id = "auditDaoStub" class = "com.sg.classroster.dao.ClassRosterAuditDaoStubImpl"/>
-
-    <bean id = "serviceLayer" class = "com.sg.classroster.service.ClassRosterServiceLayerImpl">
+    <bean id = "serviceLayer" class = "M2.Summary.classroster.service.ClassRosterServiceLayerImpl">
         <constructor-arg ref = "classRosterDaoStub"/>
         <constructor-arg ref = "auditDaoStub"/>           
     </bean>

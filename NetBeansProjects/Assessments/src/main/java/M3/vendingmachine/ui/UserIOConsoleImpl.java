@@ -1,7 +1,7 @@
 /*
 Created by: Margaret Donin
 Date created: 05/04/20
-Date revised:
+Date revised: 06/17/20
  */
 
 package M3.vendingmachine.ui;
@@ -11,7 +11,9 @@ import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
 import static java.lang.Long.parseLong;
 import java.util.Scanner;
+import org.springframework.stereotype.Component;
 
+// @Component
 public class UserIOConsoleImpl implements UserIO {
     Scanner scanInput = new Scanner(System.in);
 

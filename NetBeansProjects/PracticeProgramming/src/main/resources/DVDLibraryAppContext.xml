@@ -16,21 +16,16 @@
           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
 
     <!-- Bean definitions go here -->
-   <bean id = "userIO" class = " rtdon.classroster.ui.UserIOConsoleImpl" />
+   <bean id = "userIO" class = " M3.Testing.DVDlibrary.ui.UserIOConsoleImpl" />
    
-   <bean id = "view" class = " rtdon.classroster.ui.DVDLibraryView">
+   <bean id = "view" class = " M3.Testing.DVDlibrary.ui.DVDLibraryView">
        <constructor-arg ref = "userIO" />
    </bean>
    
-   <bean id = "classRosterDao" class = " rtdon.classroster.dao.DVDLibraryDaoFileImpl"/>
+   <bean id = "dao" class = " M3.Testing.DVDlibrary.dao.DVDLibraryDaoFileImpl"/>
    
-   <bean id = "serviceLayer" class = " rtdon.classroster.service.DVDLibraryServiceLayerImpl">
-        <constructor-arg ref = "classRosterDao"/>
-        <constructor-arg ref = "auditDao"/>           
-    </bean>
-   
-    <bean id = "controller" class = " rtdon.classroster.controller.DVDLibraryController">
-        <constructor-arg ref = "serviceLayer"/>
+    <bean id = "controller" class = " M3.Testing.DVDlibrary.controller.DVDLibraryController">
+        <constructor-arg ref = "dao"/>
         <constructor-arg ref = "view"/>
     </bean>
    

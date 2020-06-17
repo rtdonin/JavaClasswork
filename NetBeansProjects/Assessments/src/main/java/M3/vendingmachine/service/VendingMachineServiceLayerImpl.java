@@ -1,7 +1,7 @@
 /*
 Created by: Margaret Donin
 Date created: 06/07/20
-Date revised:
+Date revised: 06/17/20
 */
 
 package M3.vendingmachine.service;
@@ -22,14 +22,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-
-
+// @Component
 public class VendingMachineServiceLayerImpl implements VendingMachineServiceLayer {
     private final VendingMachineDrawerDao drawerDao = new VendingMachineDrawerDao();
     private final VendingMachineDao dao;
     private final VendingMachineAuditDao auditDao;
     
+    // @Autowired
     public VendingMachineServiceLayerImpl(VendingMachineDao dao, VendingMachineAuditDao auditDao) {
         this.dao = dao;
         this.auditDao = auditDao;
