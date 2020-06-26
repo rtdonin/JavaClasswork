@@ -1,0 +1,278 @@
+/'
+Created by: Margaret Donin
+Date created: 06/23/20
+Date revised: 06/24/20 correct syntax, packages, allOrders data structure
+'/
+
+@startuml
+
+scale 2400 width
+scale 1400 height
+
+package "flooring.controller" {
+    class FlooringController {
+        - view: FlooringView
+        - service: FlooringServiceLayer
+        + FlooringController(FlooringView, FlooringService)
+        + run(): void {}
+        - getAllOrders(): void {}
+        - addOrder(): void {}
+        - editOrder(): void {}
+        - removeOrder(): void {}
+        - export(): void {}
+    }
+}
+
+package "flooring.ui" {
+    interface UserIO {}
+
+    class UserIOConsoleImpl {}
+
+    interface FlooringView {
+        + displayGetMenu(): int {}
+        + getOrderDate(): String {}
+        + getOrderName(): String {}
+        + displayAllOrders(): void {allOrders: Map<LocalDate, Map<Integer, Order>}
+        + displayGetOrderStateMenu(): String {allStates: Map<String, State>}
+        + displayGetOrderProductMenu(): String {allProducts: Map<String, Product>}
+        + getOrderArea(): String {}
+        + displayGetOrderConfirmation(): String {newOrder: Order}
+        + displayAddOrderSuccessBanner(): void {}
+        + displayGetEditMenu(): int {}
+        + getChange(): String {edit: Edit}
+        + displayGetEditConfirmation(): String {editedOrder: Order}
+        + displayEditOrderSuccessBanner(): void {}
+        + findOrderByDate(): String {}
+        + findOrderById(): int {}
+        + displayDeletionConfirmation(): String {removedOrder: Order}
+        + displayDeletionOrderSuccessBanner(): void {}
+        + displayError(): void {error: String}
+        + displayExportingBanner(): void {}
+        + displayExportingSuccess(): void {}
+    }
+
+    class FlooringViewImpl {
+        - io: UserIO 
+        + FlooringView(): {io: UserIO}
+        + displayGetMenu(): int {}
+        + getOrderDate(): String {}
+        + getOrderName(): String {}
+        + displayAllOrders(): void {allOrders: Map<LocalDate, Map<Integer, Order>}
+        + displayGetOrderStateMenu(): String {allStates: Map<String, State>}
+        + displayGetOrderProductMenu(): String {allProducts: Map<String, Product>}
+        + getOrderArea(): String {}
+        + displayGetOrderConfirmation(): String {newOrder: Order}
+        + displayAddOrderSuccessBanner(): void {}
+        + displayGetEditMenu(): int {}
+        + getChange(): String {edit: Edit}
+        + displayGetEditConfirmation(): String {editedOrder: Order}
+        + displayEditOrderSuccessBanner(): void {}
+        + findOrderByDate(): String {}
+        + findOrderById(): int {}
+        + displayDeletionConfirmation(): String {removedOrder: Order}
+        + displayDeletionOrderSuccessBanner(): void {}
+        + displayError(): void {error: String}
+        + displayExportingBanner(): void {}
+        + displayExportingSuccess(): void {}
+    }
+}
+
+package "flooring.service" {
+    interface FlooringServiceLayer {
+        + getAllOrders(): void {allOrders: Map<LocalDate, Map<Integer, Order>}
+        + getDateOrders(): Map<Integer, Order> {date: LocalDate}
+        + getOrder(): Order {ordersFromDate: Map<Integer, Order>, id: Integer}
+        + getNewId(): Integer {}
+        + calculateProductCostTax(): Order {order: Order}
+        + addOrder(): Order {newOrder: Order}
+        + validateOrder(): void {order: Order}
+        + getAllProducts(): Map<String, Product> {}
+        + getProduct(): Product {productType: String}
+        + getAllStates(): Map<String, State>  {}
+        + getState(): State {stateAbbreviation: String}
+        + editOrder(): Order {editedOrder: Order}
+        + removeOrder(): Order {removeOrder: Order}
+        + export(): void {}
+    }
+
+    class FlooringServiceLayerImpl {
+        - orderDao: FlooringOrderDao
+        - productDao: FlooringProductDao
+        - stateDao: FlooringStateDao
+        + FlooringService: {orderDao: FlooringOrderDao, productDao: FlooringProductDao, stateOrder: FlooringStateOrder}
+        + getAllOrders(): void {allOrders: Map<LocalDate, Map<Integer, Order>}
+        + getDateOrders(): Map<Integer, Order> {date: LocalDate}
+        + getOrder(): Order {ordersFromDate: Map<Integer, Order>, id: Integer}
+        + getNewId(): Integer {}
+        + calculateProductCostTax(): Order {order: Order}
+        + addOrder(): Order {newOrder: Order}
+        + validateOrder(): void {order: Order}
+        + getAllProducts(): Map<String, Product> {}
+        + getProduct(): Product {productType: String}
+        + getAllStates(): Map<String, State>  {}
+        + getState(): State {stateAbbreviation: State}
+        + editOrder(): Order {editedOrder: Order}
+        + removeOrder(): Order {removeOrder: Order}
+        + export(): void {}
+    }
+}
+
+package "flooring.dao" {
+    interface FlooringOrderDao {
+        + getAllOrders(): Map<LocalDate, Map<Integer, Order> {}
+        + getOrder(): Order {dateId: String}
+        + addOrder(): Order {newOrder: Order}
+        + editOrder(): Order {editedOrder: Order}
+        + removeOrder(): Order {removeOrder: Order}
+    }
+
+    class FlooringOrderDaoImpl {
+        - allOrders: Map<LocalDate, Map<Integer, Order>>
+        - orderFile: String
+        - DELIMITER: String
+        + getAllOrders(): Map<LocalDate, Map<Integer, Order> {}
+        + getOrder(): Order {dateId: String}
+        + addOrder(): Order {newOrder: Order}
+        + editOrder(): Order {editedOrder: Order}
+        + removeOrder(): Order {removeOrder: Order}
+        - loadFile(): void {}
+        - writeFile(): void {}
+        - marshallData(): String {currentOrder: Order}
+        - unmarshallData(): Order {currentLine: String}
+    }
+
+    interface FlooringStateDao {
+        + getAllStates(): Map<String, State> {}
+        + getState(): State {stateAbbreviation: String}
+    }
+
+    class FlooringStateDaoImpl {
+        - allStates: Map<String, State>
+        - STATE_FILE: String
+        - DELIMITER: String
+        + getAllStates(): Map<String, State> {}
+        + getState(): State {stateAbbreviation: String}
+        - loadFile(): void {}
+        - unmarshallData() State {currentLine: String}
+    }
+
+    interface FlooringProductDao {
+        + getAllProducts(): Map<String, Product> {}
+        + getProduct(): Product {productType: String}
+    }
+
+    class FlooringProductDaoImpl {
+        - allProducts: Map<String, Product>
+        - STATE_FILE: String
+        - DELIMITER: String
+        + getAllProducts(): Map<String, Product> {}
+        + getProduct(): Product {productType: String}
+        - loadFile(): void {}
+        - unmarshallData() Product {currentLine: String}
+    }
+
+    interface FlooringExportDao {
+        + createBackup(): void {allOrder: Map<LocalDate, Map<Integer, Order>>}
+    }
+
+    class FlooringExportDaoImpl {
+        - BACKUP_FILE: String
+        - DELIMITER: String
+        + createBackup(): void {allOrder: Map<LocalDate, Map<Integer, Order>>}
+        - marshallData(): String {currentOrder: Order}
+    }
+}
+
+package "flooring.dto" {
+    class Order {
+        - id: Integer
+        - name: String
+        - state: State
+        /'includes: stateName, taxRate '/
+        - product: Product
+        /'includes: productType, costPerSquareFoot, laborCostPerSquareFoot '/
+        - area: BigDecimal
+        - materialCost: BigDecimal
+        - laborCost: BigDecimal
+        - tax: BigDecimal
+        - total: BigDecimal
+        + Order(): {id: Integer}
+        + getId(): Integer {}
+        + setName() void: {name: String}
+        + getName(): String {}
+        + setState(): void {state, State}
+        + getState(): State {}
+        + setProduct(): void {product: Product}
+        + getProduct(): Product {}
+        + setArea(): void {area: BigDecimal}
+        + getArea(): BigDecimal {}
+        + setMaterialCost(): void {materialCost: BigDecimal}
+        + getMaterialCost(): BigDecimal {}
+        + setLaborCost(): void {laborCost: BigDecimal}
+        + getLaborCost(): BigDecimal {}
+        + setTax(): void {tax: BigDecimal}
+        + getTax(): BigDecimal {}
+        + setTotal(): void {total: BigDecimal}
+        + getTotal(): BigDecimal {}
+    }
+
+    class State {
+        - stateAbbreviation: String
+        - stateName: String
+        - taxRate: BigDecimal
+        + State(): {stateAbbreviation: String, stateName: String, taxRate: BigDecimal}
+        + getStateAbbreviation(): String {}
+        + getStateName(): String {}
+        + getTaxRate(): BigDecimal {}
+    }
+
+    class Product {
+        - productType: String
+        - costPerSquareFoot: BigDecimal
+        - laborCostPerSquareFoot: BigDecimal
+        + Product(): {productType: String, costPerSquareFoot: BigDecimal, laborCostPerSquareFoot: BigDecimal}
+        + getProductType(): String {}
+        + getCostPerSquareFoot(): BigDecimal {}
+        + getLaborCostPerSquareFoot(): BigDecimal {}
+    }
+
+    enum Edit{
+        CUSTOMER_NAME
+        STATE
+        PRODUCT_TYPE
+        AREA
+    }
+}
+
+FlooringController "1" *-down- FlooringServiceLayer
+FlooringController "1" *-left- FlooringView
+
+FlooringServiceLayerImpl "1" *-down- FlooringOrderDao
+FlooringServiceLayerImpl "1" *-down- FlooringStateDao
+FlooringServiceLayerImpl "1" *-down- FlooringProductDao
+FlooringServiceLayerImpl "1" *-down- FlooringExportDao
+
+FlooringView "1" *-- UserIO
+
+UserIO <|-- UserIOConsoleImpl
+FlooringView <|-- FlooringViewImpl
+
+FlooringServiceLayer <|-- FlooringServiceLayerImpl
+
+FlooringOrderDao <|-down- FlooringOrderDaoImpl
+FlooringStateDao <|-down- FlooringStateDaoImpl
+FlooringProductDao <|-down- FlooringProductDaoImpl
+FlooringExportDao <|-down- FlooringExportDaoImpl
+
+Order *-up- State
+Order *-down- Product
+
+/' Formatting '/
+
+FlooringOrderDaoImpl-[hidden]right->FlooringProductDaoImpl
+FlooringProductDaoImpl-[hidden]right->FlooringStateDaoImpl
+
+FlooringOrderDao-[hidden]right->FlooringProductDao
+FlooringProductDao-[hidden]right->FlooringStateDao
+
+@enduml

@@ -1,0 +1,49 @@
+/'
+Created by: Margaret Donin
+Date created: 06/24/20
+'/
+
+@startuml
+
+Title Adding New Order
+
+FlooringViewImpl -> FlooringController
+FlooringController -> FlooringViewImpl : displayGetMenu()
+FlooringViewImpl --> FlooringController : int
+FlooringController -> FlooringController : addOrder()
+FlooringController -> FlooringServiceLayerImpl : getNewId()
+FlooringServiceLayerImpl -> FlooringOrderDaoImpl : getAllOrders()
+FlooringOrderDaoImpl -> FlooringServiceLayerImpl : Map<LocalDate, Map<Integer, Order>
+FlooringServiceLayerImpl --> FlooringController : Integer
+FlooringController -> FlooringViewImpl : getOrderDate()
+FlooringViewImpl --> FlooringController : String
+FlooringController -> FlooringViewImpl : getOrderName()
+FlooringViewImpl --> FlooringController : String
+FlooringController -> FlooringServiceLayerImpl : getAllProducts()
+FlooringServiceLayerImpl -> FlooringProductDaoImpl : getAllProducts()
+FlooringProductDaoImpl --> FlooringServiceLayerImpl : Map<String, Product>
+FlooringServiceLayerImpl --> FlooringController : Map<String, Product>
+FlooringController -> FlooringViewImpl : displayGetOrderProductMenu(Map<String, Product>)
+FlooringViewImpl --> FlooringController : String
+FlooringController -> FlooringServiceLayerImpl : getAllState()
+FlooringServiceLayerImpl -> FlooringStateDaoImpl : getAllState()
+FlooringStateDaoImpl --> FlooringServiceLayerImpl : Map<String, State>
+FlooringServiceLayerImpl --> FlooringController : Map<String, State>
+FlooringController -> FlooringViewImpl : displayGetOrderStateMenu(Map<String, State>)
+FlooringViewImpl --> FlooringController : String
+FlooringController -> FlooringViewImpl : displayGetOrderArea()
+FlooringViewImpl --> FlooringController : String
+FlooringController -> FlooringServiceLayerImpl : validateOrder(Order)
+FlooringServiceLayerImpl --> FlooringController : void
+FlooringController -> FlooringServiceLayerImpl : calculateProductCostTax(Order)
+FlooringServiceLayerImpl --> FlooringController : Order
+FlooringController -> FlooringViewImpl : displayGetOrderConfirmation(Order)
+FlooringViewImpl --> FlooringController : String
+FlooringController -> FlooringServiceLayerImpl : addOrder(Order)
+FlooringServiceLayerImpl -> FlooringOrderDaoImpl : addOrder(Order)
+FlooringOrderDaoImpl --> FlooringServiceLayerImpl : Order
+FlooringServiceLayerImpl --> FlooringController : Order
+FlooringController -> FlooringViewImpl : displayAddOrderSuccessBanner()
+FlooringViewImpl --> FlooringController : void
+
+@enduml
