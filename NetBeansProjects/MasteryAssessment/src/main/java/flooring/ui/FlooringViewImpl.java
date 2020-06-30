@@ -6,11 +6,10 @@ Date revised:
 
 package flooring.ui;
 
-import flooring.dto.Edit;
 import flooring.dto.Order;
 import flooring.dto.Product;
 import flooring.dto.State;
-import java.time.LocalDate;
+import java.math.BigDecimal;
 import java.util.Map;
 
 public class FlooringViewImpl implements FlooringView {
@@ -18,7 +17,7 @@ public class FlooringViewImpl implements FlooringView {
     UserIO io;
     
     public FlooringViewImpl(UserIO io) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.io = io;
     }
 
     @Override
@@ -27,32 +26,37 @@ public class FlooringViewImpl implements FlooringView {
     }
 
     @Override
-    public String getOrderDate() {
+    public String lookUpDateOrders() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public String getOrderName() {
+    public void displayAllOrders(Map<Integer, Order> allOrders) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void displayAllOrders(Map<LocalDate, Map<Integer, Order>> allOrders) {
+    public String getNewOrderDate() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public String displayGetOrderStateMenu(Map<String, State> allStates) {
+    public String getNewNameDate() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public String displayGetOrderProductMenu(Map<String, Product> allProducts) {
+    public String displayGetStateMenu(Map<String, State> allStates) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public String getOrderArea() {
+    public String displayGetProductMenu(Map<String, Product> allProducts) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public BigDecimal getArea() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -67,12 +71,7 @@ public class FlooringViewImpl implements FlooringView {
     }
 
     @Override
-    public int displayGetEditMenu() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getChange(Edit edit) {
+    public Order displayGetEdit(Order order) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -118,6 +117,11 @@ public class FlooringViewImpl implements FlooringView {
 
     @Override
     public void displayExportingSuccess() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void goodBye() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

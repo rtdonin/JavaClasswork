@@ -7,9 +7,9 @@ Date revised:
 package flooring.dao;
 
 import flooring.dto.Order;
-import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 public interface FlooringExportDao {
-    public void createBackup(Map<LocalDate, Map<Integer, Order>> allOrders);
+    public List<String> createBackup(Map<Integer, Order> allOrders);
 }

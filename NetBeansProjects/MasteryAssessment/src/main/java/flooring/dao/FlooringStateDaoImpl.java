@@ -1,7 +1,7 @@
 /*
 Created by: Margaret Donin
 Date created: 06/25/20
-Date revised:
+Date revised: 06/29/20 method implemintation and exceptions.
 */
 
 package flooring.dao;
@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FlooringStateDaoImpl implements FlooringStateDao{
-    private final Map<String, State> allStates = new HashMap<>();
+    private Map<String, State> allStates = new HashMap<>();
     private final String STATE_FILE;
     private final String DELIMITER = ",";
 
@@ -35,9 +35,8 @@ public class FlooringStateDaoImpl implements FlooringStateDao{
     
     private void loadFile() {
         throw new UnsupportedOperationException("Not supported yet.");
-      
     }
-    
+        
     private State unmarshallData(String currentLine) {
         throw new UnsupportedOperationException("Not supported yet.");        
     }

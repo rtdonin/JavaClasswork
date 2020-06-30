@@ -1,0 +1,22 @@
+/'
+Created by: Margaret Donin
+Date created: 06/29/20
+'/
+
+@startuml
+
+Title Get All Orders
+
+FlooringViewImpl -> FlooringController
+FlooringController -> FlooringViewImpl : displayGetMenu()
+FlooringViewImpl --> FlooringController : int
+FlooringController -> FlooringController : getAllOrders()
+FlooringController -> FlooringViewImpl : lookUpDateOrders()
+FlooringViewImpl --> FlooringController : String
+FlooringController -> FlooringServiceLayerImpl : getDateOrders(LocalDate)
+FlooringServiceLayerImpl -> FlooringOrderDaoImpl : getAllOrders(LocalDate)
+FlooringOrderDaoImpl --> FlooringServiceLayerImpl : Map<Integer, Order>
+FlooringServiceLayerImpl --> FlooringController : Map<Integer, Order>
+FlooringController -> FlooringViewImpl : displayAllOrders(Map<Integer, Order>)
+FlooringViewImpl --> FlooringController : void
+@enduml

@@ -16,21 +16,28 @@
           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
 
     <!-- Bean definitions go here -->
-   <bean id = "io" class = "M3.vendingmachine.ui.UserIOConsoleImpl" />
-   <bean id = "dao" class = "M3.vendingmachine.dao.VendingMachineDaoImpl" />
-   <bean id = "auditDao" class = "M3.vendingmachine.dao.VendingMachineAuditDaoImpl" />
-   
-   <bean id = "view" class = "M3.vendingmachine.ui.VendingMachineView" >
-       <constructor-arg ref = "io" />       
-   </bean>
-   
-   <bean id = "service" class = "M3.vendingmachine.service.VendingMachineServiceLayerImpl">
-       <constructor-arg ref = "dao" />
-       <constructor-arg ref = "auditDao" />
-   </bean>
-   
-   <bean id = "controller" class = "M3.vendingmachine.controller.VendingMachineController">
+    
+    <bean id = "io" class = "flooring.ui.UserIOConsoleImpl" />
+    
+    <bean id = "view" class = "flooring.ui.FlooringViewImpl">
+        <constructor-arg ref = "io" />
+    </bean>
+    
+    <bean id = "exportDao" class = "flooring.dao.FlooringExportDaoImpl" />
+    <bean id = "orderDao" class = "flooring.dao.FlooringOrderDaoImpl" />
+    <bean id = "productDao" class = "flooring.dao.FlooringProductDaoImpl" />
+    <bean id = "stateDao" class = "flooring.dao.FlooringStateDaoImpl" />
+
+    <bean id = "service" class = "flooring.service.FlooringServiceLayerImpl">
+        <constructor-arg ref = "exportDao" />
+        <constructor-arg ref = "orderDao" />
+        <constructor-arg ref = "productDao" />
+        <constructor-arg ref = "stateDao" />
+    </bean>
+    
+    <bean id = "controller" class = "flooring.controller.FlooringController">
         <constructor-arg ref = "service" />
-        <constructor-arg ref = "view" />
-   </bean>
+        <contructor-arg ref = "view" />
+    </bean>
+   
 </beans>

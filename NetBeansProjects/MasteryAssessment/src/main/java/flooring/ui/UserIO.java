@@ -6,6 +6,8 @@ Date revised:
 
 package flooring.ui;
 
+import java.math.BigDecimal;
+
 public interface UserIO {
     void print(String message);
 
@@ -26,4 +28,8 @@ public interface UserIO {
     long readLong(String prompt) throws NumberFormatException;
 
     long readLong(String prompt, long min, long max) throws NumberFormatException;
+    
+    BigDecimal readBigDecimal(String prompt) throws NumberFormatException;
+
+    BigDecimal readBigDecimal(String prompt, long min, long max) throws NumberFormatException;
 }

@@ -2,6 +2,9 @@
 Created by: Margaret Donin
 Date created: 06/25/20
 Date revised:
+
+Map newMap = Collections.unmodifiableMap(map);
+
 */
 
 package flooring.dao;

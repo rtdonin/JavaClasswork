@@ -10,6 +10,7 @@ import static java.lang.Double.parseDouble;
 import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
 import static java.lang.Long.parseLong;
+import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class UserIOConsoleImpl implements UserIO {
@@ -146,6 +147,16 @@ public class UserIOConsoleImpl implements UserIO {
         } while (!inRange);
         
         return input;
+    }
+
+    @Override
+    public BigDecimal readBigDecimal(String prompt) throws NumberFormatException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public BigDecimal readBigDecimal(String prompt, long min, long max) throws NumberFormatException {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

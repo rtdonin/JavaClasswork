@@ -1,0 +1,35 @@
+/'
+Created by: Margaret Donin
+Date created: 06/29/20
+'/
+
+@startuml
+
+Title Edit Order
+
+FlooringViewImpl -> FlooringController
+FlooringController -> FlooringViewImpl : displayGetMenu()
+FlooringViewImpl --> FlooringController : int
+FlooringController -> FlooringController : editOrder()
+FlooringController -> FlooringViewImpl : findOrderByDate()
+FlooringViewImpl --> FlooringController : String
+FlooringController -> FlooringViewImpl : findOrderById()
+FlooringViewImpl --> FlooringController : int
+FlooringController -> FlooringServiceLayerImpl : getOrder(LocalDate, Integer)
+FlooringServiceLayerImpl -> FlooringOrderDaoImpl : getOrder(LocalDate, Integer)
+FlooringOrderDaoImpl --> FlooringServiceLayerImpl : Order
+FlooringServiceLayerImpl --> FlooringController : Order
+FlooringController -> FlooringViewImpl : displayGetEdit(Order)
+FlooringViewImpl --> FlooringController : Order
+FlooringController -> FlooringServiceLayerImpl : changeEditOrder(Order, Order)
+FlooringServiceLayerImpl --> FlooringController : Order
+FlooringController -> FlooringViewImpl : displayGetEditConfirmation(Order)
+FlooringViewImpl --> FlooringController : String
+FlooringController -> FlooringServiceLayerImpl : editOrder(Order)
+FlooringServiceLayerImpl -> FlooringOrderDaoImpl : editOrder(Order)
+FlooringOrderDaoImpl --> FlooringServiceLayerImpl : Order
+FlooringServiceLayerImpl --> FlooringController : Order
+FlooringController -> FlooringViewImpl : displayEditOrderSuccessBanner()
+FlooringViewImpl --> FlooringController : void
+
+@enduml

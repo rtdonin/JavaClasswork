@@ -1,22 +1,19 @@
 /*
 Created by: Margaret Donin
-Date created: 06/25/20
+Date created: 06/26/20
 Date revised:
 */
 
-package flooring.dao;
+package flooring.service;
 
+import flooring.dao.FlooringOrderDao;
 import flooring.dto.Order;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-public class FlooringOrderDaoImpl implements FlooringOrderDao {
+public class FlooringOrderDaoImplStub implements FlooringOrderDao {
 
-    private Map<LocalDate, Map<Integer, Order>> allOrders;
-    private String orderFile;
-    private final String DELIMITER = ",";
-    
     @Override
     public Map<Integer, Order> getAllOrders(LocalDate date) {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -41,26 +38,12 @@ public class FlooringOrderDaoImpl implements FlooringOrderDao {
     public Order removeOrder(Order removeOrder) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    
+
     @Override
     public List<Order> exportAll() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    private void loadFile(){
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
     
-    private void writeFile(){
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
-    private String marshallData(Order currentOrder){
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
-    private Order unmarshallData(String currentLine){
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
 }
