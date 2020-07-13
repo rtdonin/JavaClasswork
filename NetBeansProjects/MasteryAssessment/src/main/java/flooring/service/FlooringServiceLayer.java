@@ -6,6 +6,7 @@ Date revised:
 
 package flooring.service;
 
+import flooring.dao.FlooringPersistenceException;
 import flooring.dto.Order;
 import flooring.dto.Product;
 import flooring.dto.State;
@@ -14,16 +15,16 @@ import java.util.List;
 import java.util.Map;
 
 public interface FlooringServiceLayer {
-    public Map<Integer, Order> getDateOrders(LocalDate date);
-    public Order getOrder(LocalDate date, Integer id);
-    public Integer getNewId();
-    public Order addOrder(Order newOrder);
-    public void ValidateOrder(Order order);
-    public Map<String, Product> getAllProducts();
-    public Product getProducts(String productType);
-    public Map<String, State> getAllStates();
-    public State getState(String stateAbbreviation);
-    public Order editOrder(Order editOrder);
-    public Order removeOrder(Order removeOrder);
-    public List<Order> export();
+    public List<Order> getDateOrders(LocalDate date) throws FlooringPersistenceException;
+    public Order getOrder(LocalDate date, Integer id) throws FlooringPersistenceException;
+    public Integer getNewId() throws FlooringPersistenceException;
+    public Order addOrder(Order newOrder) throws FlooringPersistenceException;
+    public Order validateOrder(Order order) throws InvalidAreaException, InvalidDateException, InvalidNameException;
+    public Map<String, Product> getAllProducts() throws FlooringPersistenceException ;
+    public Map<String, State> getAllStates() throws FlooringPersistenceException;
+    public Order checkNewOrder(Order oldOrder, Order newOrder) throws InvalidAreaException, InvalidDateException, InvalidNameException;
+    public Order editOrder(Order editedOrder) throws FlooringPersistenceException;
+    public Order removeOrder(Order removeOrder) throws FlooringPersistenceException;
+    public void export() throws FlooringPersistenceException;
+    public boolean compConfirmation(String confirmation) throws NotYesOrNoException;
 }

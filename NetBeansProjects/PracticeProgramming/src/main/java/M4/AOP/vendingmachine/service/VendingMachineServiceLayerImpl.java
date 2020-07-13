@@ -165,7 +165,6 @@ public class VendingMachineServiceLayerImpl implements VendingMachineServiceLaye
         drawerDao.restockDrawer(addedChange);
     }
     
-
     @Override
     public BigDecimal getTotalSales() throws VendingMachinePersistenceException {
         return drawerDao.getTotalSales();

@@ -10,7 +10,10 @@ import flooring.dto.Order;
 import flooring.dto.Product;
 import flooring.dto.State;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class FlooringViewImpl implements FlooringView {
 
@@ -22,107 +25,209 @@ public class FlooringViewImpl implements FlooringView {
 
     @Override
     public int displayGetMenu() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        io.print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
+        io.print("*  <<Flooring Program>>");
+        io.print("* 1. Display Orders");
+        io.print("* 2. Add an Order");
+        io.print("* 3. Edit an Order");
+        io.print("* 4. Remove an Order");
+        io.print("* 5. Export All Data");
+        io.print("* 6. Quit");
+        io.print("*");
+        io.print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
+        
+        return io.readInt("Please select one of the above options.", 1, 6);
     }
 
     @Override
-    public String lookUpDateOrders() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public LocalDate getOrderDate() {
+        return io.readLocalDate("Enter order date:");
     }
 
     @Override
-    public void displayAllOrders(Map<Integer, Order> allOrders) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void displayAllOrders(List<Order> allOrders) {
+        io.print("Listing all orders:");
+        
+        if (allOrders == null) {
+            io.print("There are no orders from the selected date.");
+            return;
+        }
+        
+        for (Order order : allOrders) {
+            Order o = order;
+            
+            io.print(o.getId() + ": " + o.getName() + " $" + o.getTotal());
+        }
     }
 
     @Override
-    public String getNewOrderDate() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public String getOrderName() {
+        return io.readString("Enter order name:");
     }
 
     @Override
-    public String getNewNameDate() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public State displayGetStateMenu(Map<String, State> allStates) {
+        Set<String> abbreviation = allStates.keySet();
+        io.print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
+        io.print("*  <<State Menu>>");
+        
+        abbreviation.forEach((s) -> {
+            io.print("* " + allStates.get(s).toString());
+        });
+        
+        io.print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
+        
+        State state;
+        
+        do {
+            String selected = io.readString("Please select one of the above states.");
+            state = allStates.get(selected);
+        } while (state == null);
+        
+        return state;
     }
 
     @Override
-    public String displayGetStateMenu(Map<String, State> allStates) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    public Product displayGetProductMenu(Map<String, Product> allProducts) {
+        Set<String> type = allProducts.keySet();
+        io.print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
+        io.print("*  <<Product Menu>>");
 
-    @Override
-    public String displayGetProductMenu(Map<String, Product> allProducts) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        type.forEach((s) -> {
+            Product p = allProducts.get(s);
+            io.print("* " + p.toString());
+        });
+        io.print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
+        
+        Product product;
+        
+        do {
+            String selected = io.readString("Please select one of the above products.");
+            product = allProducts.get(selected);
+        } while (product == null);
+        
+        return product;
     }
 
     @Override
     public BigDecimal getArea() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return io.readBigDecimal("Enter area in (square feet):");
     }
 
     @Override
     public String displayGetOrderConfirmation(Order newOrder) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        io.print("New Order:");
+        io.print(newOrder.toString());
+        
+        return io.readString("Would you like to save this order? (yes/no)");
     }
 
     @Override
-    public void displayAddOrderSuccessBanner() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void displayAddOrderSuccessBanner(Order newOrder) {
+        io.print("The following order was saved successfully.");
+        io.print(newOrder.getName());
+        io.print("Total Cost: " + newOrder.getTotal());
+        
+        io.readString("Press enter to continue.");
     }
 
     @Override
-    public Order displayGetEdit(Order order) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public String editName(String orgName) {
+        return io.readString("Enter name for the order (" + orgName + "):");
+    }
+
+    @Override
+    public BigDecimal editArea(BigDecimal orgArea) {
+        return io.readBigDecimal("Enter area for the order (" + orgArea + "):");
+    }
+    
+    @Override
+    public void displayOriginalInput(String type, String input){
+        io.print("Enter new " + type + " (" + input + "):");
     }
 
     @Override
     public String displayGetEditConfirmation(Order editedOrder) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        io.print("Edit Order:");
+        io.print(editedOrder.toString());
+        
+        return io.readString("Would you like to save this order? (yes/no)");
     }
 
     @Override
-    public void displayEditOrderSuccessBanner() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String findOrderByDate() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void displayEditOrderSuccessBanner(Order order) {
+        io.print("The following order was saved successfully.");
+        io.print(order.getName());
+        io.print("Total Cost: " + order.getTotal());
+        
+        io.readString("Press enter to continue.");
     }
 
     @Override
     public int findOrderById() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return io.readInt("Enter the order ID number:");
     }
 
     @Override
     public String displayDeletionConfirmation(Order removedOrder) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        io.print("Delete Order:");
+        io.print(removedOrder.toString());
+        
+        return io.readString("Would you like to delete this order? (yes/no)");
     }
 
     @Override
-    public void displayDeletionOrderSuccessBanner() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void displayDeletionOrderSuccessBanner(Order removedOrder) {
+        io.print("The following order was deleted successfully.");
+        io.print(removedOrder.getName());
+        io.print("Total Cost: " + removedOrder.getTotal());
+        
+        io.readString("Press enter to continue.");
     }
 
     @Override
     public void displayError(String error) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        io.print(error);
     }
 
     @Override
     public void displayExportingBanner() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        io.print("Exporting all date...");
+        io.print("....");
     }
 
     @Override
     public void displayExportingSuccess() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        io.print("All data exported successfully.");
+        io.readString("Press enter to continue.");
     }
 
     @Override
     public void goodBye() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        io.print("Goodbye!");
     }
 
+    @Override
+    public void unknownCommand() {
+        io.print("Command not understood.");
+    }
+
+    @Override
+    public void diplayActionNotCompleted() {
+        io.print("Action was not completed.");
+        io.readString("Press enter to continue.");
+    }
+
+    @Override
+    public void noSuchOrder() {
+        io.print("There is no such orders in the system.");
+        io.readString("Press enter to continue.");
+    }
+
+    @Override
+    public void displayNoOrdersForDate() {
+        io.print("There are not orders for this date in the system.");
+        io.readString("Press enter to continue.");
+    }
+    
 }

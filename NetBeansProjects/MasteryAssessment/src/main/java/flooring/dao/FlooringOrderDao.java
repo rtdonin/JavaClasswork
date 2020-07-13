@@ -9,13 +9,12 @@ package flooring.dao;
 import flooring.dto.Order;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 public interface FlooringOrderDao {
-    public Map<Integer, Order> getAllOrders(LocalDate date);
-    public Order getOrder(String dateId);
-    public Order addOrder(Order newOrder);
-    public Order editOrder(Order editedOrder);
-    public Order removeOrder(Order removeOrder);
-    public List<Order> exportAll();
+    public List<Order> getAllOrders(LocalDate date) throws FlooringPersistenceException;
+    public Order getOrder(LocalDate date, Integer id) throws FlooringPersistenceException;
+    public Order addOrder(Order order) throws FlooringPersistenceException;
+    public Order editOrder(Order order) throws FlooringPersistenceException ;
+    public Order removeOrder(Order order) throws FlooringPersistenceException ;
+    public List<Order> exportAll() throws FlooringPersistenceException;
 }

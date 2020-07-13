@@ -8,20 +8,31 @@ Date created: 06/29/20
 Title Edit Order
 
 FlooringViewImpl -> FlooringController
-FlooringController -> FlooringViewImpl : displayGetMenu()
-FlooringViewImpl --> FlooringController : int
-FlooringController -> FlooringController : editOrder()
-FlooringController -> FlooringViewImpl : findOrderByDate()
-FlooringViewImpl --> FlooringController : String
-FlooringController -> FlooringViewImpl : findOrderById()
+FlooringController -> FlooringViewImpl : getOrderDate()
+FlooringViewImpl --> FlooringController : LocalDate
+FlooringController -> FlooringViewImpl : getOrderId()
 FlooringViewImpl --> FlooringController : int
 FlooringController -> FlooringServiceLayerImpl : getOrder(LocalDate, Integer)
 FlooringServiceLayerImpl -> FlooringOrderDaoImpl : getOrder(LocalDate, Integer)
 FlooringOrderDaoImpl --> FlooringServiceLayerImpl : Order
 FlooringServiceLayerImpl --> FlooringController : Order
-FlooringController -> FlooringViewImpl : displayGetEdit(Order)
-FlooringViewImpl --> FlooringController : Order
-FlooringController -> FlooringServiceLayerImpl : changeEditOrder(Order, Order)
+FlooringController -> FlooringViewImpl : editName(String)
+FlooringViewImpl --> FlooringController : String
+FlooringController -> FlooringServiceLayerImpl : getAllProducts()
+FlooringServiceLayerImpl -> FlooringProductDaoImpl : getAllProducts()
+FlooringProductDaoImpl --> FlooringServiceLayerImpl : Map<String, Product>
+FlooringServiceLayerImpl --> FlooringController : Map<String, Product>
+FlooringController -> FlooringViewImpl : displayGetOrderProductMenu(Map<String, Product>)
+FlooringViewImpl --> FlooringController : Product
+FlooringController -> FlooringServiceLayerImpl : getAllStates()
+FlooringServiceLayerImpl -> FlooringStateDaoImpl : getAllStates()
+FlooringStateDaoImpl --> FlooringServiceLayerImpl : Map<String, State>
+FlooringServiceLayerImpl --> FlooringController : Map<String, State>
+FlooringController -> FlooringViewImpl : displayGetOrderStateMenu(Map<String, State>)
+FlooringViewImpl --> FlooringController : State
+FlooringController -> FlooringViewImpl : editArea(BigDecimal)
+FlooringViewImpl --> FlooringController : BigDecimal
+FlooringController -> FlooringServiceLayerImpl : checkNewOrder(Order, Order)
 FlooringServiceLayerImpl --> FlooringController : Order
 FlooringController -> FlooringViewImpl : displayGetEditConfirmation(Order)
 FlooringViewImpl --> FlooringController : String

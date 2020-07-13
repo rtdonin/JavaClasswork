@@ -8,10 +8,16 @@ package flooring.dao;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class FlooringStateDaoImplTest {
     
+    private FlooringStateDao testDao;
+    
     public FlooringStateDaoImplTest() {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("appContext.xml");
+        testDao = ctx.getBean("stateDao", FlooringStateDao.class);
     }
     
     @BeforeEach
@@ -28,4 +34,18 @@ public class FlooringStateDaoImplTest {
         // fail("The test case is a prototype.");
     }
     
+    @Test
+    public void addStateTest() {
+        // fail("The test case is a prototype.");
+    }
+    
+    @Test
+    public void editStateTest() {
+        // fail("The test case is a prototype.");
+    }
+    
+    @Test
+    public void removeStateTest() {
+        // fail("The test case is a prototype.");
+    }
 }

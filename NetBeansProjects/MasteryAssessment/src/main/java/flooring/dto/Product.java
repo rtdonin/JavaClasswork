@@ -7,6 +7,7 @@ Date revised:
 package flooring.dto;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class Product {
     private final String productType;
@@ -29,6 +30,46 @@ public class Product {
 
     public BigDecimal getLaborCostPerSquareFoot() {
         return laborCostPerSquareFoot;
+    }
+
+    @Override
+    public String toString() {
+        return "Product " + productType
+                + ": material $" + costPerSquareFoot.toPlainString() + "/sqft, "
+                + "labor $" + laborCostPerSquareFoot.toPlainString() + "/sqft";
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 83 * hash + Objects.hashCode(this.productType);
+        hash = 83 * hash + Objects.hashCode(this.costPerSquareFoot);
+        hash = 83 * hash + Objects.hashCode(this.laborCostPerSquareFoot);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Product other = (Product) obj;
+        if (!Objects.equals(this.productType, other.productType)) {
+            return false;
+        }
+        if (!Objects.equals(this.costPerSquareFoot, other.costPerSquareFoot)) {
+            return false;
+        }
+        if (!Objects.equals(this.laborCostPerSquareFoot, other.laborCostPerSquareFoot)) {
+            return false;
+        }
+        return true;
     }
     
 }

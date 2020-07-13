@@ -8,15 +8,12 @@ Date created: 06/24/20
 Title Adding New Order
 
 FlooringViewImpl -> FlooringController
-FlooringController -> FlooringViewImpl : displayGetMenu()
-FlooringViewImpl --> FlooringController : int
-FlooringController -> FlooringController : addOrder()
 FlooringController -> FlooringServiceLayerImpl : getNewId()
 FlooringServiceLayerImpl -> FlooringOrderDaoImpl : getAllOrders()
-FlooringOrderDaoImpl -> FlooringServiceLayerImpl : Map<LocalDate, Map<Integer, Order>
+FlooringOrderDaoImpl --> FlooringServiceLayerImpl : List<Order>
 FlooringServiceLayerImpl --> FlooringController : Integer
 FlooringController -> FlooringViewImpl : getOrderDate()
-FlooringViewImpl --> FlooringController : String
+FlooringViewImpl --> FlooringController : LocalDate
 FlooringController -> FlooringViewImpl : getOrderName()
 FlooringViewImpl --> FlooringController : String
 FlooringController -> FlooringServiceLayerImpl : getAllProducts()
@@ -24,18 +21,16 @@ FlooringServiceLayerImpl -> FlooringProductDaoImpl : getAllProducts()
 FlooringProductDaoImpl --> FlooringServiceLayerImpl : Map<String, Product>
 FlooringServiceLayerImpl --> FlooringController : Map<String, Product>
 FlooringController -> FlooringViewImpl : displayGetOrderProductMenu(Map<String, Product>)
-FlooringViewImpl --> FlooringController : String
-FlooringController -> FlooringServiceLayerImpl : getAllState()
-FlooringServiceLayerImpl -> FlooringStateDaoImpl : getAllState()
+FlooringViewImpl --> FlooringController : Product
+FlooringController -> FlooringServiceLayerImpl : getAllStates()
+FlooringServiceLayerImpl -> FlooringStateDaoImpl : getAllStates()
 FlooringStateDaoImpl --> FlooringServiceLayerImpl : Map<String, State>
 FlooringServiceLayerImpl --> FlooringController : Map<String, State>
 FlooringController -> FlooringViewImpl : displayGetOrderStateMenu(Map<String, State>)
-FlooringViewImpl --> FlooringController : String
+FlooringViewImpl --> FlooringController : State
 FlooringController -> FlooringViewImpl : displayGetOrderArea()
-FlooringViewImpl --> FlooringController : String
+FlooringViewImpl --> FlooringController : BigDecimal
 FlooringController -> FlooringServiceLayerImpl : validateOrder(Order)
-FlooringServiceLayerImpl --> FlooringController : void
-FlooringController -> FlooringServiceLayerImpl : calculateProductCostTax(Order)
 FlooringServiceLayerImpl --> FlooringController : Order
 FlooringController -> FlooringViewImpl : displayGetOrderConfirmation(Order)
 FlooringViewImpl --> FlooringController : String
@@ -43,7 +38,7 @@ FlooringController -> FlooringServiceLayerImpl : addOrder(Order)
 FlooringServiceLayerImpl -> FlooringOrderDaoImpl : addOrder(Order)
 FlooringOrderDaoImpl --> FlooringServiceLayerImpl : Order
 FlooringServiceLayerImpl --> FlooringController : Order
-FlooringController -> FlooringViewImpl : displayAddOrderSuccessBanner()
+FlooringController -> FlooringViewImpl : displayAddOrderSuccessBanner(Order)
 FlooringViewImpl --> FlooringController : void
 
 @enduml

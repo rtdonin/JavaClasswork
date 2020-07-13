@@ -8,15 +8,13 @@ Date created: 06/29/20
 Title Get All Orders
 
 FlooringViewImpl -> FlooringController
-FlooringController -> FlooringViewImpl : displayGetMenu()
-FlooringViewImpl --> FlooringController : int
-FlooringController -> FlooringController : getAllOrders()
-FlooringController -> FlooringViewImpl : lookUpDateOrders()
-FlooringViewImpl --> FlooringController : String
+FlooringController -> FlooringViewImpl : getOrderDate()
+FlooringViewImpl --> FlooringController : LocalDate
 FlooringController -> FlooringServiceLayerImpl : getDateOrders(LocalDate)
 FlooringServiceLayerImpl -> FlooringOrderDaoImpl : getAllOrders(LocalDate)
-FlooringOrderDaoImpl --> FlooringServiceLayerImpl : Map<Integer, Order>
-FlooringServiceLayerImpl --> FlooringController : Map<Integer, Order>
-FlooringController -> FlooringViewImpl : displayAllOrders(Map<Integer, Order>)
+FlooringOrderDaoImpl --> FlooringServiceLayerImpl : List<Order>
+FlooringServiceLayerImpl --> FlooringController : Lst<Order>
+FlooringController -> FlooringViewImpl : displayAllOrders(List<Order>)
 FlooringViewImpl --> FlooringController : void
+
 @enduml

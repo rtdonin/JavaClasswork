@@ -4,7 +4,7 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:aop="http://www.springframework.org/schema/aop"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       xsi:schemaLocation = "http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans.xsd
           http://www.springframework.org/schema/mvc
           http://www.springframework.org/schema/mvc/spring-mvc.xsd
@@ -16,18 +16,18 @@
           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
 
     <!-- Bean definitions go here -->
-    
     <bean id = "io" class = "flooring.ui.UserIOConsoleImpl" />
-    
+     
     <bean id = "view" class = "flooring.ui.FlooringViewImpl">
         <constructor-arg ref = "io" />
     </bean>
-    
+   
+    <bean id = "auditDao" class = "flooring.dao.FlooringAuditDaoImpl" />
     <bean id = "exportDao" class = "flooring.dao.FlooringExportDaoImpl" />
     <bean id = "orderDao" class = "flooring.dao.FlooringOrderDaoImpl" />
     <bean id = "productDao" class = "flooring.dao.FlooringProductDaoImpl" />
     <bean id = "stateDao" class = "flooring.dao.FlooringStateDaoImpl" />
-
+ 
     <bean id = "service" class = "flooring.service.FlooringServiceLayerImpl">
         <constructor-arg ref = "exportDao" />
         <constructor-arg ref = "orderDao" />
@@ -37,7 +37,32 @@
     
     <bean id = "controller" class = "flooring.controller.FlooringController">
         <constructor-arg ref = "service" />
-        <contructor-arg ref = "view" />
+        <constructor-arg ref = "view" />
     </bean>
-   
+    
+    <bean id = "advice" class = "flooring.advice.LoggingAdvice">
+        <constructor-arg ref = "auditDao" />
+    </bean>
+<!--  
+    <aop:config>
+        <aop:aspect ref = "advice">
+            <aop:after-returning
+                method = "addOrder"
+                pointcut = "execution(* flooring.service.FlooringServiceLayerImpl.addOrder(.))"
+            />
+        </aop:aspect>
+        <aop:aspect ref = "advice">
+            <aop:after-returning
+                method = "editOrder"
+                pointcut = "execution(* flooring.service.FlooringServiceLayerImpl.editOrder(.))"
+            />
+        </aop:aspect>
+        <aop:aspect ref = "advice">
+            <aop:after-returning
+                method = "removeOrder"
+                pointcut = "execution(* flooring.service.FlooringServiceLayerImpl.removeOrder(.))"
+            />
+        </aop:aspect>
+    </aop:config>
+    -->
 </beans>

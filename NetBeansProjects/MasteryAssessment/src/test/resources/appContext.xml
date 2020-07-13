@@ -16,10 +16,17 @@
           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
 
     <!-- Bean definitions go here -->
-    <bean id = "exportDao" class = "flooring.dao.FlooringExportDaoImpl" />
-    <bean id = "orderDao" class = "flooring.dao.FlooringOrderDaoImpl" />
-    <bean id = "productDao" class = "flooring.dao.FlooringProductDaoImpl" />
-    <bean id = "stateDao" class = "flooring.dao.FlooringStateDaoImpl" />
+    <bean id = "orderDao" class = "flooring.dao.FlooringOrderDaoImpl" >
+        <constructor-arg value = ".//TestFiles//Orders" />
+    </bean>
+
+    <bean id = "productDao" class = "flooring.dao.FlooringProductDaoImpl" >
+        <constructor-arg value = ".//TestFiles//ProductTest.txt" />
+    </bean>
+    
+    <bean id = "stateDao" class = "flooring.dao.FlooringStateDaoImpl" >
+        <constructor-arg value = ".//TestFiles//StateTest.txt" />
+    </bean>
 
     <bean id = "exportDaoStub" class = "flooring.service.FlooringExportDaoImplStub" />
     <bean id = "orderDaoStub" class = "flooring.service.FlooringOrderDaoImplStub" />

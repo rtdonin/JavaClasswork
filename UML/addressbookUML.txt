@@ -2,6 +2,15 @@
 
 firstName AddressBook
 
+/'
+Add an address
+View an address
+Delete an address
+Edit an address
+List all addresses
+Show the number of addresses in the address book
+'/
+
 class Address {
     -String firstName
     -String lastName

@@ -32,12 +32,17 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class VendingMachineDaoImplTest {
 
     VendingMachineDao testDao;
     
     public VendingMachineDaoImplTest() {
+        ApplicationContext appContext = new ClassPathXmlApplicationContext("classpath:appContextFile.xml");
+        
+        testDao = appContext.getBean("dao", VendingMachineDaoImpl.class);
     }
     
     @BeforeEach
@@ -57,7 +62,6 @@ public class VendingMachineDaoImplTest {
         } catch (IOException e) {
             throw new IOException("Could not write to file.");
         }
-        testDao = new VendingMachineDaoImpl(testFile);
     }
     
     @Test

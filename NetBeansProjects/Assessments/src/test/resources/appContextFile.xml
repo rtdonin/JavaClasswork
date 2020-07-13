@@ -16,7 +16,9 @@
           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
 
     <!-- Bean definitions go here -->
-   <bean id = "dao" class = "M3.vendingmachine.dao.VendingMachineDaoImpl" />
+   <bean id = "dao" class = "M3.vendingmachine.dao.VendingMachineDaoImpl">
+        <constructor-arg value = "testvendingmachine.txt" />
+    </bean>
    <bean id = "daoStub" class = "M3.vendingmachine.service.VendingMachineDaoStubImpl" />
    <bean id = "auditDaoStub" class = "M3.vendingmachine.service.VendingMachineAuditDaoStubImpl" />
 

@@ -7,6 +7,8 @@ Date revised:
 package flooring.ui;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 public interface UserIO {
     void print(String message);
@@ -31,5 +33,7 @@ public interface UserIO {
     
     BigDecimal readBigDecimal(String prompt) throws NumberFormatException;
 
-    BigDecimal readBigDecimal(String prompt, long min, long max) throws NumberFormatException;
+    BigDecimal readBigDecimal(String prompt, BigDecimal min, BigDecimal max) throws NumberFormatException;
+    
+    LocalDate readLocalDate(String prompt) throws DateTimeParseException;
 }

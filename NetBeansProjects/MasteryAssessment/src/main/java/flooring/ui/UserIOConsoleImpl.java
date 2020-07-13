@@ -11,10 +11,23 @@ import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
 import static java.lang.Long.parseLong;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
+import org.aspectj.util.ConfigParser.ParseException;
 
 public class UserIOConsoleImpl implements UserIO {
     Scanner scanInput = new Scanner(System.in);
+
+    public UserIOConsoleImpl() {
+    
+    }
+    
 
     @Override
     public void print(String message) {
@@ -79,7 +92,7 @@ public class UserIOConsoleImpl implements UserIO {
         double input;
         
         do{
-            input = readInt(prompt);
+            input = readDouble(prompt);
             
             if(input >= min && input <= max) {
                 inRange = true;
@@ -109,7 +122,7 @@ public class UserIOConsoleImpl implements UserIO {
         float input;
         
         do{
-            input = readInt(prompt);
+            input = readFloat(prompt);
             
             if(input >= min && input <= max) {
                 inRange = true;
@@ -139,7 +152,7 @@ public class UserIOConsoleImpl implements UserIO {
         long input;
         
         do{
-            input = readInt(prompt);
+            input = readLong(prompt);
             
             if(input >= min && input <= max) {
                 inRange = true;
@@ -151,12 +164,50 @@ public class UserIOConsoleImpl implements UserIO {
 
     @Override
     public BigDecimal readBigDecimal(String prompt) throws NumberFormatException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        BigDecimal input = BigDecimal.ZERO;
+        
+        try {
+            print(prompt);
+            input = new BigDecimal(scanInput.nextLine());
+        } catch(NumberFormatException ex) {
+            print("Could not read number.");
+        }
+        
+        return input;
     }
 
     @Override
-    public BigDecimal readBigDecimal(String prompt, long min, long max) throws NumberFormatException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public BigDecimal readBigDecimal(String prompt, BigDecimal min, BigDecimal max) throws NumberFormatException {
+        boolean inRange = false;
+        BigDecimal input = BigDecimal.ZERO;
+  
+        do{
+            input = readBigDecimal(prompt);
+            
+            if(input.compareTo(min) == 1 && input.compareTo(max) == -1) {
+                inRange = true;
+            }
+        } while (!inRange);
+        
+        return input;
+    }
+
+    @Override
+    public LocalDate readLocalDate(String prompt) throws DateTimeParseException {
+        LocalDate input = null;
+        print(prompt);
+        String toFormat = scanInput.nextLine();
+        
+        List<String> formats = Arrays.asList("M/d/y", "M-d-y");
+
+        for (String s : formats) {
+            try{
+                input = LocalDate.parse(toFormat, DateTimeFormatter.ofPattern(s));
+            } catch (DateTimeParseException ex) {
+                // do nothing
+            }
+        }    
+        return input;
     }
 
 }

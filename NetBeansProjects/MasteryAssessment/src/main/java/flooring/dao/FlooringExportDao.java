@@ -8,8 +8,12 @@ package flooring.dao;
 
 import flooring.dto.Order;
 import java.util.List;
-import java.util.Map;
 
 public interface FlooringExportDao {
-    public List<String> createBackup(Map<Integer, Order> allOrders);
+    /**
+     * 
+     * @param allOrders
+     * @throws FlooringPersistenceException 
+     */
+    public void createBackup(List<Order> allOrders) throws FlooringPersistenceException ;
 }

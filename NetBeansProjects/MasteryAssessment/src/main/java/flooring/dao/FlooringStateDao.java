@@ -12,4 +12,7 @@ import java.util.Map;
 public interface FlooringStateDao {
     public Map<String, State> getAllStates() throws FlooringPersistenceException;
     public State getState(String stateAbbreviation) throws FlooringPersistenceException;
+    public State addState(State newState) throws FlooringPersistenceException;
+    public State editState(State editState) throws FlooringPersistenceException;
+    public State removeState(State removeState) throws FlooringPersistenceException;
 }

@@ -9,6 +9,8 @@ package flooring.dto;
 //CustomerName
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Objects;
 
 //State
 //ProductType
@@ -26,6 +28,7 @@ public class Order {
     private BigDecimal laborCost;
     private BigDecimal tax;
     private BigDecimal total;
+    private LocalDate date;
 
     public Order(Integer id) {
         this.id = id;
@@ -97,6 +100,87 @@ public class Order {
 
     public void setTotal(BigDecimal total) {
         this.total = total;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return id + " " + name + ": " + state
+                + "\n\t\t" + product
+                + "\n\t\t" + "Area: " + area + " sqft"
+                + "\n\t\t" + "Materials: $"+ materialCost
+                + "\n\t\t" + "Labor: $" + laborCost
+                + "\n\t\t" + "Tax: $" + tax
+                + "\n\t\t" + "Total: $" + total
+                + "\n\t\t" + "Date: " + date;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 71 * hash + Objects.hashCode(this.id);
+        hash = 71 * hash + Objects.hashCode(this.name);
+        hash = 71 * hash + Objects.hashCode(this.state);
+        hash = 71 * hash + Objects.hashCode(this.product);
+        hash = 71 * hash + Objects.hashCode(this.area);
+        hash = 71 * hash + Objects.hashCode(this.materialCost);
+        hash = 71 * hash + Objects.hashCode(this.laborCost);
+        hash = 71 * hash + Objects.hashCode(this.tax);
+        hash = 71 * hash + Objects.hashCode(this.total);
+        hash = 71 * hash + Objects.hashCode(this.date);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Order other = (Order) obj;
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        if (!Objects.equals(this.state, other.state)) {
+            return false;
+        }
+        if (!Objects.equals(this.product, other.product)) {
+            return false;
+        }
+        if (!Objects.equals(this.area, other.area)) {
+            return false;
+        }
+        if (!Objects.equals(this.materialCost, other.materialCost)) {
+            return false;
+        }
+        if (!Objects.equals(this.laborCost, other.laborCost)) {
+            return false;
+        }
+        if (!Objects.equals(this.tax, other.tax)) {
+            return false;
+        }
+        if (!Objects.equals(this.total, other.total)) {
+            return false;
+        }
+        if (!Objects.equals(this.date, other.date)) {
+            return false;
+        }
+        return true;
     }
 
 }

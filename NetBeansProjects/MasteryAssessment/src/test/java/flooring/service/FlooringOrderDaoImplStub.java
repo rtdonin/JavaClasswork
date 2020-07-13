@@ -7,43 +7,78 @@ Date revised:
 package flooring.service;
 
 import flooring.dao.FlooringOrderDao;
+import flooring.dao.FlooringPersistenceException;
 import flooring.dto.Order;
+import flooring.dto.Product;
+import flooring.dto.State;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class FlooringOrderDaoImplStub implements FlooringOrderDao {
 
+    private Order onlyOrder;
+    
+    public FlooringOrderDaoImplStub(){
+        this.onlyOrder = new Order(1);
+        onlyOrder.setName("Acme Inc.");
+        onlyOrder.setArea(new BigDecimal("200"));
+        onlyOrder.setDate(LocalDate.of(2020, 7, 10));
+        onlyOrder.setState(new State("NY", "New York", new BigDecimal("4.00")));
+        onlyOrder.setProduct(new Product("Stone", new BigDecimal("3.50"), new BigDecimal("4.00")));
+    }
+
+    public FlooringOrderDaoImplStub(Order onlyOrder) {
+        this.onlyOrder = onlyOrder;
+    }
+    
+    
     @Override
-    public Map<Integer, Order> getAllOrders(LocalDate date) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public List<Order> getAllOrders(LocalDate date) throws FlooringPersistenceException {
+        List<Order> allOrders = new ArrayList<>();
+
+        if (date.equals(onlyOrder.getDate())) {
+            allOrders.add(onlyOrder);
+        } else {
+            throw new FlooringPersistenceException("");
+        }
+        
+        return allOrders;
     }
 
     @Override
-    public Order getOrder(String dateId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Order getOrder(LocalDate date, Integer id) throws FlooringPersistenceException {
+        if (date.equals(onlyOrder.getDate()) && id.equals(onlyOrder.getId())) {
+            return onlyOrder;
+        } if (!date.equals(onlyOrder.getDate())) {
+            throw new FlooringPersistenceException("ex");
+        } else {
+            return null;
+        }
     }
 
     @Override
     public Order addOrder(Order newOrder) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return newOrder;
     }
 
     @Override
     public Order editOrder(Order editedOrder) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return editedOrder;
     }
 
     @Override
     public Order removeOrder(Order removeOrder) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return removeOrder;
     }
 
     @Override
     public List<Order> exportAll() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        List<Order> allOrders = new ArrayList<>();
+        allOrders.add(onlyOrder);
+        
+        return allOrders;
     }
-
-    
 
 }

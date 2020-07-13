@@ -8,11 +8,8 @@ Date created: 06/29/20
 Title Remove Order
 
 FlooringViewImpl -> FlooringController
-FlooringController -> FlooringViewImpl : displayGetMenu()
-FlooringViewImpl --> FlooringController : int
-FlooringController -> FlooringController : removeOrder()
 FlooringController -> FlooringViewImpl : findOrderByDate()
-FlooringViewImpl --> FlooringController : String
+FlooringViewImpl --> FlooringController : LocalDate
 FlooringController -> FlooringViewImpl : findOrderById()
 FlooringViewImpl --> FlooringController : int
 FlooringController -> FlooringServiceLayerImpl : getOrder(LocalDate, Integer)
@@ -25,7 +22,7 @@ FlooringController -> FlooringServiceLayerImpl : removeOrder()
 FlooringServiceLayerImpl -> FlooringOrderDaoImpl : removeOrder(Order)
 FlooringOrderDaoImpl --> FlooringServiceLayerImpl : removeOrder(Order)
 FlooringServiceLayerImpl --> FlooringController : Order
-FlooringController -> FlooringViewImpl : displayDelectionOrderSuccessBanner()
+FlooringController -> FlooringViewImpl : displayDelectionOrderSuccessBanner(Order)
 FlooringViewImpl --> FlooringController : void
 
 @enduml
