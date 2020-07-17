@@ -1,0 +1,2 @@
+State,StateName,TaxRate
+LA,Louisiana,4.45

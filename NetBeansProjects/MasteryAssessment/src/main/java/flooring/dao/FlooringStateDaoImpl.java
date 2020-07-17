@@ -25,7 +25,7 @@ public class FlooringStateDaoImpl implements FlooringStateDao{
     private final String DELIMITER = ",";
 
     public FlooringStateDaoImpl() {
-        this.STATE_FILE = "Data/taxes.txt";
+        this.STATE_FILE = "Data//taxes.txt";
     }
     
     public FlooringStateDaoImpl(String fileName) {
@@ -39,9 +39,16 @@ public class FlooringStateDaoImpl implements FlooringStateDao{
     }
 
     @Override
-    public State getState(String stateType) throws FlooringPersistenceException {
+    public State getState(String stateAbbreviation) throws FlooringPersistenceException {
         loadFile();
-        return allStates.get(stateType);
+        State state = null;
+        
+        if (allStates.containsKey(stateAbbreviation)) {
+            
+            state = allStates.get(stateAbbreviation);
+        }
+        
+        return state;
     }
 
     @Override
@@ -71,6 +78,11 @@ public class FlooringStateDaoImpl implements FlooringStateDao{
         return removeState;
     }
     
+    /**
+     * Laods the file and populares the Map allStates.
+     * 
+     * @throws FlooringPersistenceException 
+     */
     private void loadFile() throws FlooringPersistenceException {
         Scanner scanner;
         
@@ -93,6 +105,11 @@ public class FlooringStateDaoImpl implements FlooringStateDao{
         scanner.close();
     }
     
+    /**
+     * Takes no variables, returns no variables. Writes Map allStates to the file.
+     * 
+     * @throws FlooringPersistenceException 
+     */
     private void writeFile() throws FlooringPersistenceException {
         PrintWriter out;
         
@@ -115,7 +132,13 @@ public class FlooringStateDaoImpl implements FlooringStateDao{
         
         out.close();
     }
-        
+
+    /**
+     * Takes a String and creates a State with the information.
+     * 
+     * @param currentLine
+     * @return State
+     */
     private State unmarshallData(String currentLine) {
         String[] tokens = currentLine.split(DELIMITER);
         String stateAbbreviation = tokens[0];
@@ -127,6 +150,12 @@ public class FlooringStateDaoImpl implements FlooringStateDao{
         return currentState;
     }
     
+    /**
+     * Takes state and converts it to string for writing to the file
+     * 
+     * @param currentState
+     * @return String
+     */
     private String marshallData(State currentState) {
         String marshalledState = currentState.getStateAbbreviation() + DELIMITER;
         marshalledState += currentState.getStateName() + DELIMITER;

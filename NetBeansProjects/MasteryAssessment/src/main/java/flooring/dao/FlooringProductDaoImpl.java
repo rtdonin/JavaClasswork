@@ -23,12 +23,13 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class FlooringProductDaoImpl implements FlooringProductDao{
-    private final Map<String, Product> allProducts = new HashMap<>();
+    private Map<String, Product> allProducts = new HashMap<>();
     private final String PRODUCT_FILE;
     private final String DELIMITER = ",";
+    private final String HEADER = "ProductType,CostPerSquareFoot,LaborCostPerSquareFoot";
     
     public FlooringProductDaoImpl(){
-        this.PRODUCT_FILE = "Data/products.txt";
+        this.PRODUCT_FILE = "Data//products.txt";
     }
     
     public FlooringProductDaoImpl(String fileName){
@@ -44,12 +45,17 @@ public class FlooringProductDaoImpl implements FlooringProductDao{
     @Override
     public Product getProduct(String productType) throws FlooringPersistenceException {
         loadFile();
-        return allProducts.get(productType);
+        Product product = null;
+        
+        if (allProducts.containsKey(productType)) {
+            product = allProducts.get(productType);
+        }
+        
+        return product;        
     }
     
     @Override
     public Product addProduct(Product newProduct) throws FlooringPersistenceException {
-        loadFile();
         allProducts.put(newProduct.getProductType(), newProduct);
         writeFile();
         return newProduct;
@@ -71,6 +77,11 @@ public class FlooringProductDaoImpl implements FlooringProductDao{
         return removeProduct;
     }
     
+    /**
+     * Loads file of Products and populates Map allProducts
+     * 
+     * @throws FlooringPersistenceException 
+     */
     private void loadFile() throws FlooringPersistenceException {
         Scanner scanner;
         
@@ -93,6 +104,11 @@ public class FlooringProductDaoImpl implements FlooringProductDao{
         scanner.close();
     }
     
+    /**
+     * Prints all values in Map allProducts to the file.
+     * 
+     * @throws FlooringPersistenceException 
+     */
     private void writeFile() throws FlooringPersistenceException {
         PrintWriter out;
         
@@ -116,7 +132,13 @@ public class FlooringProductDaoImpl implements FlooringProductDao{
         
         out.close();
     }
-        
+
+    /**
+     * Takes current line from load file and converts it to an instance of Product
+     * 
+     * @param currentLine
+     * @return Product
+     */
     private Product unmarshallData(String currentLine) {
         String[] tokens = currentLine.split(DELIMITER);
         String productType = tokens[0];
@@ -128,6 +150,12 @@ public class FlooringProductDaoImpl implements FlooringProductDao{
         return currentProduct;
     }
     
+    /**
+     * Takes current Product from write file and converts it to an instance of String.
+     * 
+     * @param currentProduct
+     * @return String
+     */
     private String marshallData(Product currentProduct) {
         String marshalledProduct = currentProduct.getProductType() + DELIMITER;
         marshalledProduct += currentProduct.getCostPerSquareFoot() + DELIMITER;

@@ -8,7 +8,8 @@ package flooring.dao;
 
 public interface FlooringAuditDao {
     /**
-     * writes to the audit file all CRUD methods for the orders and all exceptions
+     * writes to the audit file all CRUD methods for FlooringOrderDaoImpl and all exceptions.
+     * 
      * @param entry
      * @throws FlooringPersistenceException 
      */

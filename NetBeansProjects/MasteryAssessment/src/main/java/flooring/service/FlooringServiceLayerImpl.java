@@ -144,6 +144,13 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
         }
     }
     
+    /**
+     * Take an order and calculates the proper materials, labor, tax, and cost.
+     * Returns the order with the correct values.
+     * 
+     * @param order
+     * @return 
+     */
     private Order calculateProductCostTax(Order order) {
         BigDecimal taxRate = order.getState().getTaxRate();
         taxRate = taxRate.divide(new BigDecimal("100"));

@@ -17,15 +17,15 @@
 
     <!-- Bean definitions go here -->
     <bean id = "orderDao" class = "flooring.dao.FlooringOrderDaoImpl" >
-        <constructor-arg value = ".//TestFiles//Orders" />
+        <constructor-arg value = "TestFile//Orders" />
     </bean>
 
     <bean id = "productDao" class = "flooring.dao.FlooringProductDaoImpl" >
-        <constructor-arg value = ".//TestFiles//ProductTest.txt" />
+        <constructor-arg value = "TestFile//ProductTest.txt" />
     </bean>
     
     <bean id = "stateDao" class = "flooring.dao.FlooringStateDaoImpl" >
-        <constructor-arg value = ".//TestFiles//StateTest.txt" />
+        <constructor-arg value = "TestFile//StateTest.txt" />
     </bean>
 
     <bean id = "exportDaoStub" class = "flooring.service.FlooringExportDaoImplStub" />

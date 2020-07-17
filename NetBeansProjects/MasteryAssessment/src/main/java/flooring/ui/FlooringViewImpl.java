@@ -58,6 +58,8 @@ public class FlooringViewImpl implements FlooringView {
             
             io.print(o.getId() + ": " + o.getName() + " $" + o.getTotal());
         }
+        
+        io.readString("Press enter to continue.");
     }
 
     @Override

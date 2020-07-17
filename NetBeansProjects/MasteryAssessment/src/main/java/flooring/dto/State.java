@@ -10,9 +10,9 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 public class State {
-    private final String stateAbbreviation;
+    private String stateAbbreviation;
     private String stateName;
-    private final BigDecimal taxRate;
+    private BigDecimal taxRate;
 
     public State(String stateAbbreviation, String stateName, BigDecimal taxRate) {
         this.stateAbbreviation = stateAbbreviation;
@@ -29,22 +29,39 @@ public class State {
         return stateAbbreviation;
     }
 
-    public void setStateName(String stateName) {
-        this.stateName = stateName;
+    public void setStateAbbreviation(String stateAbbreviation) {
+        this.stateAbbreviation = stateAbbreviation;
     }
-    
+
     public String getStateName() {
         return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 
     public BigDecimal getTaxRate() {
         return taxRate;
     }
 
+    public void setTaxRate(BigDecimal taxRate) {
+        this.taxRate = taxRate;
+    }
+
     @Override
     public String toString() {
-        return "State: " + stateName + " ("+ stateAbbreviation + ") "
-                + taxRate.toPlainString() + "% tax";
+        String string = "State: ";
+        
+        if (stateName != null) {
+            string += stateName + " ("+ stateAbbreviation + ") ";
+        } else {
+            string += stateAbbreviation + " ";
+        }
+        
+        string += taxRate.toPlainString() + "% tax";
+        
+        return string;
     }
 
     @Override

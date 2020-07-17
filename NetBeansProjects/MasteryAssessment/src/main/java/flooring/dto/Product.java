@@ -10,9 +10,9 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Product {
-    private final String productType;
-    private final BigDecimal costPerSquareFoot;
-    private final BigDecimal laborCostPerSquareFoot;
+    private String productType;
+    private BigDecimal costPerSquareFoot;
+    private BigDecimal laborCostPerSquareFoot;
 
     public Product(String productType, BigDecimal costPerSquareFoot, BigDecimal laborCostPerSquareFoot) {
         this.productType = productType;
@@ -23,18 +23,30 @@ public class Product {
     public String getProductType() {
         return productType;
     }
+    
+    public void setProductType(String productType) {
+        this.productType = productType;
+    }
 
     public BigDecimal getCostPerSquareFoot() {
         return costPerSquareFoot;
     }
 
+    public void setCostPerSquareFoot(BigDecimal costPerSquareFoot) {
+        this.costPerSquareFoot = costPerSquareFoot;
+    }
+    
     public BigDecimal getLaborCostPerSquareFoot() {
         return laborCostPerSquareFoot;
     }
 
+    public void setLaborCostPerSquareFoot(BigDecimal laborCostPerSquareFoot) {
+        this.laborCostPerSquareFoot = laborCostPerSquareFoot;
+    }
+
     @Override
     public String toString() {
-        return "Product " + productType
+        return "Product - " + productType
                 + ": material $" + costPerSquareFoot.toPlainString() + "/sqft, "
                 + "labor $" + laborCostPerSquareFoot.toPlainString() + "/sqft";
     }

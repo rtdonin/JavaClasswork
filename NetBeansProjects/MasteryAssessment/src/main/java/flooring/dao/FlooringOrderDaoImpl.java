@@ -30,20 +30,23 @@ import java.util.Set;
 public class FlooringOrderDaoImpl implements FlooringOrderDao {
     private Map<LocalDate, Map<Integer, Order>> allOrders = new HashMap<>();
     private Map<Integer, Order> orders = new HashMap<>();
-    private String folderName;
+    private final String folderName;
+    private LocalDate date;
     private final String DELIMITER = ",";
+    private final String REPLACEMENT = "::";
 
     public FlooringOrderDaoImpl() {
-        this.folderName = ".//Orders";
+        this.folderName = "Orders";
     }
     
     public FlooringOrderDaoImpl(String folderName) {
-        this.folderName = ".//" + folderName;
+        this.folderName = folderName;
     }
 
     @Override
-    public List<Order> getAllOrders(LocalDate date) throws FlooringPersistenceException{
-        File fileName = getFileName(date);
+    public List<Order> getAllOrders(LocalDate date) throws FlooringPersistenceException {
+        this.date = date;
+        File fileName = getFileName();
         loadFile(fileName);
         List<Order> listOrders = new ArrayList<>();
         listOrders.addAll(orders.values());
@@ -52,14 +55,34 @@ public class FlooringOrderDaoImpl implements FlooringOrderDao {
 
     @Override
     public Order getOrder(LocalDate date, Integer id) throws FlooringPersistenceException{
-        File fileName = getFileName(date);
-        loadFile(fileName);
-        return orders.get(id);
+        this.date = date;
+        File fileName = getFileName();
+        Order order = null;
+        
+        if (fileName.exists()) {
+            loadFile(fileName);
+            order = orders.get(id);
+        }
+        
+        return order;
     }
 
     @Override
     public Order addOrder(Order order) throws FlooringPersistenceException {
-        File fileName = getFileName(order.getDate());
+        this.date = order.getDate();
+        File fileName = getFileName();
+        
+        if (!fileName.exists()) {
+            try {
+                fileName.createNewFile();
+            } catch (IOException ex) {
+                throw new FlooringPersistenceException("Could not create file.");
+            }
+            
+        } else {
+            loadFile(fileName);
+        }
+        
         Order added = orders.put(order.getId(), order);
         writeFile(fileName);
         return added;
@@ -67,7 +90,8 @@ public class FlooringOrderDaoImpl implements FlooringOrderDao {
 
     @Override
     public Order editOrder(Order order) throws FlooringPersistenceException {
-        File fileName = getFileName(order.getDate());
+        this.date = order.getDate();
+        File fileName = getFileName();
         loadFile(fileName);
         Order edited = orders.replace(order.getId(), order);
         writeFile(fileName);
@@ -76,10 +100,16 @@ public class FlooringOrderDaoImpl implements FlooringOrderDao {
 
     @Override
     public Order removeOrder(Order order) throws FlooringPersistenceException {
-        File fileName = getFileName(order.getDate());
+        this.date = order.getDate();
+        File fileName = getFileName();
         loadFile(fileName);
         Order removed = orders.remove(order.getId());
-        writeFile(fileName);
+        
+        if (orders.isEmpty()) {
+            fileName.delete();
+        } else {
+            writeFile(fileName);
+        }
         return removed;
     }
 
@@ -94,12 +124,18 @@ public class FlooringOrderDaoImpl implements FlooringOrderDao {
         // we .addAll the elements in temp to listOrders
         
         for(LocalDate ld : dates){
-            listOrders.addAll(allOrders.get(ld).values());
+            this.date = ld;
+            listOrders.addAll(allOrders.get(date).values());
         }
         
         return listOrders;
     }
     
+    /**
+     * Loads the folder where all the files are and walks through the folder.
+     * 
+     * @throws FlooringPersistenceException 
+     */
     private void loadFolder() throws FlooringPersistenceException{
         File folder = new File(folderName);
         File[] listOfFiles = folder.listFiles();
@@ -116,14 +152,19 @@ public class FlooringOrderDaoImpl implements FlooringOrderDao {
 
     }
         
-    
+    /**
+     * Loads the File file and populates a new Map allOrders
+     * 
+     * @param file
+     * @throws FlooringPersistenceException 
+     */
     private void loadFile(File file) throws FlooringPersistenceException{
         Scanner scanner = null;
         
         try {
             scanner = new Scanner(new BufferedReader(new FileReader(file)));
         } catch(FileNotFoundException e) {
-            // do nothing.
+            this.orders = null;
         }
         
         String currentLine;
@@ -142,6 +183,12 @@ public class FlooringOrderDaoImpl implements FlooringOrderDao {
         scanner.close();
     }
     
+    /**
+     * Writes to a File file the Map orders.
+     * 
+     * @param file
+     * @throws FlooringPersistenceException 
+     */
     private void writeFile(File file) throws FlooringPersistenceException{
         PrintWriter out;
         
@@ -164,9 +211,15 @@ public class FlooringOrderDaoImpl implements FlooringOrderDao {
         out.close();
     }
     
+    /**
+     * Takes an Order and converts it to a string for printing.
+     * 
+     * @param currentOrder
+     * @return 
+     */
     private String marshallData(Order currentOrder){
         String orderAsText = currentOrder.getId() + DELIMITER;
-        orderAsText += currentOrder.getName() + DELIMITER;
+        orderAsText += currentOrder.getName().replace(DELIMITER, REPLACEMENT) + DELIMITER;
         orderAsText += currentOrder.getState().getStateAbbreviation() + DELIMITER;
         orderAsText += currentOrder.getState().getTaxRate().toPlainString() + DELIMITER;
         orderAsText += currentOrder.getProduct().getProductType() + DELIMITER;
@@ -180,8 +233,10 @@ public class FlooringOrderDaoImpl implements FlooringOrderDao {
         
         return orderAsText;
     }
-    
+
     /**
+     * Takes a String and converts it to an Order
+     * 
      * 0. OrderNumber
      * 1. CustomerName
      * 2. State Abbreviation
@@ -194,6 +249,9 @@ public class FlooringOrderDaoImpl implements FlooringOrderDao {
      * 9. LaborCost
      * 10. Tax
      * 11. Total
+     * 
+     * @param currentLine
+     * @return 
      */
     
     private Order unmarshallData(String currentLine){
@@ -204,28 +262,28 @@ public class FlooringOrderDaoImpl implements FlooringOrderDao {
         
         Integer id = parseInt(tokens[0]);
         Order order = new Order(id);
-        
-        int x = tokens.length - 12;
-        String name = "";
-        
-        for (int i = 0; i <= x; i++){
-            name += tokens [1+i];
-        }
+
+        String name  = tokens[1].replace(REPLACEMENT, DELIMITER);
         
         order.setName(name);
-        
-        order.setState(new State(tokens[2 + x], new BigDecimal(tokens[3 + x])));
-        order.setProduct(new Product(tokens[4 + x], new BigDecimal(tokens[6 + x]), new BigDecimal(tokens[7 + x])));
-        order.setArea(new BigDecimal(tokens[5 + x]));
-        order.setMaterialCost(new BigDecimal(tokens[8 + x]));
-        order.setLaborCost(new BigDecimal(tokens[9 + x]));
-        order.setTax(new BigDecimal(tokens[10 + x]));
-        order.setTotal(new BigDecimal(tokens[11 + x]));
+        order.setState(new State(tokens[2], new BigDecimal(tokens[3])));
+        order.setProduct(new Product(tokens[4], new BigDecimal(tokens[6]), new BigDecimal(tokens[7])));
+        order.setArea(new BigDecimal(tokens[5]));
+        order.setMaterialCost(new BigDecimal(tokens[8]));
+        order.setLaborCost(new BigDecimal(tokens[9]));
+        order.setTax(new BigDecimal(tokens[10]));
+        order.setTotal(new BigDecimal(tokens[11]));
+        order.setDate(date);
         
         return order;
     }
 
-    private File getFileName(LocalDate date) {
+    /**
+     * Using the LocalDate date creates the correct file name.
+     * 
+     * @return 
+     */
+    private File getFileName() {
         String fileName = folderName + "//Orders_";
         fileName += date.format(DateTimeFormatter.ofPattern("MMddyyyy"));
         fileName += ".txt";

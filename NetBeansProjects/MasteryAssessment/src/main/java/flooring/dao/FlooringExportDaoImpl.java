@@ -47,6 +47,12 @@ public class FlooringExportDaoImpl implements FlooringExportDao {
         out.close();
     }
     
+    /**
+     * Take an Order and converts it to a String for printing.
+     * 
+     * @param currentOrder
+     * @return String
+     */
     private String marshallData(Order currentOrder) {
         String currentLine = currentOrder.getId() + DELIMITER;
         currentLine += currentOrder.getName() + DELIMITER;

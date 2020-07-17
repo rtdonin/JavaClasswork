@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface FlooringExportDao {
     /**
+     * Prints the Lost of Orders, allOrders to a file.
      * 
      * @param allOrders
      * @throws FlooringPersistenceException 
