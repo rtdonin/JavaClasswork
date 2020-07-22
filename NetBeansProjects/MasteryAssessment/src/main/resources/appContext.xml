@@ -43,26 +43,27 @@
     <bean id = "advice" class = "flooring.advice.LoggingAdvice">
         <constructor-arg ref = "auditDao" />
     </bean>
-<!--  
+
     <aop:config>
         <aop:aspect ref = "advice">
             <aop:after-returning
-                method = "addOrder"
-                pointcut = "execution(* flooring.service.FlooringServiceLayerImpl.addOrder(.))"
+                method = "createAuditEntry"
+                pointcut = "execution(* flooring.service.FlooringServiceLayerImpl.addOrder(..))"
             />
         </aop:aspect>
+
         <aop:aspect ref = "advice">
             <aop:after-returning
-                method = "editOrder"
-                pointcut = "execution(* flooring.service.FlooringServiceLayerImpl.editOrder(.))"
+                method = "createAuditEntry"
+                pointcut = "execution(* flooring.service.FlooringServiceLayerImpl.editOrder(..))"
             />
         </aop:aspect>
+        
         <aop:aspect ref = "advice">
             <aop:after-returning
-                method = "removeOrder"
-                pointcut = "execution(* flooring.service.FlooringServiceLayerImpl.removeOrder(.))"
+                method = "createAuditEntry"
+                pointcut = "execution(* flooring.service.FlooringServiceLayerImpl.removeOrder(..))"
             />
         </aop:aspect>
     </aop:config>
-    -->
 </beans>

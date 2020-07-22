@@ -1,6 +1,7 @@
 /'
 Created by: Margaret Donin
 Date created: 06/29/20
+Date revised: 07/22/20 fixed to match the code
 '/
 
 @startuml
@@ -11,13 +12,15 @@ FlooringViewImpl -> FlooringController
 FlooringController -> FlooringViewImpl : getOrderDate()
 FlooringViewImpl --> FlooringController : LocalDate
 FlooringController -> FlooringViewImpl : getOrderId()
-FlooringViewImpl --> FlooringController : int
+FlooringViewImpl --> FlooringController : Integer
 FlooringController -> FlooringServiceLayerImpl : getOrder(LocalDate, Integer)
 FlooringServiceLayerImpl -> FlooringOrderDaoImpl : getOrder(LocalDate, Integer)
 FlooringOrderDaoImpl --> FlooringServiceLayerImpl : Order
 FlooringServiceLayerImpl --> FlooringController : Order
 FlooringController -> FlooringViewImpl : editName(String)
 FlooringViewImpl --> FlooringController : String
+FlooringController -> FlooringViewImpl : displayOriginalInput(String, String)
+FlooringViewImpl --> FlooringController : void
 FlooringController -> FlooringServiceLayerImpl : getAllProducts()
 FlooringServiceLayerImpl -> FlooringProductDaoImpl : getAllProducts()
 FlooringProductDaoImpl --> FlooringServiceLayerImpl : Map<String, Product>
@@ -36,6 +39,8 @@ FlooringController -> FlooringServiceLayerImpl : checkNewOrder(Order, Order)
 FlooringServiceLayerImpl --> FlooringController : Order
 FlooringController -> FlooringViewImpl : displayGetEditConfirmation(Order)
 FlooringViewImpl --> FlooringController : String
+FlooringController -> FlooringServiceLayerImpl : compConfirmation(String)
+FlooringServiceLayerImpl --> FlooringController : boolean
 FlooringController -> FlooringServiceLayerImpl : editOrder(Order)
 FlooringServiceLayerImpl -> FlooringOrderDaoImpl : editOrder(Order)
 FlooringOrderDaoImpl --> FlooringServiceLayerImpl : Order

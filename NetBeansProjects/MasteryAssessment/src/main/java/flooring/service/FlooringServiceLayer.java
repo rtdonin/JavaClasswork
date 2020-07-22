@@ -17,20 +17,27 @@ import java.util.Map;
 public interface FlooringServiceLayer {
     /**
      * Takes a LocalDate date and returns a List of Orders from that date.
+     * If there are no orders from this date, the OrderDao will throw a persistence
+     * exception.This exception is caught and the list if set to null. When the
+     * value reaches the view the view will tell the user that there are no orders
+     * from this date.
      * 
      * @param date
      * @return List
-     * @throws FlooringPersistenceException 
      */
-    public List<Order> getDateOrders(LocalDate date) throws FlooringPersistenceException;
+    public List<Order> getDateOrders(LocalDate date);
     
     /**
      * Get an order by LocalDate date and Integer id
+     * If there are no orders from this date, the OrderDao will throw a persistence
+     * exception.This exception is caught later in the controller. The view will
+     * then display there are no orders from this date. If there are orders from
+     * this date, but nothing with this id, the view will inform the user that the
+     * id was incorrect.
      * 
      * @param date
      * @param id
      * @return Order
-     * @throws FlooringPersistenceException 
      */
     public Order getOrder(LocalDate date, Integer id) throws FlooringPersistenceException;
     
@@ -56,16 +63,14 @@ public interface FlooringServiceLayer {
      * Validates an Order.
      * 
      * Checks that the name is a valid name and only contains alphanumeric values, commas, and periods.
-     * Checks that the date is after today.
+     * Checks that the date is not null and is after today.
      * Checks that the Area is the greater than of equals to the minimum area
-     * 
+     * Checks that the product and state are not null.
      * @param order
      * @return
-     * @throws InvalidAreaException
-     * @throws InvalidDateException
-     * @throws InvalidNameException 
+     * @throws InvalidAreaException, InvalidDateException, InvalidNameException, InvalidProductException, InvalidStateException
      */
-    public Order validateOrder(Order order) throws InvalidAreaException, InvalidDateException, InvalidNameException;
+    public Order validateOrder(Order order) throws InvalidAreaException, InvalidDateException, InvalidNameException, InvalidProductException, InvalidStateException;
     
     /**
      * Returns a map of all products/
@@ -91,9 +96,11 @@ public interface FlooringServiceLayer {
      * @return
      * @throws InvalidAreaException
      * @throws InvalidDateException
-     * @throws InvalidNameException 
+     * @throws InvalidNameException
+     * @throws InvalidProductException
+     * @throws InvalidStateException 
      */
-    public Order checkNewOrder(Order oldOrder, Order newOrder) throws InvalidAreaException, InvalidDateException, InvalidNameException;
+    public Order checkNewOrder(Order oldOrder, Order newOrder) throws InvalidAreaException, InvalidDateException, InvalidNameException, InvalidProductException, InvalidStateException;
     
     /**
      * Edits the order in the OrderDao.

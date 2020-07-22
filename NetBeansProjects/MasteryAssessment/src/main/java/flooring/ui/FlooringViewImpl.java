@@ -56,7 +56,7 @@ public class FlooringViewImpl implements FlooringView {
         for (Order order : allOrders) {
             Order o = order;
             
-            io.print(o.getId() + ": " + o.getName() + " $" + o.getTotal());
+            io.print(o.getId() + ": " + o.getName() + " $" + o.getTotal().toPlainString());
         }
         
         io.readString("Press enter to continue.");
@@ -79,14 +79,9 @@ public class FlooringViewImpl implements FlooringView {
         
         io.print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
         
-        State state;
-        
-        do {
-            String selected = io.readString("Please select one of the above states.");
-            state = allStates.get(selected);
-        } while (state == null);
-        
-        return state;
+        String selected = io.readString("Please select one of the above states.");
+
+        return allStates.get(selected);
     }
 
     @Override
@@ -101,14 +96,9 @@ public class FlooringViewImpl implements FlooringView {
         });
         io.print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
         
-        Product product;
+        String selected = io.readString("Please select one of the above products.");
         
-        do {
-            String selected = io.readString("Please select one of the above products.");
-            product = allProducts.get(selected);
-        } while (product == null);
-        
-        return product;
+        return allProducts.get(selected);
     }
 
     @Override
@@ -128,7 +118,7 @@ public class FlooringViewImpl implements FlooringView {
     public void displayAddOrderSuccessBanner(Order newOrder) {
         io.print("The following order was saved successfully.");
         io.print(newOrder.getName());
-        io.print("Total Cost: " + newOrder.getTotal());
+        io.print("Total Cost: $" + newOrder.getTotal().toPlainString());
         
         io.readString("Press enter to continue.");
     }
@@ -160,7 +150,7 @@ public class FlooringViewImpl implements FlooringView {
     public void displayEditOrderSuccessBanner(Order order) {
         io.print("The following order was saved successfully.");
         io.print(order.getName());
-        io.print("Total Cost: " + order.getTotal());
+        io.print("Total Cost: $" + order.getTotal().toPlainString());
         
         io.readString("Press enter to continue.");
     }
@@ -182,7 +172,7 @@ public class FlooringViewImpl implements FlooringView {
     public void displayDeletionOrderSuccessBanner(Order removedOrder) {
         io.print("The following order was deleted successfully.");
         io.print(removedOrder.getName());
-        io.print("Total Cost: " + removedOrder.getTotal());
+        io.print("Total Cost: $" + removedOrder.getTotal().toPlainString());
         
         io.readString("Press enter to continue.");
     }

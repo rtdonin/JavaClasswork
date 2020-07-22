@@ -26,7 +26,6 @@ public class FlooringProductDaoImpl implements FlooringProductDao{
     private Map<String, Product> allProducts = new HashMap<>();
     private final String PRODUCT_FILE;
     private final String DELIMITER = ",";
-    private final String HEADER = "ProductType,CostPerSquareFoot,LaborCostPerSquareFoot";
     
     public FlooringProductDaoImpl(){
         this.PRODUCT_FILE = "Data//products.txt";

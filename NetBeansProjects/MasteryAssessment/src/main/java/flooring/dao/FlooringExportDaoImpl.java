@@ -17,7 +17,7 @@ public class FlooringExportDaoImpl implements FlooringExportDao {
     private final String DELIMITER = ",";
     
     public FlooringExportDaoImpl(){
-        this.BACKUP_FILE = "Backup/DataExprot.txt";
+        this.BACKUP_FILE = "Backup/DataExport.txt";
     }
     
     public FlooringExportDaoImpl(String fileName){

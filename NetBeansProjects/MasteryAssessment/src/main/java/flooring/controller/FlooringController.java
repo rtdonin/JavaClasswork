@@ -16,6 +16,8 @@ import flooring.service.FlooringServiceLayer;
 import flooring.service.InvalidAreaException;
 import flooring.service.InvalidDateException;
 import flooring.service.InvalidNameException;
+import flooring.service.InvalidProductException;
+import flooring.service.InvalidStateException;
 import flooring.ui.FlooringView;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -78,37 +80,23 @@ public class FlooringController {
             date = view.getOrderDate();
         }
         
-        try {
-            List<Order> allOrders = service.getDateOrders(date);
-            view.displayAllOrders(allOrders);
-        } catch (FlooringPersistenceException e){
-            view.displayNoOrdersForDate();
-        }
+        List<Order> allOrders = service.getDateOrders(date);
+        view.displayAllOrders(allOrders);
     }
     
     private void addOrder() throws FlooringPersistenceException {
         int id = service.getNewId();
         Order order = new Order(id);
         
+        String name = null;
         LocalDate date = null;
-        
-        while (date == null) {
-            date = view.getOrderDate();
-        }
-        
-        String name = view.getOrderName();
+        BigDecimal area = null;
+        Product product = null;
+        State state = null;
         
         Map<String, Product> products = service.getAllProducts();
-        Product product = view.displayGetProductMenu(products);
-        order.setProduct(product);
-        
         Map<String, State> states = service.getAllStates();
-        State state = view.displayGetStateMenu(states);
-        order.setState(state);
         
-        BigDecimal area = view.getArea();
-        
-        Order costTaxOrder = null;
         boolean hasError = true;
         
             do{
@@ -116,30 +104,37 @@ public class FlooringController {
                     order.setDate(date);
                     order.setName(name);
                     order.setArea(area);
-
-                    costTaxOrder = service.validateOrder(order);
+                    order.setProduct(product);
+                    order.setState(state);
+                    
+                    service.validateOrder(order);
                     hasError = false;
                     
                 } catch (InvalidNameException e) {
                     name = view.getOrderName();
-                } catch (InvalidAreaException e ){
-                    area = view.getArea();
                 } catch (InvalidDateException e) {
                     date = view.getOrderDate();
+                } catch (InvalidAreaException e ){
+                    area = view.getArea();
+                } catch (InvalidProductException e) {
+                    product = view.displayGetProductMenu(products);
+                } catch (InvalidStateException e) {
+                    state = view.displayGetStateMenu(states);
                 }
+                
             } while (hasError);
-        
-        String confirm = view.displayGetOrderConfirmation(costTaxOrder);
-        
+
         boolean keepGoing = true;
-        boolean saidYes;
         
         while (keepGoing){
+            String confirm = view.displayGetOrderConfirmation(order);
+            boolean saidYes;
+
             try {
                 saidYes = service.compConfirmation(confirm);
                 if(saidYes) {
-                    service.addOrder(costTaxOrder);
-                    view.displayAddOrderSuccessBanner(costTaxOrder);
+                    service.addOrder(order);
+                    view.displayAddOrderSuccessBanner(order);
                 } else if (!saidYes) {
                     view.diplayActionNotCompleted();
                 }
@@ -159,66 +154,93 @@ public class FlooringController {
         }
         
         Integer id = view.findOrderById();
-        Order selected = service.getOrder(date, id);
+        Order selected;
+        
+        try {
+            selected = service.getOrder(date, id);
+        } catch (FlooringPersistenceException ex) {
+            view.displayNoOrdersForDate();
+            return;
+        }
+
         
         if (selected == null) {
-            
             view.noSuchOrder();
-            
-        } else {
+            return;
+        } 
         
-            String name = view.editName(selected.getName());
-            view.displayOriginalInput("product", selected.getProduct().getProductType());
-            Map<String, Product> products = service.getAllProducts();
-            Product product = view.displayGetProductMenu(products);
-            view.displayOriginalInput("state", selected.getState().getStateName());
-            Map<String, State> states = service.getAllStates();
-            State state = view.displayGetStateMenu(states);
-            BigDecimal area = view.editArea(selected.getArea());
+        // get the edits
+        
+        String name = view.editName(selected.getName());
+        
+        String originalProduct = selected.getProduct().getProductType();
+        view.displayOriginalInput("product", originalProduct);
+        Map<String, Product> products = service.getAllProducts();
+        Product product = view.displayGetProductMenu(products);
+        
+        Map<String, State> states = service.getAllStates();
+        String originalStateAbbreviation = selected.getState().getStateAbbreviation();
+        String originalStateName = states.get(originalStateAbbreviation).getStateName();
+        view.displayOriginalInput("state", originalStateName);
+        State state = view.displayGetStateMenu(states);
+        
+        BigDecimal area = view.editArea(selected.getArea());
 
-            Order finalOrder = null;
-            boolean hasError = true;
+        // create the edited order
+        
+        Order edit = new Order(selected.getId());
+        boolean hasError = true;
 
-            do {
-                try {
-                    Order edit = new Order(selected.getId());
-                    edit.setName(name);
-                    edit.setProduct(product);
-                    edit.setState(state);
-                    edit.setArea(area);
+        do {
+            try {
+                
+                // put in the values for the edited order.
+        
+                edit.setName(name);
+                edit.setProduct(product);
+                edit.setState(state);
+                edit.setArea(area);
 
-                    finalOrder = service.checkNewOrder(selected, edit);
-                    hasError = false;
-                } catch (InvalidAreaException ex) {
-                    area = view.editArea(selected.getArea());
-                } catch (InvalidNameException ex) {
-                    name = view.editName(selected.getName());
-                } catch (InvalidDateException ex) {
-                    // should never happen.
-                    // This property is already checked for when the order was added
+                // validate and redo cost and tax calculations
+                service.checkNewOrder(selected, edit);
+                hasError = false;
+                
+                // if the validation errors happen - get a new value.
+            } catch (InvalidAreaException ex) {
+                area = view.editArea(selected.getArea());
+            } catch (InvalidNameException ex) {
+                name = view.editName(selected.getName());
+            } catch (InvalidStateException ex) {
+                view.displayOriginalInput("state", originalStateName);
+                state = view.displayGetStateMenu(states);
+            } catch (InvalidProductException ex) {
+                view.displayOriginalInput("product", originalProduct);
+                product = view.displayGetProductMenu(products);
+            } catch (InvalidDateException ex) {
+                // should never happen.
+                // This property is already checked for when the order was added
 
-                    view.displayError("Date exception thrown in editOrder method.");
-                }
-            } while (hasError);
+                view.displayError("Date exception thrown in editOrder method.");
+            }
+        } while (hasError);
+            
+        boolean keepGoing = true;
 
-            String confirm = view.displayGetEditConfirmation(finalOrder);
-
-            boolean keepGoing = true;
+        while (keepGoing){
+            String confirm = view.displayGetEditConfirmation(edit);
             boolean saidYes;
 
-            while (keepGoing){
-                try {
-                    saidYes = service.compConfirmation(confirm);
-                    if(saidYes) {
-                        service.editOrder(finalOrder);
-                        view.displayEditOrderSuccessBanner(finalOrder);
-                    } else if (!saidYes) {
-                        view.diplayActionNotCompleted();
-                    }
-                    keepGoing = false;
-                } catch(NotYesOrNoException e) {
-                    view.displayError(e.getMessage());
+            try {
+                saidYes = service.compConfirmation(confirm);
+                if(saidYes) {
+                    service.editOrder(edit);
+                    view.displayEditOrderSuccessBanner(edit);
+                } else if (!saidYes) {
+                    view.diplayActionNotCompleted();
                 }
+                keepGoing = false;
+            } catch(NotYesOrNoException e) {
+                view.displayError(e.getMessage());
             }
         }
     }
@@ -231,32 +253,37 @@ public class FlooringController {
         }
         
         Integer id = view.findOrderById();
-        Order selected = service.getOrder(date, id);
+        Order selected;
         
-        if (selected == null) {
-            
-            view.noSuchOrder();
-            
-        } else {
-        
-            String confirm = view.displayDeletionConfirmation(selected);
+        try {
+            selected = service.getOrder(date, id);
+        } catch (FlooringPersistenceException ex) {
+            view.displayNoOrdersForDate();
+            return;
+        }
 
-            boolean keepGoing = true;
+        if (selected == null) {
+            view.noSuchOrder();
+            return;
+        }
+
+        boolean keepGoing = true;
+
+        while (keepGoing){
+            String confirm = view.displayDeletionConfirmation(selected);
             boolean saidYes;
 
-            while (keepGoing){
-                try {
-                    saidYes = service.compConfirmation(confirm);
-                    if(saidYes) {
-                        service.removeOrder(selected);
-                        view.displayDeletionOrderSuccessBanner(selected);
-                    } else if (!saidYes) {
-                        view.diplayActionNotCompleted();
-                    }
-                    keepGoing = false;
-                } catch(NotYesOrNoException e) {
-                    view.displayError(e.getMessage());
+            try {
+                saidYes = service.compConfirmation(confirm);
+                if(saidYes) {
+                    service.removeOrder(selected);
+                    view.displayDeletionOrderSuccessBanner(selected);
+                } else if (!saidYes) {
+                    view.diplayActionNotCompleted();
                 }
+                keepGoing = false;
+            } catch(NotYesOrNoException e) {
+                view.displayError(e.getMessage());
             }
         }
     }

@@ -3,11 +3,12 @@ Created by: Margaret Donin
 Date created: 06/23/20
 Date revised: 06/24/20 correct syntax, packages, allOrders data structure
 Date revised: 06/26/20 fixed a few mistakes
+Date revised: 07/22/20 made corrections to fit code
 '/
 
 @startuml
 
-scale 2400 width
+scale 3200 width
 scale 1400 height
 
 package "flooring.controller" {
@@ -41,6 +42,7 @@ package "flooring.ui" {
         + displayAddOrderSuccessBanner(): void {newOrder: Order}
         + editName(): String {orgName: String}
         + editArea(): BigDecimal {orgArea: BigDecimal}
+        + displayOriginalInput(): void {type: String, String: input}
         + displayGetEditConfirmation(): String {editedOrder: Order}
         + displayEditOrderSuccessBanner(): void {}
         + getOrderById(): int {}
@@ -50,9 +52,13 @@ package "flooring.ui" {
         + displayExportingBanner(): void {}
         + displayExportingSuccess(): void {}
         + goodBye(): void {}
+        + unknownCommand(): void {}
+        + displayActionNotCompleted(): void {}
+        + noSuchOrder(): void {}
+        + displayNoOrdersForDate(): void {}
     }
 
-    class FlooringViewImpl {
+    class FlooringViewImpl { 
         - io: UserIO 
         + FlooringView(): {io: UserIO}
         + displayGetMenu(): int {}
@@ -66,6 +72,7 @@ package "flooring.ui" {
         + displayAddOrderSuccessBanner(): void {newOrder: Order}
         + editName(): String {orgName: String}
         + editArea(): BigDecimal {orgArea: BigDecimal}
+        + displayOriginalInput(): void {type: String, String: input}
         + displayGetEditConfirmation(): String {editedOrder: Order}
         + displayEditOrderSuccessBanner(): void {}
         + getOrderById(): int {}
@@ -75,6 +82,10 @@ package "flooring.ui" {
         + displayExportingBanner(): void {}
         + displayExportingSuccess(): void {}
         + goodBye(): void {}
+        + unknownCommand(): void {}
+        + displayActionNotCompleted(): void {}
+        + noSuchOrder(): void {}
+        + displayNoOrdersForDate(): void {}
     }
 }
 
@@ -86,13 +97,12 @@ package "flooring.service" {
         + addOrder(): Order {newOrder: Order}
         + validateOrder(): Order {order: Order}
         + getAllProducts(): Map<String, Product> {}
-        + getProduct(): Product {productType: String}
         + getAllStates(): Map<String, State>  {}
-        + getState(): State {stateAbbreviation: String}
         + checkNewOrder: Order {oldOrder: Order, newOrder: Order}
         + editOrder(): Order {editedOrder: Order}
         + removeOrder(): Order {removeOrder: Order}
         + export(): void {}
+        + compConfirmation(): boolean {confirmation: String}
     }
 
     class FlooringServiceLayerImpl {
@@ -107,13 +117,12 @@ package "flooring.service" {
         + addOrder(): Order {newOrder: Order}
         + validateOrder(): Order {order: Order}
         + getAllProducts(): Map<String, Product> {}
-        + getProduct(): Product {productType: String}
         + getAllStates(): Map<String, State>  {}
-        + getState(): State {stateAbbreviation: String}
         + checkNewOrder: Order {oldOrder: Order, newOrder: Order}
         + editOrder(): Order {editedOrder: Order}
         + removeOrder(): Order {removeOrder: Order}
         + export(): void {}
+        + compConfirmation(): boolean {confirmation: String}
         - calculateProductCostTax(): Order {order: Order}
     }
 }
@@ -132,16 +141,20 @@ package "flooring.dao" {
         - allOrders: Map<LocalDate, Map<Integer, Order>>
         - orderFile: String
         - DELIMITER: String
+        + FlooringOrderDaoImpl(): {}
+        + FlooringOrderDaoImpl(): {folderName: String}
         + getAllOrdersFromDate(): List<Order> {date: LocalDate}
         + getOrder(): Order {date: LocalDate, id: Integer}
         + addOrder(): Order {newOrder: Order}
         + editOrder(): Order {editedOrder: Order}
         + removeOrder(): Order {removeOrder: Order}
         + getAllOrders(): List<Order> {}
+        - loadFolder(): void {}
         - loadFile(): void {}
         - writeFile(): void {}
         - marshallData(): String {currentOrder: Order}
         - unmarshallData(): Order {currentLine: String}
+        - getFileName(): File {}
     }
 
     interface FlooringStateDao {
@@ -156,13 +169,17 @@ package "flooring.dao" {
         - allStates: Map<String, State>
         - STATE_FILE: String
         - DELIMITER: String
+        + FlooringStateDaoImpl(): {}
+        + FlooringStateDaoImpl(): {fileName: String}
         + getAllStates(): Map<String, State> {}
         + getState(): State {stateAbbreviation: String}
         + addState(): State {newState: State}
         + editState(): State {editState: State}
         + removeState(): State {removeState: State}
         - loadFile(): void {}
+        - writeFile(): void {}
         - unmarshallData(): State {currentLine: String}
+        - marshallData(): String {State: currentState}
     }
 
     interface FlooringProductDao {
@@ -177,13 +194,17 @@ package "flooring.dao" {
         - allProducts: Map<String, Product>
         - PRODUCT_FILE: String
         - DELIMITER: String
+        + FlooringProductDaoImpl(): {}
+        + FlooringProductDaoImpl(): {fileName: String}
         + getAllProducts(): Map<String, Product> {}
         + getProduct(): Product {productType: String}
         + addProduct(): Product {newProduct: Product}
         + editProduct(): Product {editProduct: Product}
         + removeProduct(): Product {removeProduct: Product}
         - loadFile(): void {}
+        - writeFile(): void {}
         - unmarshallData() Product {currentLine: String}
+        - marshallData() String {currentProduct: Product}
     }
 
     interface FlooringExportDao {
@@ -193,6 +214,8 @@ package "flooring.dao" {
     class FlooringExportDaoImpl {
         - BACKUP_FILE: String
         - DELIMITER: String
+        + FlooringExportDaoImpl(): {}
+        + FlooringExportDaoImpl(): {fileName: String}
         + createBackup(): void {allOrder: List<Order>}
         - marshallData(): String {currentOrder: Order}
     }
@@ -203,6 +226,8 @@ package "flooring.dao" {
 
     class FlooringAuditDaoImpl {
         - AUDIT_FILE: String
+        + FlooringAuditDaoImpl(): void {}
+        + FlooringAuditDaoImpl(): void {fileName: String}
         + writeAuditEntry(): void {entry: String}
     }
 }
@@ -268,11 +293,13 @@ package "flooring.dto" {
         + getLaborCostPerSquareFoot(): BigDecimal {}
     }
 
-    enum Edit{
-        CUSTOMER_NAME
-        STATE
-        PRODUCT_TYPE
-        AREA
+    enum MainMenuChoices{
+        GET_ALL_FROM_DATE
+        ADD_ORDER
+        EDIT_ORDER
+        REMOVE_ORDER
+        EXPORT
+        QUIT
     }
 }
 
@@ -298,8 +325,6 @@ FlooringStateDao <|-down- FlooringStateDaoImpl
 FlooringProductDao <|-down- FlooringProductDaoImpl
 FlooringExportDao <|-down- FlooringExportDaoImpl
 
-Order *-up- State
-Order *-down- Product
 
 /' Formatting '/
 
@@ -308,5 +333,9 @@ FlooringProductDaoImpl-[hidden]right->FlooringStateDaoImpl
 
 FlooringOrderDao-[hidden]right->FlooringProductDao
 FlooringProductDao-[hidden]right->FlooringStateDao
+
+Order *-up- State
+Order *-down- Product
+
 
 @enduml

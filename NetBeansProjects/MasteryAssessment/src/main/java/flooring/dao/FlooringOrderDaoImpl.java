@@ -28,7 +28,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class FlooringOrderDaoImpl implements FlooringOrderDao {
-    private Map<LocalDate, Map<Integer, Order>> allOrders = new HashMap<>();
+    private List<Map<Integer, Order>> allOrders = new ArrayList<>();
     private Map<Integer, Order> orders = new HashMap<>();
     private final String folderName;
     private LocalDate date;
@@ -58,7 +58,7 @@ public class FlooringOrderDaoImpl implements FlooringOrderDao {
         this.date = date;
         File fileName = getFileName();
         Order order = null;
-        
+
         if (fileName.exists()) {
             loadFile(fileName);
             order = orders.get(id);
@@ -69,6 +69,7 @@ public class FlooringOrderDaoImpl implements FlooringOrderDao {
 
     @Override
     public Order addOrder(Order order) throws FlooringPersistenceException {
+        this.orders = new HashMap<>();
         this.date = order.getDate();
         File fileName = getFileName();
         
@@ -83,9 +84,10 @@ public class FlooringOrderDaoImpl implements FlooringOrderDao {
             loadFile(fileName);
         }
         
-        Order added = orders.put(order.getId(), order);
+        orders.put(order.getId(), order);
         writeFile(fileName);
-        return added;
+
+        return order;
     }
 
     @Override
@@ -93,9 +95,9 @@ public class FlooringOrderDaoImpl implements FlooringOrderDao {
         this.date = order.getDate();
         File fileName = getFileName();
         loadFile(fileName);
-        Order edited = orders.replace(order.getId(), order);
+        orders.replace(order.getId(), order);
         writeFile(fileName);
-        return edited;
+        return order;
     }
 
     @Override
@@ -117,15 +119,9 @@ public class FlooringOrderDaoImpl implements FlooringOrderDao {
     public List<Order> exportAll() throws FlooringPersistenceException{
         loadFolder();
         List<Order> listOrders = new ArrayList<>();
-        Set<LocalDate> dates = allOrders.keySet();
         
-        // iterate through keySet of dates
-        // .values() returns a collection which we cast to List
-        // we .addAll the elements in temp to listOrders
-        
-        for(LocalDate ld : dates){
-            this.date = ld;
-            listOrders.addAll(allOrders.get(date).values());
+        for(Map<Integer, Order> o : allOrders){
+            listOrders.addAll(o.values());
         }
         
         return listOrders;
@@ -140,20 +136,19 @@ public class FlooringOrderDaoImpl implements FlooringOrderDao {
         File folder = new File(folderName);
         File[] listOfFiles = folder.listFiles();
         
-        allOrders = new HashMap<>();
-        
         for(File f : listOfFiles){
-            loadFile(f);
             String[] fileDate = f.toString().split("_|(.txt)");
             LocalDate ld = LocalDate.parse(fileDate[1], DateTimeFormatter.ofPattern("MMddyyyy"));
-
-            allOrders.put(ld, orders);
+            this.date = ld;
+            
+            loadFile(f);
+            allOrders.add(orders);
         }
 
     }
         
     /**
-     * Loads the File file and populates a new Map allOrders
+     * Loads the File file, clears orders from the map, and then populates map orders
      * 
      * @param file
      * @throws FlooringPersistenceException 
@@ -169,7 +164,9 @@ public class FlooringOrderDaoImpl implements FlooringOrderDao {
         
         String currentLine;
         Order currentOrder;
-        this.orders = new HashMap<Integer, Order>();
+        
+        // creates a new map of for listings.
+        this.orders = new HashMap<>();
         
         // skip the first line
         scanner.nextLine();
@@ -208,6 +205,8 @@ public class FlooringOrderDaoImpl implements FlooringOrderDao {
             out.flush();
         }
 
+        // clears listings
+        this.orders = new HashMap<>();
         out.close();
     }
     

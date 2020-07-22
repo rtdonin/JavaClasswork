@@ -12,7 +12,7 @@ import flooring.dto.Product;
 import flooring.dto.State;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.time.Month;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,17 +38,18 @@ public class FlooringServiceLayerImplTest {
         testOrder.setDate(ld);
         testOrder.setState(new State("NY", "New York", new BigDecimal("4.00")));
         testOrder.setProduct(new Product("Stone", new BigDecimal("3.50"), new BigDecimal("4.00")));
-        
-        List<Order> testList = new ArrayList<>();
-        testList.add(testOrder);
-        
+
         List receivedList = service.getDateOrders(ld);
         
         assertEquals(receivedList.size(), 1, "List should have only one order.");
         assertNotNull(receivedList, "List should not be empty.");
-        assertArrayEquals(receivedList.toArray(), testList.toArray(), "Lists shold be the same.");
         assertTrue(receivedList.contains(testOrder), "Should contain testOrder.");
         
+        ld = LocalDate.of(2020, 7, 20);
+
+        receivedList = service.getDateOrders(ld);
+        
+        assertNull(receivedList, "The list should be null.");
     }
     
     @Test
@@ -93,19 +94,137 @@ public class FlooringServiceLayerImplTest {
         
         assertNotNull(receivedId, "Should be a value.");
         assertEquals(receivedId, testId, "There is only one order, next order ID should be 2.");
-
     }
     
     @Test
-    public void addOrderTest() {
-        //public Order addOrder(Order newOrder) throws FlooringPersistenceException;
+    public void addOrderTest() throws Exception {
+        Order order = new Order(1);
+        order.setName("Acme Inc.");
+        order.setArea(new BigDecimal("200"));
+        order.setDate(LocalDate.of(2020, 7, 10));
+        order.setState(new State("NY", "New York", new BigDecimal("4.00")));
+        order.setProduct(new Product("Stone", new BigDecimal("3.50"), new BigDecimal("4.00")));
         
+        Order received = service.addOrder(order);
+        
+        assertEquals(received, order, "Should be the same. Order was added.");
     }
     
     @Test
-    public void validateOrderTest() {
-       //public Order validateOrder(Order order) throws InvalidAreaException, InvalidDateException, InvalidNameException;
+    public void validateOrderTest() throws Exception{
+        // I doubt anyone will be usign my code in 1000 years, therefore 3020
+        LocalDate normalDate = LocalDate.of(3020, 7, 10);
+        Integer id = 1;
+        String normalName = "Acme Inc.";
+        BigDecimal normalArea = new BigDecimal("200");
+        State normalState = new State("NY", "New York", new BigDecimal("4.00"));
+        Order normalOrder = new Order(id);
+        Product normalProduct = new Product("Stone", new BigDecimal("3.50"), new BigDecimal("4.00"));
+        
+        normalOrder.setName(normalName);
+        normalOrder.setArea(normalArea);
+        normalOrder.setDate(normalDate);
+        normalOrder.setState(normalState);
+        normalOrder.setProduct(normalProduct);
+        
+        // What the values should be.
+        BigDecimal materials = new BigDecimal("700.00");
+        BigDecimal labor = new BigDecimal("800.00");
+        BigDecimal tax = new BigDecimal("60.00");
+        BigDecimal total = new BigDecimal("1560.00");
+        
+        // test normal values.
+        Order received = service.validateOrder(normalOrder);
+        
+        assertNotNull(received, "Order should not be null.");
+        assertEquals(received.getMaterialCost().compareTo(materials), 0, "Checking cost of materials.");
+        assertEquals(received.getLaborCost().compareTo(labor), 0, "Checking cost of labor.");
+        assertEquals(received.getTax().compareTo(tax), 0, "Checking tax.");
+        assertEquals(received.getTotal().compareTo(total), 0, "Checking total.");
+        
+        Order nameOrder = new Order(id++);
+        nameOrder.setName("bad-name");
+        nameOrder.setArea(normalArea);
+        nameOrder.setDate(normalDate);
+        nameOrder.setState(normalState);
+        nameOrder.setProduct(normalProduct);
+        
+        try {
+            service.validateOrder(nameOrder);
+            fail("Should throw an invalid name exception.");
+        } catch (InvalidNameException ex) {
+            // do nothing
+        }
+        
+        Order dateOrder = new Order(id++);
+        dateOrder.setName(normalName);
+        dateOrder.setArea(normalArea);
+        dateOrder.setDate(LocalDate.of(2000, 01, 01));
+        dateOrder.setState(normalState);
+        dateOrder.setProduct(normalProduct);
+        
+        try {
+            service.validateOrder(dateOrder);
+            fail("Should throw an invalid date exception.");
+        } catch (InvalidDateException ex) {
+            // do nothing
+        }
 
+        dateOrder.setDate(LocalDate.now());
+        
+        try {
+            service.validateOrder(dateOrder);
+            fail("Should throw an invalid date exception.");
+        } catch (InvalidDateException ex) {
+            // do nothing
+        }
+        
+        Order areaOrder = new Order(id++);
+        areaOrder.setName(normalName);
+        areaOrder.setArea(new BigDecimal("100"));
+        areaOrder.setDate(normalDate);
+        areaOrder.setState(normalState);
+        areaOrder.setProduct(normalProduct);
+        
+        // should not throw exception. If it does, it fails.
+        service.validateOrder(areaOrder);
+        
+        areaOrder.setArea(new BigDecimal("50"));
+        
+        try {
+            service.validateOrder(areaOrder);
+            fail("Should throw an invalid area exception.");
+        } catch (InvalidAreaException ex) {
+            // do nothing
+        }
+        
+        Order productOrder = new Order(id++);
+        productOrder.setName(normalName);
+        productOrder.setArea(normalArea);
+        productOrder.setDate(normalDate);
+        productOrder.setState(normalState);
+        productOrder.setProduct(null);
+        
+        try {
+            service.validateOrder(productOrder);
+            fail("Should throw an invalid product exception.");
+        } catch (InvalidProductException ex) {
+            // do nothing
+        }
+        
+        Order stateOrder = new Order(id++);
+        stateOrder.setName(normalName);
+        stateOrder.setArea(normalArea);
+        stateOrder.setDate(normalDate);
+        stateOrder.setState(null);
+        stateOrder.setProduct(normalProduct);
+        
+        try {
+            service.validateOrder(stateOrder);
+            fail("Should throw an invalid state exception.");
+        } catch (InvalidStateException ex) {
+            // do nothing
+        }
     }
     
     @Test
@@ -149,55 +268,110 @@ public class FlooringServiceLayerImplTest {
     }
     
     @Test
-    public void checkNewOrderTest() {
-        // public Order checkNewOrder(Order oldOrder, Order newOrder) throws InvalidAreaException, InvalidDateException, InvalidNameException;
+    public void checkNewOrderTest() throws Exception{
+        // we call the validateOrder method in this method to validate the data.
+        // I don't need to test a method twice.
+        
+        Order oldOrder = new Order(1);
+        oldOrder.setName("Acme Inc.");
+        oldOrder.setArea(new BigDecimal("200"));
+        LocalDate ld = LocalDate.of(3020, 7, 10);
+        oldOrder.setDate(ld);
+        oldOrder.setState(new State("NY", "New York", new BigDecimal("4.00")));
+        oldOrder.setProduct(new Product("Stone", new BigDecimal("3.50"), new BigDecimal("4.00")));
+        
+        Order newOrder = new Order(1);
+        
+        Order received = service.checkNewOrder(oldOrder, newOrder);
+        
+        assertNotNull(received, "Should not be null.");
+        
+        assertEquals(newOrder, oldOrder, "The orders should now be equal to each other.");
+        String newName = "Edit, order";
+        newOrder.setName(newName);
+        newOrder.setArea(null);
+        newOrder.setDate(null);
+        newOrder.setState(null);
+        newOrder.setProduct(null);
+        
+        service.checkNewOrder(oldOrder, newOrder);
+        
+        assertEquals(newOrder.getName(), newName, "Checking name.");
+        assertEquals(newOrder.getArea(), oldOrder.getArea(), "Checking area.");
+        assertEquals(newOrder.getDate(), oldOrder.getDate(), "Checking date.");
+        assertEquals(newOrder.getState(), oldOrder.getState(), "Checking state.");
+        assertEquals(newOrder.getProduct(), oldOrder.getProduct(), "Checking product.");
         
     }
     
     @Test
-    public void editOrderTest() {
-        // public Order editOrder(Order editedOrder) throws FlooringPersistenceException;
+    public void editOrderTest() throws Exception {
+        Order testOrder = new Order(1);
+        testOrder.setName("Acme Inc.");
+        testOrder.setArea(new BigDecimal("200"));
+        testOrder.setDate(LocalDate.of(2020, 7, 10));
+        testOrder.setState(new State("NY", "New York", new BigDecimal("4.00")));
+        testOrder.setProduct(new Product("Stone", new BigDecimal("3.50"), new BigDecimal("4.00")));
         
+        Order received = service.editOrder(testOrder);
+        
+        assertEquals(received, testOrder, "Should be the same.");
     }
     
     @Test
-    public void removeOrderTest() {
-        // public Order removeOrder(Order removeOrder) throws FlooringPersistenceException;
+    public void removeOrderTest() throws Exception {
+        Order order = new Order(1);
+        order.setName("Acme Inc.");
+        order.setArea(new BigDecimal("200"));
+        LocalDate ld = LocalDate.of(2020, 7, 10);
+        order.setDate(ld);
+        order.setState(new State("NY", "New York", new BigDecimal("4.00")));
+        order.setProduct(new Product("Stone", new BigDecimal("3.50"), new BigDecimal("4.00")));
+
+        // We always check to see if the order exists first, so we should never get
+        // to this point ever. But I will assume the "what if" of someone meddling
+        // with my code.
+        Order receivedOrder = service.removeOrder(order);
+        
+        assertNotNull(receivedOrder, "Should not be null.");
+        assertEquals(order, receivedOrder, "Should be equal.");
+        
+        order = new Order(2);
+        order.setDate(ld);
+        
+        receivedOrder = service.removeOrder(order);
+        
+        assertNull(receivedOrder, "Should be null.");
         
     }
     
     @Test
     public void exportTest() {
-        // public void export() throws FlooringPersistenceException;
+        try {
+            service.export();
+        } catch (FlooringPersistenceException ex) {
+            fail("Exporting shouldn't throw an exception.");
+        }
     }
 
-    
     @Test
     public void compConfirmationTest() throws Exception {
+        String[] testTrueStrings = {"Y", "y", "Yes", "YES", "yEs", "yES", "yes"};
+        boolean received;
         
-        boolean received = service.compConfirmation("y");
-        assertTrue(received, "\"y\" should be TRUE");
+        for (int i = 0; i < testTrueStrings.length; i++) {
+            String test = testTrueStrings[i];
+            received = service.compConfirmation(test);
+            assertTrue(received, "\"" + test + "\" should be TRUE");
+        }
         
-        received = service.compConfirmation("Y");
-        assertTrue(received, "\"Y\" should be TRUE");
+        String[] testFalseStrings = {"N", "n", "No", "NO", "no", "NO"};
         
-        received = service.compConfirmation("yes");
-        assertTrue(received, "\"yes\" should be TRUE");
-        
-        received = service.compConfirmation("Yes");
-        assertTrue(received, "\"Yes\" should be TRUE");
-        
-        received = service.compConfirmation("n");
-        assertFalse(received, "\"n\" should be FALSE");
-        
-        received = service.compConfirmation("N");
-        assertFalse(received, "\"N\" should be FALSE");
-        
-        received = service.compConfirmation("no");
-        assertFalse(received, "\"no\" should be FALSE");
-        
-        received = service.compConfirmation("NO");
-        assertFalse(received, "\"NO\" should be False");
+        for (int i = 0; i < testFalseStrings.length; i++) {
+            String test = testFalseStrings[i];
+            received = service.compConfirmation(test);
+            assertFalse(received, "\"" + test + "\" should be FALSE");
+        }
         
         try {
             service.compConfirmation("es");

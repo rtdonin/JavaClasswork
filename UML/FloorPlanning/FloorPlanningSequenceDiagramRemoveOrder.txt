@@ -1,6 +1,7 @@
 /'
 Created by: Margaret Donin
 Date created: 06/29/20
+Date revised: 07/22/20 fixed to match the code
 '/
 
 @startuml
@@ -8,7 +9,7 @@ Date created: 06/29/20
 Title Remove Order
 
 FlooringViewImpl -> FlooringController
-FlooringController -> FlooringViewImpl : findOrderByDate()
+FlooringController -> FlooringViewImpl : getOrderDate()
 FlooringViewImpl --> FlooringController : LocalDate
 FlooringController -> FlooringViewImpl : findOrderById()
 FlooringViewImpl --> FlooringController : int
@@ -18,9 +19,11 @@ FlooringOrderDaoImpl --> FlooringServiceLayerImpl : Order
 FlooringServiceLayerImpl --> FlooringController : Order
 FlooringController -> FlooringViewImpl : displayDelectionConfirmation(Order)
 FlooringViewImpl --> FlooringController : String
-FlooringController -> FlooringServiceLayerImpl : removeOrder()
+FlooringController -> FlooringServiceLayerImpl : compConfirmation(String)
+FlooringServiceLayerImpl --> FlooringController : boolean
+FlooringController -> FlooringServiceLayerImpl : removeOrder(Order)
 FlooringServiceLayerImpl -> FlooringOrderDaoImpl : removeOrder(Order)
-FlooringOrderDaoImpl --> FlooringServiceLayerImpl : removeOrder(Order)
+FlooringOrderDaoImpl --> FlooringServiceLayerImpl : Order
 FlooringServiceLayerImpl --> FlooringController : Order
 FlooringController -> FlooringViewImpl : displayDelectionOrderSuccessBanner(Order)
 FlooringViewImpl --> FlooringController : void

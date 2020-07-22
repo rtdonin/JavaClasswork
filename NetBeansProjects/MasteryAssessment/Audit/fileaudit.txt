@@ -1,0 +1,36 @@
+07-22-20 10:51:03 : addOrder: 4 Rita: State: Texas (TX) 4.45% tax
+		Product - Wood: material $5.15/sqft, labor $4.75/sqft
+		Area: 500 sqft
+		Materials: $2.6E+3
+		Labor: $2.4E+3
+		Tax: $2.0E+2
+		Total: $5.20E+3
+		Date: 3030-05-04
+
+07-22-20 10:56:38 : removeOrder: 4 Rita: State: TX 4.45% tax
+		Product - Wood: material $5.15/sqft, labor $4.75/sqft
+		Area: 500 sqft
+		Materials: $2600
+		Labor: $2400
+		Tax: $200
+		Total: $5200
+		Date: 3030-05-04
+
+07-22-20 11:02:18 : addOrder: 4 Rita: State: Calfornia (CA) 25.00% tax
+		Product - Tile: material $3.50/sqft, labor $4.15/sqft
+		Area: 500 sqft
+		Materials: $1800
+		Labor: $2100
+		Tax: $980
+		Total: $4880
+		Date: 2020-12-12
+
+07-22-20 11:03:09 : addOrder: 5 Rita: State: Texas (TX) 4.45% tax
+		Product - Wood: material $5.15/sqft, labor $4.75/sqft
+		Area: 500 sqft
+		Materials: $2600
+		Labor: $2400
+		Tax: $200
+		Total: $5200
+		Date: 2020-12-12
+

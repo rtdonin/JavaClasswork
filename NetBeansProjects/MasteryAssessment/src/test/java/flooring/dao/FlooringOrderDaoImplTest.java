@@ -20,7 +20,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class FlooringOrderDaoImplTest {
-    
+    private Order orderOne;
+    private Order orderTwo;
+    private final Integer idOne = 1;
+    private final Integer idTwo = 2;
+    private final LocalDate dateOne = LocalDate.of(2020, 5, 8);
+    private final LocalDate dateTwo = LocalDate.of(2020, 5, 9);
     private FlooringOrderDao testDao;
     
     public FlooringOrderDaoImplTest() {
@@ -43,12 +48,8 @@ public class FlooringOrderDaoImplTest {
         
         ApplicationContext ctx = new ClassPathXmlApplicationContext("appContext.xml");
         testDao = ctx.getBean("orderDao", FlooringOrderDao.class);
-    }
-
-    @Test
-    public void getAllOrdersTest() throws Exception {
-        LocalDate dateOne = LocalDate.of(2020, 5, 8);
-        Order orderOne = new Order(1);
+        
+        orderOne = new Order(idOne);
         orderOne.setName("Rachel Carson");
         orderOne.setDate(dateOne);
         orderOne.setArea(new BigDecimal("250"));
@@ -58,9 +59,8 @@ public class FlooringOrderDaoImplTest {
         orderOne.setLaborCost(new BigDecimal("1000"));
         orderOne.setTax(new BigDecimal("83.44"));
         orderOne.setTotal(new BigDecimal("1958.43"));
-
-        LocalDate dateTwo = LocalDate.of(2020, 5, 9);
-        Order orderTwo = new Order(2);
+        
+        orderTwo = new Order(idTwo);
         orderTwo.setName("Gertrude B. Elion");
         orderTwo.setDate(dateTwo);
         orderTwo.setArea(new BigDecimal("150"));
@@ -70,7 +70,10 @@ public class FlooringOrderDaoImplTest {
         orderTwo.setLaborCost(new BigDecimal("300"));
         orderTwo.setTax(new BigDecimal("22.5"));
         orderTwo.setTotal(new BigDecimal("472.50"));
-        
+    }
+
+    @Test
+    public void getAllOrdersTest() throws Exception {
         testDao.addOrder(orderOne);
         testDao.addOrder(orderTwo);
         
@@ -79,37 +82,29 @@ public class FlooringOrderDaoImplTest {
         assertNotNull(receivedList, "List should not be null.");
         assertEquals(receivedList.size(), 1, "There should only be one order on this list.");
         assertTrue(receivedList.contains(orderOne), "Order 1 from Rachel Carson should be on this list.");
+    
+        receivedList = testDao.getAllOrders(dateTwo);
+        
+        assertNotNull(receivedList, "List should not be null.");
+        assertEquals(receivedList.size(), 1, "There should only be one order on this list.");
+        assertTrue(receivedList.contains(orderTwo), "Order 2 from Gertrude B. Elion should be on this list.");
+    
+        LocalDate dateThree = LocalDate.of(2020, 5, 10);
+                
+        try {
+            testDao.getAllOrders(dateThree);
+            fail("Should throw exception.");
+        } catch (FlooringPersistenceException ex) {
+            // do nothing
+        }
+
     }
     
     @Test
     public void getOrderTest() throws Exception {
-        LocalDate dateOne = LocalDate.of(2020, 5, 8);
-        Order orderOne = new Order(1);
-        orderOne.setName("Rachel Carson");
-        orderOne.setDate(dateOne);
-        orderOne.setArea(new BigDecimal("250"));
-        orderOne.setProduct(new Product("Tile", new BigDecimal("3.50"), new BigDecimal("4.00")));
-        orderOne.setState(new State("LA", new BigDecimal("4.45")));
-        orderOne.setMaterialCost(new BigDecimal("875"));
-        orderOne.setLaborCost(new BigDecimal("1000"));
-        orderOne.setTax(new BigDecimal("83.44"));
-        orderOne.setTotal(new BigDecimal("1958.43"));
-        
-        LocalDate dateTwo = LocalDate.of(2020, 5, 9);
-        Order orderTwo = new Order(2);
-        orderTwo.setName("Gertrude B. Elion");
-        orderTwo.setDate(dateTwo);
-        orderTwo.setArea(new BigDecimal("150"));
-        orderTwo.setProduct(new Product("Wood", new BigDecimal("1.00"), new BigDecimal("2.00")));
-        orderTwo.setState(new State("ND", new BigDecimal("5.00")));
-        orderTwo.setMaterialCost(new BigDecimal("150"));
-        orderTwo.setLaborCost(new BigDecimal("300"));
-        orderTwo.setTax(new BigDecimal("22.5"));
-        orderTwo.setTotal(new BigDecimal("472.50"));
-        
         testDao.addOrder(orderOne);
         
-        Order received = testDao.getOrder(dateOne, 1);
+        Order received = testDao.getOrder(dateOne, idOne);
         
         assertEquals(received, orderOne, "The orders should be the same.");
         assertEquals(received.getName(), orderOne.getName(), "Checking names.");
@@ -122,43 +117,29 @@ public class FlooringOrderDaoImplTest {
         assertEquals(received.getTax(), orderOne.getTax(), "Checking tax.");
         assertEquals(received.getTotal(), orderOne.getTotal(), "Checking total.");
         
-        received = testDao.getOrder(dateTwo, 2);
+        received = testDao.getOrder(dateTwo, idOne);
         
         assertNull(received, "The order should be null.");
         
+        LocalDate dateThree = LocalDate.of(2020, 5, 10);
+        
+        try {
+            testDao.getOrder(dateThree, idOne);
+            fail("Should throw an exception.");
+        } catch (FlooringPersistenceException ex) {
+            // do nothing.
+        }
+        
     }
-    
+
     @Test
     public void addOrderTest() throws Exception {
-        LocalDate dateOne = LocalDate.of(2020, 5, 8);
-        Integer idOne = 1;
-        Order orderOne = new Order(idOne);
-        orderOne.setName("Rachel Carson");
-        orderOne.setDate(dateOne);
-        orderOne.setArea(new BigDecimal("250"));
-        orderOne.setProduct(new Product("Tile", new BigDecimal("3.50"), new BigDecimal("4.00")));
-        orderOne.setState(new State("LA", new BigDecimal("4.45")));
-        orderOne.setMaterialCost(new BigDecimal("875"));
-        orderOne.setLaborCost(new BigDecimal("1000"));
-        orderOne.setTax(new BigDecimal("83.44"));
-        orderOne.setTotal(new BigDecimal("1958.43"));
-        
         Order received = testDao.getOrder(dateOne, idOne);
         
         assertNull(received, "Should be null.");
         
-        received = testDao.addOrder(orderOne);
-        
-        assertEquals(received, orderOne, "The order should be the same.");
-        assertEquals(received.getName(), orderOne.getName(), "Checking names.");
-        assertEquals(received.getDate(), orderOne.getDate(), "Checking dates.");
-        assertEquals(received.getArea(), orderOne.getArea(), "Checking area.");
-        assertEquals(received.getProduct(), orderOne.getProduct(), "Checking Product.");
-        assertEquals(received.getState(), orderOne.getState(), "Checking State.");
-        assertEquals(received.getMaterialCost(), orderOne.getMaterialCost(), "Checking material cost.");
-        assertEquals(received.getLaborCost(), orderOne.getLaborCost(), "Checking labor cost.");
-        assertEquals(received.getTax(), orderOne.getTax(), "Checking tax.");
-        assertEquals(received.getTotal(), orderOne.getTotal(), "Checking total.");
+        testDao.addOrder(orderOne);
+        testDao.addOrder(orderTwo);
         
         received = testDao.getOrder(dateOne, idOne);
         
@@ -173,23 +154,21 @@ public class FlooringOrderDaoImplTest {
         assertEquals(received.getTax(), orderOne.getTax(), "Checking tax.");
         assertEquals(received.getTotal(), orderOne.getTotal(), "Checking total.");
         
+        List<Order> receivedList = testDao.getAllOrders(dateOne);
+        
+        assertNotNull(receivedList, "List should not be null.");
+        assertEquals(receivedList.size(), 1, "There should only be one order on this list.");
+        assertTrue(receivedList.contains(orderOne), "Order 1 from Rachel Carson should be on this list.");
+        
+        receivedList = testDao.getAllOrders(dateTwo);
+        
+        assertNotNull(receivedList, "List should not be null.");
+        assertEquals(receivedList.size(), 1, "There should only be one order on this list.");
+        assertTrue(receivedList.contains(orderTwo), "Order 1 from Gertrude B. Elion should be on this list.");
     }
     
     @Test
     public void editOrderTest() throws Exception {
-        LocalDate dateOne = LocalDate.of(2020, 5, 8);
-        Integer idOne = 1;
-        Order orderOne = new Order(idOne);
-        orderOne.setName("Rachel Carson");
-        orderOne.setDate(dateOne);
-        orderOne.setArea(new BigDecimal("250"));
-        orderOne.setProduct(new Product("Tile", new BigDecimal("3.50"), new BigDecimal("4.00")));
-        orderOne.setState(new State("LA", new BigDecimal("4.45")));
-        orderOne.setMaterialCost(new BigDecimal("875"));
-        orderOne.setLaborCost(new BigDecimal("1000"));
-        orderOne.setTax(new BigDecimal("83.44"));
-        orderOne.setTotal(new BigDecimal("1958.43"));
-        
         testDao.addOrder(orderOne);
         
         Order received = testDao.getOrder(dateOne, idOne);
@@ -198,7 +177,8 @@ public class FlooringOrderDaoImplTest {
         
         orderOne.setArea(new BigDecimal("150"));
         
-        received = testDao.editOrder(orderOne);
+        testDao.editOrder(orderOne);
+        received = testDao.getOrder(dateOne, idOne);
         
         assertEquals(received, orderOne, "The orders should be the same.");
         assertEquals(received.getArea(), orderOne.getArea(), "Checking area.");
@@ -206,29 +186,6 @@ public class FlooringOrderDaoImplTest {
     
     @Test
     public void removeOrderTest() throws Exception {
-        LocalDate dateOne = LocalDate.of(2020, 5, 8);
-        Order orderOne = new Order(1);
-        orderOne.setName("Rachel Carson");
-        orderOne.setDate(dateOne);
-        orderOne.setArea(new BigDecimal("250"));
-        orderOne.setProduct(new Product("Tile", new BigDecimal("3.50"), new BigDecimal("4.00")));
-        orderOne.setState(new State("LA", new BigDecimal("4.45")));
-        orderOne.setMaterialCost(new BigDecimal("875"));
-        orderOne.setLaborCost(new BigDecimal("1000"));
-        orderOne.setTax(new BigDecimal("83.44"));
-        orderOne.setTotal(new BigDecimal("1958.43"));
-        
-        Order orderTwo = new Order(2);
-        orderTwo.setName("Gertrude B. Elion");
-        orderTwo.setDate(dateOne);
-        orderTwo.setArea(new BigDecimal("150"));
-        orderTwo.setProduct(new Product("Wood", new BigDecimal("1.00"), new BigDecimal("2.00")));
-        orderTwo.setState(new State("ND", new BigDecimal("5.00")));
-        orderTwo.setMaterialCost(new BigDecimal("150"));
-        orderTwo.setLaborCost(new BigDecimal("300"));
-        orderTwo.setTax(new BigDecimal("22.5"));
-        orderTwo.setTotal(new BigDecimal("472.50"));
-        
         testDao.addOrder(orderOne);
         testDao.addOrder(orderTwo);
         
@@ -262,30 +219,6 @@ public class FlooringOrderDaoImplTest {
     
     @Test
     public void exportAllTest() throws Exception {
-        LocalDate dateOne = LocalDate.of(2020, 5, 8);
-        Order orderOne = new Order(1);
-        orderOne.setName("Rachel Carson");
-        orderOne.setDate(dateOne);
-        orderOne.setArea(new BigDecimal("250"));
-        orderOne.setProduct(new Product("Tile", new BigDecimal("3.50"), new BigDecimal("4.00")));
-        orderOne.setState(new State("LA", new BigDecimal("4.45")));
-        orderOne.setMaterialCost(new BigDecimal("875"));
-        orderOne.setLaborCost(new BigDecimal("1000"));
-        orderOne.setTax(new BigDecimal("83.44"));
-        orderOne.setTotal(new BigDecimal("1958.43"));
-        
-        LocalDate dateTwo = LocalDate.of(2020, 5, 9);
-        Order orderTwo = new Order(2);
-        orderTwo.setName("Gertrude B. Elion");
-        orderTwo.setDate(dateTwo);
-        orderTwo.setArea(new BigDecimal("150"));
-        orderTwo.setProduct(new Product("Wood", new BigDecimal("1.00"), new BigDecimal("2.00")));
-        orderTwo.setState(new State("ND", new BigDecimal("5.00")));
-        orderTwo.setMaterialCost(new BigDecimal("150"));
-        orderTwo.setLaborCost(new BigDecimal("300"));
-        orderTwo.setTax(new BigDecimal("22.5"));
-        orderTwo.setTotal(new BigDecimal("472.50"));
-        
         testDao.addOrder(orderOne);
         testDao.addOrder(orderTwo);
         

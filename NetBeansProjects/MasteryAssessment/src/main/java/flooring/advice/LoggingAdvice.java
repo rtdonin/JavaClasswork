@@ -8,8 +8,6 @@ package flooring.advice;
 
 import flooring.dao.FlooringAuditDao;
 import flooring.dao.FlooringPersistenceException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.aspectj.lang.JoinPoint;
 
 public class LoggingAdvice {

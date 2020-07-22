@@ -39,6 +39,5 @@ public interface FlooringView {
     void unknownCommand();
     void diplayActionNotCompleted();
     void noSuchOrder();
-
-    public void displayNoOrdersForDate();
+    void displayNoOrdersForDate();
 }

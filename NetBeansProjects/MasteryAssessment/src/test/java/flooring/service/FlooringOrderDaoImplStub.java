@@ -36,9 +36,10 @@ public class FlooringOrderDaoImplStub implements FlooringOrderDao {
     
     @Override
     public List<Order> getAllOrders(LocalDate date) throws FlooringPersistenceException {
-        List<Order> allOrders = new ArrayList<>();
+        List<Order> allOrders = null;
 
         if (date.equals(onlyOrder.getDate())) {
+            allOrders= new ArrayList<>();
             allOrders.add(onlyOrder);
         } else {
             throw new FlooringPersistenceException("");
@@ -70,7 +71,14 @@ public class FlooringOrderDaoImplStub implements FlooringOrderDao {
 
     @Override
     public Order removeOrder(Order removeOrder) {
-        return removeOrder;
+        LocalDate date = removeOrder.getDate();
+        Integer id = removeOrder.getId();
+        
+        if (date.equals(onlyOrder.getDate()) && id.equals(onlyOrder.getId())) {
+            return onlyOrder;
+        } else {
+            return null;
+        }
     }
 
     @Override

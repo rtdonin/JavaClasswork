@@ -20,8 +20,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class FlooringProductDaoImplTest {
-    
-    FlooringProductDao testDao;
+    private FlooringProductDao testDao;
+    private final String typeOne = "Tile";
+    private final String typeTwo = "Wood";
+    private Product productOne;
+    private Product productTwo;
     
     public FlooringProductDaoImplTest() {
         
@@ -38,16 +41,13 @@ public class FlooringProductDaoImplTest {
         
         ApplicationContext ctx = new ClassPathXmlApplicationContext("appContext.xml");
         this.testDao = ctx.getBean("productDao", FlooringProductDao.class);
+        
+        productOne = new Product(typeOne, new BigDecimal("3.50"), new BigDecimal("4.00"));
+        productTwo = new Product(typeTwo, new BigDecimal("1.00"), new BigDecimal("2.00"));
     }
 
     @Test
-    public void getAllProductsTest() throws Exception {
-        String typeOne = "Tile";
-        Product productOne = new Product(typeOne, new BigDecimal("3.50"), new BigDecimal("4.00"));
-        
-        String typeTwo = "Wood";
-        Product productTwo = new Product(typeTwo, new BigDecimal("1.00"), new BigDecimal("2.00"));
-        
+    public void getAllProductsTest() throws Exception {      
         testDao.addProduct(productOne);
         testDao.addProduct(productTwo);
         
@@ -61,9 +61,6 @@ public class FlooringProductDaoImplTest {
     
     @Test
     public void getProductTest() throws Exception {
-        String typeOne = "Tile";
-        Product productOne = new Product(typeOne, new BigDecimal("3.50"), new BigDecimal("4.00"));
-        
         testDao.addProduct(productOne);
         
         Product received = testDao.getProduct(typeOne);
@@ -78,9 +75,6 @@ public class FlooringProductDaoImplTest {
     
     @Test
     public void addProductTest() throws Exception {
-        String typeOne = "Tile";
-        Product productOne = new Product(typeOne, new BigDecimal("3.50"), new BigDecimal("4.00"));
-        
         Product received = testDao.getProduct(typeOne);
         
         assertNull(received, "Should be null.");
@@ -100,9 +94,6 @@ public class FlooringProductDaoImplTest {
     
     @Test
     public void editProductTest() throws Exception {
-        String typeOne = "Tile";
-        Product productOne = new Product(typeOne, new BigDecimal("3.50"), new BigDecimal("4.00"));
-        
         testDao.addProduct(productOne);
         
         Product received = testDao.getProduct(typeOne);
@@ -129,12 +120,6 @@ public class FlooringProductDaoImplTest {
     
     @Test
     public void removeProductTest() throws Exception {
-        String typeOne = "Tile";
-        Product productOne = new Product(typeOne, new BigDecimal("3.50"), new BigDecimal("4.00"));
-        
-        String typeTwo = "Wood";
-        Product productTwo = new Product(typeTwo, new BigDecimal("1.00"), new BigDecimal("2.00"));
-        
         testDao.addProduct(productOne);
         testDao.addProduct(productTwo);
         

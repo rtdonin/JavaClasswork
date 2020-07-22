@@ -14,10 +14,10 @@ import java.time.format.DateTimeFormatter;
 
 public class FlooringAuditDaoImpl implements FlooringAuditDao {
 
-    private String AUDIT_FILE;
+    private final String AUDIT_FILE;
 
     public FlooringAuditDaoImpl() {
-        this.AUDIT_FILE = "audit.txt";
+        this.AUDIT_FILE = "Audit/fileaudit.txt";
     }
 
     public FlooringAuditDaoImpl(String fileName) {

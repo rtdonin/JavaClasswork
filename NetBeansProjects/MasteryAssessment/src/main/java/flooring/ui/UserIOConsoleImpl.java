@@ -28,7 +28,6 @@ public class UserIOConsoleImpl implements UserIO {
     
     }
     
-
     @Override
     public void print(String message) {
         System.out.println(message);

@@ -1,6 +1,7 @@
 /'
 Created by: Margaret Donin
 Date created: 06/24/20
+Date revised: 07/22/20 fixed to match the code
 '/
 
 @startuml
@@ -12,28 +13,30 @@ FlooringController -> FlooringServiceLayerImpl : getNewId()
 FlooringServiceLayerImpl -> FlooringOrderDaoImpl : getAllOrders()
 FlooringOrderDaoImpl --> FlooringServiceLayerImpl : List<Order>
 FlooringServiceLayerImpl --> FlooringController : Integer
-FlooringController -> FlooringViewImpl : getOrderDate()
-FlooringViewImpl --> FlooringController : LocalDate
-FlooringController -> FlooringViewImpl : getOrderName()
-FlooringViewImpl --> FlooringController : String
 FlooringController -> FlooringServiceLayerImpl : getAllProducts()
 FlooringServiceLayerImpl -> FlooringProductDaoImpl : getAllProducts()
 FlooringProductDaoImpl --> FlooringServiceLayerImpl : Map<String, Product>
 FlooringServiceLayerImpl --> FlooringController : Map<String, Product>
-FlooringController -> FlooringViewImpl : displayGetOrderProductMenu(Map<String, Product>)
-FlooringViewImpl --> FlooringController : Product
 FlooringController -> FlooringServiceLayerImpl : getAllStates()
 FlooringServiceLayerImpl -> FlooringStateDaoImpl : getAllStates()
 FlooringStateDaoImpl --> FlooringServiceLayerImpl : Map<String, State>
 FlooringServiceLayerImpl --> FlooringController : Map<String, State>
-FlooringController -> FlooringViewImpl : displayGetOrderStateMenu(Map<String, State>)
-FlooringViewImpl --> FlooringController : State
+FlooringController -> FlooringViewImpl : getOrderName()
+FlooringViewImpl --> FlooringController : String
+FlooringController -> FlooringViewImpl : getOrderDate()
+FlooringViewImpl --> FlooringController : LocalDate
 FlooringController -> FlooringViewImpl : displayGetOrderArea()
 FlooringViewImpl --> FlooringController : BigDecimal
+FlooringController -> FlooringViewImpl : displayGetOrderProductMenu(Map<String, Product>)
+FlooringViewImpl --> FlooringController : Product
+FlooringController -> FlooringViewImpl : displayGetOrderStateMenu(Map<String, State>)
+FlooringViewImpl --> FlooringController : State
 FlooringController -> FlooringServiceLayerImpl : validateOrder(Order)
 FlooringServiceLayerImpl --> FlooringController : Order
 FlooringController -> FlooringViewImpl : displayGetOrderConfirmation(Order)
 FlooringViewImpl --> FlooringController : String
+FlooringController -> FlooringServiceLayerImpl : compConfirmation(String)
+FlooringServiceLayerImpl --> FlooringController : boolean
 FlooringController -> FlooringServiceLayerImpl : addOrder(Order)
 FlooringServiceLayerImpl -> FlooringOrderDaoImpl : addOrder(Order)
 FlooringOrderDaoImpl --> FlooringServiceLayerImpl : Order

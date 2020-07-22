@@ -15,6 +15,8 @@ import flooring.dto.Order;
 import flooring.dto.Product;
 import flooring.dto.State;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -36,8 +38,17 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
     }
 
     @Override
-    public List<Order> getDateOrders(LocalDate date) throws FlooringPersistenceException {
-        return orderDao.getAllOrders(date);
+    public List<Order> getDateOrders(LocalDate date) {
+        List<Order> orders = null;
+        
+        try {
+            orders = orderDao.getAllOrders(date);
+        } catch (FlooringPersistenceException ex) {
+            // do nothing.
+            // view will display "No orders from this date
+        }
+        
+        return orders;
     }
 
     @Override
@@ -60,25 +71,44 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
     }
 
     @Override
-    public Order validateOrder(Order order) throws InvalidAreaException, InvalidDateException, InvalidNameException {
-        if (order.getArea() == null || order.getArea().compareTo(new BigDecimal("100")) == -1) {
-            throw new InvalidAreaException("Area is less that 100 sq ft.");
-        }
+    public Order validateOrder(Order order) throws InvalidAreaException, InvalidDateException, InvalidNameException, InvalidProductException, InvalidStateException {
+        String name = order.getName();
         
-        Pattern pName = Pattern.compile("[^a-zA-Z0-9,. ]");
-        Matcher mName = pName.matcher(order.getName());
-        
-        if (order.getName() == null || order.getName().trim().length() == 0 || mName.matches()) {
+        if (name == null || name.trim().length() == 0) {
             throw new InvalidNameException("Name is invalid.");
+        } else {
+            Pattern pName = Pattern.compile("[^a-zA-Z0-9,. ]");
+            Matcher mName = pName.matcher(name);
+            boolean b = mName.find();
+        
+            if (b) {
+                throw new InvalidNameException("Name is invalid.");
+            }
+            
         }
         
         LocalDate today = LocalDate.now();
+        LocalDate date = order.getDate();
         
-        if(order.getDate() == null || order.getDate().isBefore(today)){
+        if(date == null || date.isBefore(today) || date.isEqual(today)){
             throw new InvalidDateException("Invalid date.");
         }
         
-        return order;
+        BigDecimal area = order.getArea();
+        
+        if (area == null || area.compareTo(new BigDecimal("100")) == -1) {
+            throw new InvalidAreaException("Area is less that 100 sq ft.");
+        }
+        
+        if (order.getState() == null) {
+            throw new InvalidStateException("Invalid state.");
+        }
+        
+        if (order.getProduct() == null) {
+            throw new InvalidProductException("Invalid product.");
+        }
+        
+        return calculateProductCostTax(order);
     }
 
     @Override
@@ -92,19 +122,29 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
     }
 
     @Override
-    public Order checkNewOrder(Order oldOrder, Order newOrder) throws InvalidAreaException, InvalidDateException, InvalidNameException {
+    public Order checkNewOrder(Order oldOrder, Order newOrder) throws InvalidAreaException, InvalidDateException, InvalidNameException, InvalidProductException, InvalidStateException {
         
-        if (newOrder.getName() == null || newOrder.getName().trim().length() == 0) {
+        String newName = newOrder.getName();
+        
+        if (newName == null || newName.trim().length() == 0) {
             newOrder.setName(oldOrder.getName());
         }
-        
-        if (newOrder.getArea() == null || newOrder.getArea().compareTo(new BigDecimal("100")) == -1){
+
+        if (newOrder.getArea() == null){
             newOrder.setArea(oldOrder.getArea());
+        }
+        
+        if (newOrder.getState() == null) {
+           newOrder.setState(oldOrder.getState());
+        }
+        
+        if (newOrder.getProduct() == null) {
+           newOrder.setProduct(oldOrder.getProduct());
         }
         
         validateOrder(newOrder);
         
-        newOrder = calculateProductCostTax(newOrder);
+        calculateProductCostTax(newOrder);
            
         return newOrder;
     }
@@ -152,16 +192,17 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
      * @return 
      */
     private Order calculateProductCostTax(Order order) {
+        MathContext mc = new MathContext(2, RoundingMode.HALF_UP);
         BigDecimal taxRate = order.getState().getTaxRate();
-        taxRate = taxRate.divide(new BigDecimal("100"));
+        taxRate = taxRate.divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP);
         
         BigDecimal laborCostPerSquareFoot = order.getProduct().getLaborCostPerSquareFoot();
         BigDecimal materialCostPerSquareFoot = order.getProduct().getCostPerSquareFoot();
         BigDecimal area = order.getArea();
         
-        BigDecimal laborCost = area.multiply(laborCostPerSquareFoot);
-        BigDecimal materialCost = area.multiply(materialCostPerSquareFoot);
-        BigDecimal tax = (laborCost.add(materialCost)).multiply(taxRate);
+        BigDecimal laborCost = area.multiply(laborCostPerSquareFoot, mc);
+        BigDecimal materialCost = area.multiply(materialCostPerSquareFoot, mc);
+        BigDecimal tax = (laborCost.add(materialCost)).multiply(taxRate, mc);
         
         BigDecimal total = laborCost.add(materialCost).add(tax);
         

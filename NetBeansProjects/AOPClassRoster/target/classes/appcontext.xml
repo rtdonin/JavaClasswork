@@ -51,7 +51,7 @@
                 method = "createAuditEntry"
                 pointcut = "execution(* classroster.service.ClassRosterServiceLayer.removeStudent(..))"
             />
-      </aop:aspect>
+        </aop:aspect>
     </aop:config>
 
 </beans>

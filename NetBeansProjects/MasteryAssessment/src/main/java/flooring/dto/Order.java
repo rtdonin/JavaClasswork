@@ -6,30 +6,22 @@ Date revised:
 
 package flooring.dto;
 
-//CustomerName
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
-//State
-//ProductType
-//Area
-
 public class Order {
     private final Integer id;
     private String name;
-    private State state;
-    // include state name, taxRate
-    private Product product;
-    // includes productType, costPerSquareFoot, laborCostPerSquareFoor
+    private State state; // includes state name, taxRate
+    private Product product; // includes productType, costPerSquareFoot, laborCostPerSquareFoor
     private BigDecimal area;
     private BigDecimal materialCost;
     private BigDecimal laborCost;
     private BigDecimal tax;
     private BigDecimal total;
     private LocalDate date;
-
+    
     public Order(Integer id) {
         this.id = id;
     }
@@ -114,11 +106,11 @@ public class Order {
     public String toString() {
         return id + " " + name + ": " + state
                 + "\n\t\t" + product
-                + "\n\t\t" + "Area: " + area + " sqft"
-                + "\n\t\t" + "Materials: $"+ materialCost
-                + "\n\t\t" + "Labor: $" + laborCost
-                + "\n\t\t" + "Tax: $" + tax
-                + "\n\t\t" + "Total: $" + total
+                + "\n\t\t" + "Area: " + area.toPlainString() + " sqft"
+                + "\n\t\t" + "Materials: $"+ materialCost.toPlainString()
+                + "\n\t\t" + "Labor: $" + laborCost.toPlainString()
+                + "\n\t\t" + "Tax: $" + tax.toPlainString()
+                + "\n\t\t" + "Total: $" + total.toPlainString()
                 + "\n\t\t" + "Date: " + date;
     }
 
