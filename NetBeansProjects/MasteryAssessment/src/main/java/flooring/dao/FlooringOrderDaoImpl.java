@@ -49,7 +49,12 @@ public class FlooringOrderDaoImpl implements FlooringOrderDao {
         File fileName = getFileName();
         loadFile(fileName);
         List<Order> listOrders = new ArrayList<>();
-        listOrders.addAll(orders.values());
+        
+        if (orders != null) {
+            listOrders.addAll(orders.values());
+        } else {
+            listOrders = null;
+        }
         return listOrders;
     }
 
@@ -57,14 +62,9 @@ public class FlooringOrderDaoImpl implements FlooringOrderDao {
     public Order getOrder(LocalDate date, Integer id) throws FlooringPersistenceException{
         this.date = date;
         File fileName = getFileName();
-        Order order = null;
+        loadFile(fileName);
 
-        if (fileName.exists()) {
-            loadFile(fileName);
-            order = orders.get(id);
-        }
-        
-        return order;
+        return orders.get(id);
     }
 
     @Override
@@ -160,6 +160,7 @@ public class FlooringOrderDaoImpl implements FlooringOrderDao {
             scanner = new Scanner(new BufferedReader(new FileReader(file)));
         } catch(FileNotFoundException e) {
             this.orders = null;
+            throw new FlooringPersistenceException("Could not load file.");
         }
         
         String currentLine;

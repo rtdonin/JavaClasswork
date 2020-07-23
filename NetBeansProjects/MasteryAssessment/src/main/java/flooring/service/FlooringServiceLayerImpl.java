@@ -123,6 +123,7 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
 
     @Override
     public Order checkNewOrder(Order oldOrder, Order newOrder) throws InvalidAreaException, InvalidDateException, InvalidNameException, InvalidProductException, InvalidStateException {
+        newOrder.setDate(oldOrder.getDate());
         
         String newName = newOrder.getName();
         

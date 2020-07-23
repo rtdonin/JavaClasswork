@@ -27,7 +27,17 @@ public class LoggingAdvice {
         try {
             auditDao.writeAuditEntry(auditEntry);
         } catch (FlooringPersistenceException ex) {
-            System.out.println("IT'S BROKEN!!!!!");
+            System.out.println("AOP IS BROKEN!!!!! In logging advice.");
+        }
+    }
+    
+    public void createExceptionAuditEntry (Exception ex) {
+        String auditEntry = "Exception thrown: " + ex.getMessage();
+
+        try {
+            auditDao.writeAuditEntry(auditEntry);
+        } catch (FlooringPersistenceException e) {
+            System.err.println("ERROR: Could not create audit entry in LoggingAdvice.");
         }
     }
 }

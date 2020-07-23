@@ -12,7 +12,6 @@ import flooring.dto.Product;
 import flooring.dto.State;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -279,14 +278,17 @@ public class FlooringServiceLayerImplTest {
         oldOrder.setDate(ld);
         oldOrder.setState(new State("NY", "New York", new BigDecimal("4.00")));
         oldOrder.setProduct(new Product("Stone", new BigDecimal("3.50"), new BigDecimal("4.00")));
-        
+        oldOrder.setLaborCost(new BigDecimal("800"));
+        oldOrder.setMaterialCost(new BigDecimal("700"));
+        oldOrder.setTax(new BigDecimal("60"));
+        oldOrder.setTotal(new BigDecimal("1560"));
         Order newOrder = new Order(1);
         
         Order received = service.checkNewOrder(oldOrder, newOrder);
         
         assertNotNull(received, "Should not be null.");
         
-        assertEquals(newOrder, oldOrder, "The orders should now be equal to each other.");
+        assertEquals(newOrder.toString(), oldOrder.toString(), "The orders should now be equal to each other.");
         String newName = "Edit, order";
         newOrder.setName(newName);
         newOrder.setArea(null);

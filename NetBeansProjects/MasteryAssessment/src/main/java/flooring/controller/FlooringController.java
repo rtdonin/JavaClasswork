@@ -221,6 +221,8 @@ public class FlooringController {
                 // This property is already checked for when the order was added
 
                 view.displayError("Date exception thrown in editOrder method.");
+                view.diplayActionNotCompleted();
+                return;
             }
         } while (hasError);
             

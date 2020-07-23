@@ -93,7 +93,7 @@ public class FlooringOrderDaoImplTest {
                 
         try {
             testDao.getAllOrders(dateThree);
-            fail("Should throw exception.");
+            fail("Should throw persistence exception.");
         } catch (FlooringPersistenceException ex) {
             // do nothing
         }
@@ -103,6 +103,7 @@ public class FlooringOrderDaoImplTest {
     @Test
     public void getOrderTest() throws Exception {
         testDao.addOrder(orderOne);
+        testDao.addOrder(orderTwo);
         
         Order received = testDao.getOrder(dateOne, idOne);
         
@@ -134,9 +135,14 @@ public class FlooringOrderDaoImplTest {
 
     @Test
     public void addOrderTest() throws Exception {
-        Order received = testDao.getOrder(dateOne, idOne);
+        Order received;
         
-        assertNull(received, "Should be null.");
+        try {
+            testDao.getOrder(dateOne, idOne);
+            fail("Should throw persistence excpetion.");
+        } catch (FlooringPersistenceException ex) {
+            // do nothing
+        }
         
         testDao.addOrder(orderOne);
         testDao.addOrder(orderTwo);
@@ -186,6 +192,8 @@ public class FlooringOrderDaoImplTest {
     
     @Test
     public void removeOrderTest() throws Exception {
+        orderTwo.setDate(dateOne);
+        
         testDao.addOrder(orderOne);
         testDao.addOrder(orderTwo);
         
@@ -214,7 +222,7 @@ public class FlooringOrderDaoImplTest {
         assertFalse(receivedList.contains(orderOne), "List should not contain Rachel Carson order.");
         assertTrue(receivedList.contains(orderTwo), "List should contain Gertrude B. Elion order.");
 
-        // STILL NEED TO CHECK I DELETE THE EMPTY FILE
+        
     }
     
     @Test

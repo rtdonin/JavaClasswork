@@ -50,20 +50,22 @@
                 method = "createAuditEntry"
                 pointcut = "execution(* flooring.service.FlooringServiceLayerImpl.addOrder(..))"
             />
-        </aop:aspect>
-
-        <aop:aspect ref = "advice">
+            
             <aop:after-returning
                 method = "createAuditEntry"
                 pointcut = "execution(* flooring.service.FlooringServiceLayerImpl.editOrder(..))"
             />
-        </aop:aspect>
-        
-        <aop:aspect ref = "advice">
+            
             <aop:after-returning
                 method = "createAuditEntry"
                 pointcut = "execution(* flooring.service.FlooringServiceLayerImpl.removeOrder(..))"
             />
+
+            <aop:after-throwing
+                method = "createExceptionAuditEntry"
+                pointcut = "execution(* *(..))"
+                throwing = "ex"
+            />
         </aop:aspect>
-    </aop:config>
+    </aop:config> 
 </beans>

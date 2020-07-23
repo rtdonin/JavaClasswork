@@ -46,12 +46,13 @@ public class FlooringViewImpl implements FlooringView {
 
     @Override
     public void displayAllOrders(List<Order> allOrders) {
-        io.print("Listing all orders:");
         
         if (allOrders == null) {
             io.print("There are no orders from the selected date.");
             return;
         }
+        
+        io.print("Listing all orders:");
         
         for (Order order : allOrders) {
             Order o = order;
