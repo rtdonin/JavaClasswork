@@ -222,6 +222,15 @@ public class FlooringOrderDaoImplTest {
         assertFalse(receivedList.contains(orderOne), "List should not contain Rachel Carson order.");
         assertTrue(receivedList.contains(orderTwo), "List should contain Gertrude B. Elion order.");
 
+        // test that the file gets deleted if there are no other orders from that date.
+        testDao.removeOrder(orderTwo);
+        
+        try {
+            testDao.getAllOrders(dateOne);
+            fail("Should throw exception because file was deleted.");
+        } catch (FlooringPersistenceException ex) {
+            // do nothing
+        }
         
     }
     

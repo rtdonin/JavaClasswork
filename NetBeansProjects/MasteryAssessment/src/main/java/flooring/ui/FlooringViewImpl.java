@@ -41,7 +41,7 @@ public class FlooringViewImpl implements FlooringView {
 
     @Override
     public LocalDate getOrderDate() {
-        return io.readLocalDate("Enter order date:");
+        return io.readLocalDate("Enter order date (MM/DD/YYYY):");
     }
 
     @Override
@@ -82,7 +82,7 @@ public class FlooringViewImpl implements FlooringView {
         
         String selected = io.readString("Please select one of the above states.");
 
-        return allStates.get(selected);
+        return allStates.get(selected.toUpperCase());
     }
 
     @Override
@@ -98,6 +98,12 @@ public class FlooringViewImpl implements FlooringView {
         io.print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
         
         String selected = io.readString("Please select one of the above products.");
+        
+        try {
+            selected = selected.substring(0, 1).toUpperCase() + selected.substring(1).toLowerCase();
+        } catch (StringIndexOutOfBoundsException ex) {
+            
+        }
         
         return allProducts.get(selected);
     }

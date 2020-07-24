@@ -1,2 +1,0 @@
-OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
-2,Gertrude B. Elion,ND,5.00,Wood,150,1.00,2.00,150,300,22.5,472.50

@@ -11,15 +11,14 @@ import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
 import static java.lang.Long.parseLong;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
-import org.aspectj.util.ConfigParser.ParseException;
 
 public class UserIOConsoleImpl implements UserIO {
     Scanner scanInput = new Scanner(System.in);
@@ -163,11 +162,12 @@ public class UserIOConsoleImpl implements UserIO {
 
     @Override
     public BigDecimal readBigDecimal(String prompt) throws NumberFormatException {
+        MathContext mc = new MathContext(2, RoundingMode.HALF_UP);
         BigDecimal input = BigDecimal.ZERO;
         
         try {
             print(prompt);
-            input = new BigDecimal(scanInput.nextLine());
+            input = new BigDecimal(scanInput.nextLine(), mc);
         } catch(NumberFormatException ex) {
             print("Could not read number.");
         }

@@ -193,7 +193,7 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
      * @return 
      */
     private Order calculateProductCostTax(Order order) {
-        MathContext mc = new MathContext(2, RoundingMode.HALF_UP);
+//        MathContext mc = new MathContext(2, RoundingMode.HALF_UP);
         BigDecimal taxRate = order.getState().getTaxRate();
         taxRate = taxRate.divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP);
         
@@ -201,9 +201,9 @@ public class FlooringServiceLayerImpl implements FlooringServiceLayer {
         BigDecimal materialCostPerSquareFoot = order.getProduct().getCostPerSquareFoot();
         BigDecimal area = order.getArea();
         
-        BigDecimal laborCost = area.multiply(laborCostPerSquareFoot, mc);
-        BigDecimal materialCost = area.multiply(materialCostPerSquareFoot, mc);
-        BigDecimal tax = (laborCost.add(materialCost)).multiply(taxRate, mc);
+        BigDecimal laborCost = laborCostPerSquareFoot.multiply(area).setScale(2);
+        BigDecimal materialCost = area.multiply(materialCostPerSquareFoot).setScale(2);
+        BigDecimal tax = (laborCost.add(materialCost)).multiply(taxRate).setScale(2);
         
         BigDecimal total = laborCost.add(materialCost).add(tax);
         
