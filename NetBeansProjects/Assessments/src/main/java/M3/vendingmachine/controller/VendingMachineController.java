@@ -1,7 +1,7 @@
 /*
 Created by: Margaret Donin
 Date created: 06/07/20
-Date revised:
+Date revised: 06/17/20
 */
 
 package M3.vendingmachine.controller;
@@ -20,13 +20,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-
-
+// @Component
 public class VendingMachineController {
     private final VendingMachineServiceLayer service;
     private final VendingMachineView view;
 
+    // @Autowired
     public VendingMachineController(VendingMachineServiceLayer service, VendingMachineView view) {
         this.service = service;
         this.view = view;

@@ -1,0 +1,22 @@
+/'
+Created by: Margaret Donin
+Date created: 06/29/20
+'/
+
+@startuml
+
+Title Export Orders
+
+FlooringViewImpl -> FlooringController
+FlooringController -> FlooringViewImpl : displayExportingBanner()
+FlooringViewImpl --> FlooringController : void
+FlooringController -> FlooringServiceLayerImpl :  export()
+FlooringServiceLayerImpl -> FlooringOrderDaoImpl : exportAll()
+FlooringOrderDaoImpl --> FlooringServiceLayerImpl : List<Order>
+FlooringServiceLayerImpl -> FlooringExportDaoImpl : createBackup(List<Order>)
+FlooringExportDaoImpl --> FlooringServiceLayerImpl : void
+FlooringServiceLayerImpl --> FlooringController : void
+FlooringController -> FlooringViewImpl : displayExportingSuccess()
+FlooringViewImpl --> FlooringController : void
+
+@enduml

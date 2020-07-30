@@ -1,7 +1,7 @@
 /*
 Created by: Margaret Donin
 Date created: 06/07/20
-Date revised:
+Date revised: 06/17/20
 */
 
 package M3.vendingmachine.dao;
@@ -11,7 +11,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import org.springframework.stereotype.Component;
 
+// @Component
 public class VendingMachineAuditDaoImpl implements VendingMachineAuditDao {
 
     public static final String AUDIT_FILE = "vendingmachineaudit.txt";

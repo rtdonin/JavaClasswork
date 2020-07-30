@@ -71,7 +71,7 @@ public class BookView {
     }
 
     public void displayExit() {
-        io.print("Existing Book Tracker");
+        io.print("Exiting Book Tracker");
     }
 
     public String getBookTitleToDelete() {

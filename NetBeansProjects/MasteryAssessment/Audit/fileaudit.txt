@@ -1,0 +1,149 @@
+07-22-20 22:53:32 : Exception thrown: Could not load file.
+
+07-22-20 22:53:48 : Exception thrown: Name is invalid.
+
+07-22-20 22:53:54 : Exception thrown: Name is invalid.
+
+07-22-20 22:53:57 : Exception thrown: Invalid date.
+
+07-22-20 22:54:04 : Exception thrown: Invalid date.
+
+07-22-20 22:54:12 : Exception thrown: Area is less that 100 sq ft.
+
+07-22-20 22:54:15 : Exception thrown: Invalid state.
+
+07-22-20 22:54:21 : Exception thrown: Invalid product.
+
+07-22-20 22:54:24 : Exception thrown: Invalid product.
+
+07-22-20 22:54:36 : addOrder: 4 Rita: State: Texas (TX) 4.45% tax
+		Product - Tile: material $3.50/sqft, labor $4.15/sqft
+		Area: 500 sqft
+		Materials: $1800
+		Labor: $2100
+		Tax: $160
+		Total: $4060
+		Date: 2021-05-01
+
+07-22-20 22:55:39 : removeOrder: 4 Rita: State: TX 4.45% tax
+		Product - Tile: material $3.50/sqft, labor $4.15/sqft
+		Area: 500 sqft
+		Materials: $1800
+		Labor: $2100
+		Tax: $160
+		Total: $4060
+		Date: 2021-05-01
+
+07-23-20 08:36:45 : Exception thrown: Could not load file.
+
+07-23-20 08:36:45 : Exception thrown: Could not load file.
+
+07-23-20 08:37:32 : Exception thrown: Name is invalid.
+
+07-23-20 08:37:36 : Exception thrown: Invalid date.
+
+07-23-20 08:37:50 : Exception thrown: Invalid date.
+
+07-23-20 08:38:09 : Exception thrown: Invalid date.
+
+07-23-20 08:38:29 : Exception thrown: Area is less that 100 sq ft.
+
+07-23-20 08:38:34 : Exception thrown: Invalid state.
+
+07-23-20 08:38:45 : Exception thrown: Invalid product.
+
+07-23-20 08:38:54 : Exception thrown: Invalid product.
+
+07-23-20 08:39:08 : addOrder: 4 hi: State: Texas (TX) 4.45% tax
+		Product - Wood: material $5.15/sqft, labor $4.75/sqft
+		Area: 456 sqft
+		Materials: $2300
+		Labor: $2200
+		Tax: $180
+		Total: $4680
+		Date: 2021-01-02
+
+07-23-20 08:45:42 : Exception thrown: Could not load file.
+
+07-23-20 08:45:42 : Exception thrown: Could not load file.
+
+07-23-20 08:46:12 : Exception thrown: Name is invalid.
+
+07-23-20 08:46:14 : Exception thrown: Invalid date.
+
+07-23-20 08:46:18 : Exception thrown: Area is less that 100 sq ft.
+
+07-23-20 08:46:21 : Exception thrown: Invalid state.
+
+07-23-20 08:46:24 : Exception thrown: Invalid product.
+
+07-24-20 11:33:03 : Exception thrown: Name is invalid.
+
+07-24-20 11:33:05 : Exception thrown: Invalid date.
+
+07-24-20 11:33:17 : Exception thrown: Area is less that 100 sq ft.
+
+07-24-20 11:33:20 : Exception thrown: Invalid state.
+
+07-24-20 11:33:25 : Exception thrown: Invalid product.
+
+07-24-20 11:33:32 : addOrder: 4 Rita: State: Texas (TX) 4.45% tax
+		Product - Tile: material $3.50/sqft, labor $4.15/sqft
+		Area: 200 sqft
+		Materials: $700
+		Labor: $830
+		Tax: $61
+		Total: $1591
+		Date: 2020-09-01
+
+07-24-20 11:37:44 : Exception thrown: begin 0, end 1, length 0
+
+07-24-20 11:37:44 : Exception thrown: begin 0, end 1, length 0
+
+07-24-20 11:40:40 : editOrder: 4 Rita: State: TX 4.45% tax
+		Product - Tile: material $3.50/sqft, labor $4.15/sqft
+		Area: 127 sqft
+		Materials: $440
+		Labor: $530
+		Tax: $39
+		Total: $1009
+		Date: 2020-09-01
+
+07-24-20 11:45:44 : editOrder: 4 Rita: State: TX 4.45% tax
+		Product - Tile: material $3.50/sqft, labor $4.15/sqft
+		Area: 127 sqft
+		Materials: $440
+		Labor: $530
+		Tax: $39
+		Total: $1009
+		Date: 2020-09-01
+
+07-24-20 11:46:14 : editOrder: 4 Rita: State: TX 4.45% tax
+		Product - Tile: material $3.50/sqft, labor $4.15/sqft
+		Area: 200 sqft
+		Materials: $700
+		Labor: $830
+		Tax: $61
+		Total: $1591
+		Date: 2020-09-01
+
+07-24-20 11:55:01 : Exception thrown: Not a yes or no.
+
+07-24-20 11:55:06 : editOrder: 4 Rita: State: TX 4.45% tax
+		Product - Tile: material $3.50/sqft, labor $4.15/sqft
+		Area: 150 sqft
+		Materials: $525.00
+		Labor: $622.50
+		Tax: $45.90
+		Total: $1193.40
+		Date: 2020-09-01
+
+07-24-20 11:56:33 : removeOrder: 4 Rita: State: TX 4.45% tax
+		Product - Tile: material $3.50/sqft, labor $4.15/sqft
+		Area: 150 sqft
+		Materials: $525.00
+		Labor: $622.50
+		Tax: $45.90
+		Total: $1193.40
+		Date: 2020-09-01
+

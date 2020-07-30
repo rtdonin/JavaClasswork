@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+                http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--id acts as a name or alias. class needs the implemented package and class. define things before you mention it-->
+    <!-- /> works the same as </bean> -->
+    <bean id="io" class="com.sg.booktracker.ui.UserIOConsoleImpl" ></bean>
+
+    <bean id="dao" class="com.sg.booktracker.dao.BookDaoMemoryImpl" />
+
+    <!--these beans have arguments for the constructor. value = the straight value, different than ref-->
+    <bean id="view" class="com.sg.booktracker.ui.BookView">
+        <constructor-arg ref="io" />
+    </bean>
+
+    <bean id="service" class="com.sg.booktracker.service.BookService">
+        <constructor-arg ref="dao" />
+    </bean>
+
+    <bean id="controller" class="com.sg.booktracker.controller.BookController">
+        <constructor-arg ref="service" />
+        <constructor-arg ref="view" />
+    </bean>
+</beans>

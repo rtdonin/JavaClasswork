@@ -1,7 +1,7 @@
 /*
 Created by: Margaret Donin
 Date created: 06/07/20
-Date revised:
+Date revised: 06/17/20
 */
 
 package M3.vendingmachine.ui;
@@ -11,10 +11,14 @@ import M3.vendingmachine.dto.Coin;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+// Component
 public class VendingMachineView {
     private final UserIO io;
     
+    // @Autowired
     public VendingMachineView(UserIO io) {
         this.io = io;
     }

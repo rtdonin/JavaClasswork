@@ -1,7 +1,7 @@
 /*
 Created by: Margaret Donin
 Date created: 06/09/20
-Date revised:
+Date revised: 06/18/20 For M4 Assessment
 
 Arrange
 Act
@@ -25,15 +25,22 @@ import java.math.BigDecimal;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class VendingMachineServiceLayerImplTest {
     private final VendingMachineServiceLayer service;
 
     public VendingMachineServiceLayerImplTest() {
-        VendingMachineDao dao = new VendingMachineDaoStubImpl();
-        VendingMachineAuditDao auditDao = new VendingMachineAuditDaoStubImpl();
+//        VendingMachineDao dao = new VendingMachineDaoStubImpl();
+//        VendingMachineAuditDao auditDao = new VendingMachineAuditDaoStubImpl();
+//
+//        service = new VendingMachineServiceLayerImpl(dao, auditDao);
 
-        service = new VendingMachineServiceLayerImpl(dao, auditDao);
+        ApplicationContext appContext = new ClassPathXmlApplicationContext("classpath:appContextFile.xml");
+        
+        service = appContext.getBean("service", VendingMachineServiceLayerImpl.class);
+
     }
     
     @Test

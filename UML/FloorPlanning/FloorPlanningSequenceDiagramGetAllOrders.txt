@@ -1,0 +1,20 @@
+/'
+Created by: Margaret Donin
+Date created: 06/29/20
+'/
+
+@startuml
+
+Title Get All Orders
+
+FlooringViewImpl -> FlooringController
+FlooringController -> FlooringViewImpl : getOrderDate()
+FlooringViewImpl --> FlooringController : LocalDate
+FlooringController -> FlooringServiceLayerImpl : getDateOrders(LocalDate)
+FlooringServiceLayerImpl -> FlooringOrderDaoImpl : getAllOrders(LocalDate)
+FlooringOrderDaoImpl --> FlooringServiceLayerImpl : List<Order>
+FlooringServiceLayerImpl --> FlooringController : Lst<Order>
+FlooringController -> FlooringViewImpl : displayAllOrders(List<Order>)
+FlooringViewImpl --> FlooringController : void
+
+@enduml
