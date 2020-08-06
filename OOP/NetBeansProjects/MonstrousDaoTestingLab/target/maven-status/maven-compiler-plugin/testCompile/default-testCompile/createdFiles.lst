@@ -1,0 +1,7 @@
+com\sg\testing\dao\implementations\buggy\BadMonsterDaoDTest.class
+com\sg\testing\dao\implementations\buggy\BadMonsterDaoETest.class
+com\sg\testing\dao\implementations\buggy\BadMonsterDaoCTest.class
+com\sg\testing\dao\implementations\buggy\BadMonsterDaoBTest.class
+com\sg\testing\dao\implementations\buggy\BadMonsterDaoFTest.class
+com\sg\testing\dao\implementations\AGoodMonsterDaoTest.class
+com\sg\testing\dao\implementations\buggy\BadMonsterDaoATest.class

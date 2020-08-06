@@ -1,0 +1,10 @@
+com\sg\testing\dao\implementations\buggy\BadMonsterDaoA.class
+com\sg\testing\model\MonsterType.class
+com\sg\testing\dao\implementations\buggy\BadMonsterDaoD.class
+com\sg\testing\dao\implementations\buggy\BadMonsterDaoF.class
+com\sg\testing\model\Monster.class
+com\sg\testing\dao\implementations\buggy\BadMonsterDaoB.class
+com\sg\testing\dao\implementations\buggy\BadMonsterDaoE.class
+com\sg\testing\dao\MonsterDao.class
+com\sg\testing\dao\implementations\buggy\BadMonsterDaoC.class
+com\sg\testing\dao\implementations\AGoodMonsterDao.class
