@@ -6,6 +6,9 @@ Date revised:
 
 package BullsAndCows.controller;
 
+import BullsAndCows.controller.Error;
+import BullsAndCows.service.BadAttemptException;
+import BullsAndCows.service.NoSuchGameException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

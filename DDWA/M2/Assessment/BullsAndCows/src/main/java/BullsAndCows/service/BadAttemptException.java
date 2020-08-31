@@ -4,7 +4,7 @@ Date created: 08/30/20
 Date revised:
 */
 
-package BullsAndCows.controller;
+package BullsAndCows.service;
 
 public class BadAttemptException extends Exception {
 

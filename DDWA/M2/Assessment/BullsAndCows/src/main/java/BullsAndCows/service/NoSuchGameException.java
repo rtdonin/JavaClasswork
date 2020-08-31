@@ -4,7 +4,7 @@ Date created:
 Date revised:
 */
 
-package BullsAndCows.controller;
+package BullsAndCows.service;
 
 public class NoSuchGameException extends Exception{
 

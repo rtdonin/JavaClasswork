@@ -7,7 +7,6 @@ Date revised:
 package BullsAndCows.service;
 
 import BullsAndCows.TestApplicationConfiguration;
-import BullsAndCows.controller.NoSuchGameException;
 import BullsAndCows.dao.GameDao;
 import BullsAndCows.dto.Attempt;
 import BullsAndCows.dto.Game;
@@ -20,7 +19,6 @@ import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.runner.RunWith;
@@ -182,6 +180,37 @@ public class BullAndCowsServiceLayerTest {
             // do nothing
         }
         
+        /************************************************************
+         * 
+         * PART THREE OF TEST!
+         * 
+         ************************************************************/
+        
+        // Arrange
+        guess = "12";
+        attempt = new Attempt(gameId, guess);
+        
+        // Act and Assert
+        
+        try {
+            service.addAttempt(attempt);
+            fail("Should throw Exception.");
+        } catch (BadAttemptException ex) {
+            // do nothing
+        }
+        
+        // Arrange
+        guess = "abcd";
+        attempt = new Attempt(gameId, guess);
+        
+        // Act and Assert
+        
+        try {
+            service.addAttempt(attempt);
+            fail("Should throw Exception.");
+        } catch (BadAttemptException ex) {
+            // do nothing
+        }
     }
     
 }

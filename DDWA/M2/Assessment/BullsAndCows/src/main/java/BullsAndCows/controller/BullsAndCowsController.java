@@ -6,8 +6,10 @@ Date revised:
 
 package BullsAndCows.controller;
 
+import BullsAndCows.service.NoSuchGameException;
 import BullsAndCows.dto.Attempt;
 import BullsAndCows.dto.GameVM;
+import BullsAndCows.service.BadAttemptException;
 import BullsAndCows.service.BullAndCowsServiceLayer;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +69,8 @@ public class BullsAndCowsController {
             return new ResponseEntity(createdAttempt, HttpStatus.CREATED);
         } catch(NoSuchGameException ex) {
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+        } catch(BadAttemptException ex) {
+            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
         }
     }
 }

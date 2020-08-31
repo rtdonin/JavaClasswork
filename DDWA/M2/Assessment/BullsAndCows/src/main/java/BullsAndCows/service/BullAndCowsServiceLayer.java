@@ -6,7 +6,6 @@ Date revised:
 
 package BullsAndCows.service;
 
-import BullsAndCows.controller.NoSuchGameException;
 import BullsAndCows.dao.AttemptDatabaseDao;
 import BullsAndCows.dao.GameDatabaseDao;
 import BullsAndCows.dto.Attempt;
@@ -17,6 +16,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -61,8 +62,8 @@ public class BullAndCowsServiceLayer {
         return convert(game);
     }
     
-    public Attempt addAttempt(Attempt attempt) throws NoSuchGameException {
-
+    public Attempt addAttempt(Attempt attempt) throws NoSuchGameException, BadAttemptException {
+        validateGuess(attempt.getGuess());
         try {
             int gameId = attempt.getGameId();
             Game game = gameDao.getGameByGameId(gameId);
@@ -142,5 +143,18 @@ public class BullAndCowsServiceLayer {
         }
 
         return new GameVM(game.getGameId(), status);
+    }
+
+    private void validateGuess(String guess) throws BadAttemptException {
+        if (guess.length() != 4) {
+            throw new BadAttemptException();
+        }
+        
+        Pattern pattern = Pattern.compile("[^0-9]");
+        Matcher matcher = pattern.matcher(guess);
+
+        if (matcher.find()) {
+            throw new BadAttemptException();
+        }
     }
 }
