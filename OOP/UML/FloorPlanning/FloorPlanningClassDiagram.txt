@@ -255,7 +255,7 @@ package "flooring.dto" {
         - total: BigDecimal
         + Order(): {id: Integer}
         + getId(): Integer {}
-        + setName() void: {name: String}
+        + setName(): void {name: String}
         + getName(): String {}
         + setState(): void {state, State}
         + getState(): State {}

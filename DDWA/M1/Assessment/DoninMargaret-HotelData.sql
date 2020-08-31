@@ -133,4 +133,3 @@ WHERE `FirstName` = 'Jeremiah'
 		AND `LastName` = 'Pendergrass';
 
 SET SQL_SAFE_UPDATES = 1;
-

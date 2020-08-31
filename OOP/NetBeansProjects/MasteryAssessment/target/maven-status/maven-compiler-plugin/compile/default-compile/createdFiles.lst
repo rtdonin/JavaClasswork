@@ -6,11 +6,13 @@ flooring\ui\FlooringViewImpl.class
 flooring\service\FlooringServiceLayer.class
 flooring\service\InvalidNameException.class
 flooring\dao\FlooringPersistenceException.class
+flooring\service\InvalidStateException.class
 flooring\advice\LoggingAdvice.class
 flooring\service\InvalidDateException.class
 flooring\dto\Order.class
 flooring\dao\FlooringOrderDao.class
 flooring\ui\FlooringView.class
+flooring\service\InvalidProductException.class
 flooring\service\FlooringServiceLayerImpl.class
 flooring\dao\FlooringExportDao.class
 flooring\dao\FlooringProductDaoImpl.class

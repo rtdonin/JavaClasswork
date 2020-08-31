@@ -1,0 +1,43 @@
+/'
+Created by: Margaret Donin
+Date created: 08/20/20
+Date revised: 08/21/20, Dao per dto, renamed methods I was previously overloading
+'/
+
+@startuml
+
+Title All Games
+
+Actor User
+
+User -> BullsAndCowsController: allGames()
+BullsAndCowsController -> BullsAndCowsServiceLayer: getAllGames()
+BullsAndCowsServiceLayer -> GameDatabaseDaoImpl: getAllGames()
+Database BullsCows
+GameDatabaseDaoImpl -> BullsCows: Query
+BullsCows --> GameDatabaseDaoImpl: List<Games>
+GameDatabaseDaoImpl --> BullsAndCowsServiceLayer: List<Games>
+BullsAndCowsServiceLayer --> BullsAndCowsController: List<Games>
+BullsAndCowsController --> User: List<Game>
+
+skinparam BackgroundColor #EFEEEB
+skinparam Shadowing false
+
+skinparam sequence {
+    arrowcolor #6CA6D5
+    
+    LifeLineBorderColor #213E5F
+
+    participantbackgroundcolor #EFEEEB
+    participantbordercolor #213E5F
+    participantfontcolor #000000
+
+    actorbackgroundcolor #6CA6D5
+    actorbordercolor #213E5F
+
+}
+
+skinparam DatabaseBackgroundColor #6CA6D5
+skinparam DatabaseBorderColorr #213E5F
+    
+@enduml

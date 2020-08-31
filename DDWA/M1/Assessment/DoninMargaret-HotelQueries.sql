@@ -2,6 +2,8 @@
 -- Date created: 08/06/20
 -- Date revised:
 
+-- M1 Assessment Queries
+
 -- 1. Write a query that returns a list of reservations that end in July 2023, including the name of the guest, the room number(s), and the reservation dates.
  
  SELECT 
@@ -125,8 +127,8 @@ INNER JOIN `Room` r
 INNER JOIN `RoomType` rt
 	ON r.`RoomTypeId` = rt.`RoomTypeId`
 WHERE rt.MaximumOccupancy >= 3
-	AND rv.`End` >= '2023-04-01'
-    AND rv.`Start` <= '2023-04-30'
+	AND rv.`Start` <= '2023-04-30'
+    AND rv.`End` >= '2023-04-01'
 GROUP BY r.`RoomId`;
 
 -- 301	4	2023-04-09	2023-04-13

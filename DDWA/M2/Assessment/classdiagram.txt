@@ -1,0 +1,154 @@
+/'
+Created by: Margaret Donin
+Date created: 08/18/20
+Date revised: 08/21/20, Dao per dto, renamed methods I was previously overloading
+'/
+
+@startuml
+
+Title Bulls and Cows
+
+package "bullsAndCows.controller" {
+
+    class BullsAndCowsController{
+        - service: BullsAndCowsService
+        + allGames(): List<GameVM> {}
+        + allAttempts(): List<Attmempt> {id: int}
+        + findById(): GameVM {id: int}
+        + createGame(): GameVM {}
+        + createAttempt(): Attempt {id: int, guess: String}
+    }
+}
+
+package "bullsAndCows.service" {
+    class BullsAndCowsServiceLayer {
+        - attemptDao: AttemptDatabaseDao
+        - gameDao: GameDatabaseDao
+        + getAllGames(): List<GameVM> {}
+        + getAllAttempts(): List<Attempt {id: int}
+        + getGameById(): GameVM {id: int}
+        + addGame(): GameVM {}
+        + addAttempt(): Attempt {attempt: Attempt}
+        - pickNewAnswer(): String {}
+        - checkAttempt(): String {id: int, guess: String}
+        - convert(): GameVM {game: Game}
+    }
+}
+
+package "bullsAndCows.dto" {
+    class Game {
+        - gameId: int
+        - answer: String
+        - isFinished: boolean
+        
+        + setGameId(): void {gameId: int}
+        + getGameId(): int {}
+        + setAnswer(): void {answer: int}
+        + getAnswer(): int {}
+        + setIsFinished(): void {isFinished: boolean}
+        + getIsFinished(): boolean {}
+    }
+
+    class GameVM {
+        - gameId: int
+        - status: String
+        
+        + setGameId(): void {gameId: int}
+        + getGameId(): int {}
+        + setStatus(): void {status: String}
+        + getStatus(): String {}
+    }
+
+    class Attempt {
+        - attemptId: int
+        - gameId: int
+        - guess: String
+        - score: String
+        - timestamp: Time
+
+        + setAttemptId(): void {attemptId: int}
+        + getAttemptId(): int {}
+        + setGameId(): void {gameId: int}
+        + getGameId(): int {}
+        + setGuess(): void {guessId: int}
+        + getGuess(): int {}
+        + setScore(): void {score: String}
+        + getScore(): String {}
+        + setTime(): void {timestamp: Time}
+        + getTime(): Time {}
+    }
+}
+
+package "bullsAndCows.dao" {
+    interface GameDatabaseDao {
+        + addGame(): Game {answer: String+}
+        + getGameByGameId(): Game {id: int}
+        + getAllGames(): List<Games> {}
+        + deleteGame(): void {id: int}
+        + updateGame(): void {id: int}
+    }
+
+    class GameDatabaseDaoImpl {
+        - jdbcTemplate: JdbcTemplate
+        + addGame(): Game {answer: String}
+        + getGameByGameId(): Game {id: int}
+        + getAllGames(): List<Games> {}
+        + deleteGame(): void {id: int}
+        + updateGame(): void {id: int}
+    }
+
+    interface AttemptDatabaseDao {
+        + addAttempt(): Attempt {attempt: Attempt}
+        + getAllAttempts(): List<Attempt> {}
+        + getAttemptbyAttemptId(): Attempt {id: int}
+        + getAllAttemptsByGameId(): List<Attempt> {id: int}
+        + deleteAttempt(): void {id: int}
+        + updateAttempt(): void {attempt: Attempt}
+    }
+
+    class AttemptDatabaseDaoImpl {
+        - jdbcTemplate: JdbcTemplate
+        + addAttempt(): Attempt {attempt: Attempt}
+        + getAllAttempts(): List<Attempt> {}
+        + getAttemptbyAttemptId(): Attempt {id: int}
+        + getAllAttemptsByGameId(): List<Attempt> {id: int}
+        + deleteAttempt(): void {id: int}
+        + updateAttempt(): void {attempt: Attempt}
+    }
+
+    class GameMapper {
+        + mapRow(): Game {rs: ResultSet, index: int}
+    }
+    
+    class AttemptMapper {
+        + mapRow(): Attempt {rs: ResultSet, index: int}
+    }
+
+}
+
+
+skinparam backgroundColor #EFEEEB
+skinparam Shadowing false
+
+skinparam package {
+    BackgroundColor #6CA6D5
+}
+
+skinparam class {
+    BackgroundColor #EFEEEB
+    BorderColor #213E5F
+    ArrowColor #213E5F
+}
+
+GameDatabaseDaoImpl +-- GameMapper
+AttemptDatabaseDaoImpl +-- AttemptMapper
+
+
+GameDatabaseDao <|-- GameDatabaseDaoImpl
+AttemptDatabaseDao <|-- AttemptDatabaseDaoImpl
+
+BullsAndCowsController "1" *-- BullsAndCowsServiceLayer
+BullsAndCowsServiceLayer "1" *-- GameDatabaseDao
+BullsAndCowsServiceLayer "1" *-- AttemptDatabaseDao
+
+@enduml

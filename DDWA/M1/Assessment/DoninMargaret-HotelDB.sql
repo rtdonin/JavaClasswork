@@ -45,6 +45,8 @@ CREATE TABLE IF NOT EXISTS `RoomAmenity` (
 	`RoomId` INT NOT NULL,
     `AmenityId` INT NOT NULL,
 
+	PRIMARY KEY `pk_RoomAmenity` (`RoomId`, `AmenityId`),
+
 	FOREIGN KEY `fk_RoomAmenity_RoomId` (`RoomId`)
 		REFERENCES `Room` (`RoomId`),
 	FOREIGN KEY `fk_RoomAmenity_Amenity` (`AmenityId`)
