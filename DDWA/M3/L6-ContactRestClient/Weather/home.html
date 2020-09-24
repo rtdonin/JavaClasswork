@@ -1,0 +1,175 @@
+<!--
+    Name: Margaret Donin
+    Date Created: 09/08/20
+    Date revised:
+-->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+        <title>Open Weather Map</title>
+    
+        <!-- Bootstrap CDN copied from https://getbootstrap.com/docs/4.1/getting-started/introduction/ -->
+        <link rel = "stylesheet" href = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity = "sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin = "anonymous">
+    
+        <!-- Additional CSS files here -->
+        <link rel = "stylesheet" href = "css/home.css" />
+    </head>
+    
+    <body>
+        <header class = "container d-flex justify-content-center">
+            <h1>Weather Page</h1>
+        </header>
+
+        <div>
+            <hr />
+
+            <main class = "container">
+                <div id = "error-message" class="alert alert-danger row">
+                    Zip code: please enter a 5-digit zip code
+                </div>
+
+                <form class = "form-inline justify-content-center">
+                    <!-- Zip input -->
+                    <label for = "zip">Zipcode:</label>  
+                    <input id = "zipcode" class = "form-control" name = "zip" type = "text" placeholder = "Enter zipcode" reqiured/>
+                    
+                    <!-- Units selection -->
+                    <label for = "measurment">Units:</label>
+                    <select id = "units" class = "form-control custom-select" name = "measurment">
+                        <option value = "1">Imperial</option>
+                        <option value = "2">Metric</option>
+                    </select>
+                
+                    <!-- Button -->
+                    <button id = "button" class = "btn" type = "submit">Get Weather</button>
+                </form>
+            </main>
+
+            <hr class = "display-weather" />
+
+            <article id = "current" class = "container flex-column justify-content-around">
+                <h2>Current Conditions in <span id = "city">Akron</span></h2>
+
+                <div id = "current-conditions" class = "container d-flex align-content-left">
+                    <div class = "flex-row col-3">
+                        <span id = "icon" class = "col-5"><img src = "http://openweathermap.org/img/w/01n.png" /></span>
+                        <span id = "current-description" class = "col-4">Haze: haze</span>
+                    </div>
+
+                    <div class = "container flex-column col-3">
+                        <div>
+                            Temperature: <span id = "current-temperature">76.77 F</span>
+                        </div>
+
+                        <div>
+                            Humidity: <span id = "current-humidity">61</span>%
+                        </div>
+
+                        <div>
+                            Wind: <span id = "current-wind">3.38 miles/hour</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <hr class = "display-weather" />
+
+            <article id = "five-day" class = "container flex-column justify-content-around">
+                <h2>Five Day Forecast</h2>
+
+                <div id = "five-day-conditions" class = "container d-flex">
+                    <!-- Day 1 -->
+                    <div class = "d-flex container flex-column col-2 align-items-center">
+                        <div id = "date-1">
+                            3 August
+                        </div>
+
+                        <div>
+                            <img src = "http://openweathermap.org/img/w/01n.png" class = "col-5" id = "img-1" />
+                            <span id = "img-1-Desc" class = "col-4">Clear</span>
+                        </div>
+
+                        <div>
+                            H <span id = "day-1-H">87.26 F</span> L <span id = "day-1-L">73.76 F</span>
+                        </div>
+                    </div>
+
+                    <!-- Day 2 -->
+                    <div class = "d-flex container flex-column col-2 align-items-center">
+                        <div id = "date-2">
+                            3 August
+                        </div>
+
+                        <div>
+                            <img src = "http://openweathermap.org/img/w/01n.png" class = "col-5" id = "img-2" />
+                            <span id = "img-2-Desc" class = "col-4">Clear</span>
+                        </div>
+
+                        <div>
+                            H <span id = "day-2-H">87.26 F</span> L <span id = "day-2-L">73.76 F</span>
+                        </div>
+                    </div>
+
+                    <!-- Day 3 -->
+                    <div class = "d-flex container flex-column col-2 align-items-center">
+                        <div id = "date-3">
+                            3 August
+                        </div>
+
+                        <div>
+                            <img src = "http://openweathermap.org/img/w/01n.png" class = "col-5" id = "img-3" />
+                            <span id = "img-3-Desc" class = "col-4">Clear</span>
+                        </div>
+
+                        <div>
+                            H <span id = "day-3-H">87.26 F</span> L <span id = "day-3-L">73.76 F</span>
+                        </div>
+                    </div>
+
+                    <!-- Day 4 -->
+                    <div class = "d-flex container flex-column col-2 align-items-center">
+                        <div id = "date-4">
+                            3 August
+                        </div>
+
+                        <div>
+                            <img src = "http://openweathermap.org/img/w/01n.png" class = "col-5" id = "img-4" />
+                            <span id = "img-4-Desc" class = "col-4">Clear</span>
+                        </div>
+
+                        <div>
+                            H <span id = "day-4-H">87.26 F</span> L <span id = "day-4-L">73.76 F</span>
+                        </div>
+                    </div>
+
+                    <!-- Day 5 -->
+                    <div class = "d-flex container flex-column col-2 align-items-center">
+                        <div id = "date-5">
+                            3 August
+                        </div>
+
+                        <div>
+                            <img src = "http://openweathermap.org/img/w/01n.png" class = "col-5" id = "img-5" />
+                            <span id = "img-5-Desc" class = "col-4">Clear</span>
+                        </div>
+
+                        <div>
+                            H <span id = "day-5-H">87.26 F</span> L <span id = "day-5-L">73.76 F</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div> <!-- main div end -->
+
+        <!-- CDN links copied from https://getbootstrap.com/docs/4.1/getting-started/introduction/ -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src = "https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity = "sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin = "anonymous"></script>
+        <script src = "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity = "sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin = "anonymous"></script>
+        <script src = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity = "sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin = "anonymous"></script>
+        <script src = "js/home.js"></script>
+    </body>
+</html>

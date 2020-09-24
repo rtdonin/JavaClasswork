@@ -1,0 +1,70 @@
+<!--
+    Name: Margaret Donin
+    Date Created:
+    Date revised:
+-->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+        <title>ClassWork</title>
+        <!--Give me a form that is formatted nicely:
+            inputs that all look alike,
+            a submit button centered at the bottom of the form,
+            and labels that are justified.-->
+        <style>
+            form{
+                background-color: rgb(143, 207, 207);
+                width: 50%;
+                
+                display: flex;
+                justify-content: left;
+                align-items: center;
+                flex-wrap: wrap;
+                flex-direction: column;
+            }
+
+
+            
+            .row {
+                width: 50%;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: center;
+            }
+              
+              
+        </style>
+    </head>
+    <body>
+
+        <form class="form-horizontal" id="editDvd">
+            <div class = "row";
+                <label for="title">Title</label>
+                <input id="editTitle" name="title" type="text" placeholder=""
+                    class="form-control input-md" required="">
+                <label for="director">Director</label>
+                <input id="editDirector" name="director" type="text" placeholder=""
+                    class="form-control input-md" required="">
+                <label for="releaseYear">Release Year</label>
+                <input id="editReleaseYear" name="releaseYear" type="text" placeholder=""
+                    class="form-control input-md" required="">
+                <label for="rating">Rating</label>
+                <select id="editRating" name="rating" class="form-control">
+                    <option value="G">G</option>
+                    <option value="PG">PG</option>
+                    <option value="PG-13">PG-13</option>
+                    <option value="R">R</option>
+                </select>
+            </div>
+            <div class = "row">
+                <label for="submit"></label>
+                <button id="submit" name="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </body>
+</html>

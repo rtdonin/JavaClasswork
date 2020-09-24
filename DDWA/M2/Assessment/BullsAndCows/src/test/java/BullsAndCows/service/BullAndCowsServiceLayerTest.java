@@ -128,7 +128,7 @@ public class BullAndCowsServiceLayerTest {
         assertEquals(4, digitsSet.size(), "There should be only 4 numbers in the set.");
     }
 
-    // Also tests method testAttempt
+    // Also tests method testAttempt and validateGuess
     @Test
     public void testAddAttempt() throws Exception {
         // Arrange

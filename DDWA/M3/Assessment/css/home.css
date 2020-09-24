@@ -1,0 +1,11 @@
+.item {
+    margin: 2%;
+    border-width: 5px;
+    padding: 2%;
+    background-color: rgb(217, 219, 235);
+    border: 2px solid rgb(81, 80, 82);
+}
+
+button {
+    margin: 2%;
+}
