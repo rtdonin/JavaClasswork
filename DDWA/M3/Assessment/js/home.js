@@ -10,9 +10,9 @@ var money = 0.0;
 /*************************************
  * Formatting/ Getting Items
  *************************************/
-function formatItemBox(item) {
-    var itemFormatted = `<div id = '${item.id}' class = 'item col-lg-3 col-sm-4'>
-                            ${item.id}
+function formatItemBox(item, i) {
+    var itemFormatted = `<div id = '${item.id}' class = 'item col-lg-3 col-sm-4' data-i = '${i}' >
+                            ${i}
                             <p class = 'text-center'>
                                 ${item.name}<br />
                                 $${item.price.toFixed(2)}<br />
@@ -24,15 +24,19 @@ function formatItemBox(item) {
 }
 
 function refreshItemTable(itemList) {
+    $('#items').empty();
     var items = '';
 
     $(itemList).each(function (index, item) {
-        items += formatItemBox(item);
+        items += formatItemBox(item, (index + 1));
     });
 
     $('#items').append(items);
 }
 
+function updatePage() {
+    ds.getItems(refreshItemTable, handleGetItemsError);
+}
 /*************************************
  * Money Updating
  *************************************/
@@ -76,6 +80,7 @@ function stringifyChange(coins) {
     $('#messages').val('Thank you!');
     $('#change').val(change);
     
+    updatePage();
 }
 
 /*************************************
@@ -107,15 +112,18 @@ function onAddNickleClicked(e) {
 
 function onSelectItemClicked(e) {
     e.preventDefault();
-    var id = e.currentTarget.id;
-    
+    var item = $(this);
+    var id = item.data('i');
+
+    $('#hidden-value').val(item[0].id);
     $('#item-number').val(id);
 }
 
 function onPurchaseItemClicked(e) {
     e.preventDefault();
-    var id = $('#item-number').val();
+    var id = $('#hidden-value').val();
     ds.vendItem(money.toFixed(2), id, stringifyChange, updateMessage);
+
 }
 
 function onReturnChangeClicked(e) {
@@ -160,7 +168,7 @@ function handleVendItemError(error) {
  * Brain of the operation
  *************************************/
 $(document).ready(function () {
-    ds.getItems(refreshItemTable, handleGetItemsError);
+    updatePage();
 
     $(document).on('click', '#add-dollar', onAddDollarClicked);
     $(document).on('click', '#add-quarter', onAddQuarterClicked);
