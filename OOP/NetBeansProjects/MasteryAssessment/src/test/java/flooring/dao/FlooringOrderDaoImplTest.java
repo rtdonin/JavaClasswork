@@ -76,7 +76,7 @@ public class FlooringOrderDaoImplTest {
     public void getAllOrdersTest() throws Exception {
         testDao.addOrder(orderOne);
         testDao.addOrder(orderTwo);
-        
+                
         List<Order> receivedList = testDao.getAllOrders(dateOne);
         
         assertNotNull(receivedList, "List should not be null.");

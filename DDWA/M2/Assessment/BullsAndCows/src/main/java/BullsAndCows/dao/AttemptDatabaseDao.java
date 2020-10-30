@@ -10,7 +10,6 @@ import BullsAndCows.dto.Attempt;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import org.apache.tomcat.jni.Time;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -65,7 +64,7 @@ public class AttemptDatabaseDao implements AttemptDao{
     
     @Override
     public List<Attempt> getAllAttemptsByGameId (int id) {
-                try {
+        try {
             final String SELECT_ATTEMPTS = "SELECT *"
                                         + "FROM Attempt "
                                         + "WHERE gameId = ?";
