@@ -35,11 +35,9 @@
 
         </nav>
         
-        <h3 th:if="${#request.getParameter('login_error') == '1'}">
-            Wrong id or password!</h3>
+        <h4 th:if="${#request.getParameter('login_error') == '1'}">
+            Wrong id or password!</h4>
         
-        <a href="#" th:href="@{/userAdd}">Create Account</a>
-
         <form class="form-horizontal" role="form" method="post" action="login">
             <div class="form-group">
                 <label for="username" class="col-md-4 control-label">Username or Email:</label>
@@ -58,10 +56,14 @@
                        th:value="${_csrf.token}"/>
             <div class="form-group">
                 <div class="col-md-offset-4 col-md-8">
-                    <input type="submit" class="btn btn-default" id="search-button" value="Login In"/>
+                    <input type="submit" class="btn btn-success" id="search-button" value="Login In"/>
                 </div>
             </div>
         </form>
+        <div class = "col-md-offset-4 m-3">
+            <a class="btn-outline-info btn btn-sm" href="#" th:href="@{/userAdd}">Create Account</a>
+        </div>
+
 
     </body>
 </html>

@@ -28,7 +28,7 @@ CREATE TABLE `UserRole`(
 
 CREATE TABLE `Post`(
 	`postId`	INT PRIMARY KEY AUTO_INCREMENT,
-    `title`		VARCHAR(20) NOT NULL,
+    `title`		VARCHAR(255) NOT NULL,
     `static`	BOOL,
     `enabled`	BOOL DEFAULT FALSE,
     `body`		TEXT NOT NULL,

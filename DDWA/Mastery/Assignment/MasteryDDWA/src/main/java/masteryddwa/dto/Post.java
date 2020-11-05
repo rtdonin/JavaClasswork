@@ -10,9 +10,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import javax.validation.constraints.Future;
-import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class Post {
@@ -20,21 +20,22 @@ public class Post {
     private int id;
     
     @NotBlank
-    @Size(max=20, message="Title can\'t be longer than 20 characters.")
+    @Size(max=255, message="Title can\'t be longer than 255 characters.")
     private String title;
     private boolean enabled;
     private boolean staticPost;
     
-    @NotBlank
+    @NotBlank(message = "Please include text.")
     private String body;
     
-    @FutureOrPresent
+    @NotNull(message = "Start date must be filled in.")
     private LocalDate start;
     
-    @Future
+    @NotNull(message = "End date must not be blank.")
+    @Future(message = "End date must be in the future.")
     private LocalDate end;
     
-    @NotEmpty
+    @NotEmpty(message = "Hashtags should be filled in.")
     private List<Hashtag> hashtags;
     
     private User user;

@@ -5,19 +5,18 @@ Date revised:
  */
 package masteryddwa.controller;
 
-import static java.lang.Integer.parseInt;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
 import masteryddwa.dao.PostDao;
 import masteryddwa.dao.RoleDao;
 import masteryddwa.dao.UserDao;
 import masteryddwa.dto.Post;
 import masteryddwa.dto.Role;
 import masteryddwa.dto.User;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,35 +40,49 @@ public class UserController {
 
     @Autowired
     PasswordEncoder encoder;
-    
-    Set<ConstraintViolation<User>> violations;
+
+    Set<ConstraintViolation<User>> violations = new HashSet<>();
+    Set<ConstraintViolation<User>> passwordViolations = new HashSet<>();
+    boolean usernameViolations = false;
 
     @GetMapping("usersAll")
     public String usersAll(Model model) {
-        List<User> users = userDao.getAllUsers();
+        List<User> adminUsers = userDao.getUsersByRoleId(roleDao.getRoleByRole("ROLE_ADMIN").getId());
+        List<User> employeeUsers = userDao.getUsersByRoleId(roleDao.getRoleByRole("ROLE_EMPLOYEE").getId());
+        List<User> regUsers = userDao.getUsersByRoleId(roleDao.getRoleByRole("ROLE_USER").getId());
         List<Post> statics = postDao.getAllEnabledStatics();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userDao.getUserByLogin(authentication.getName());
 
-        model.addAttribute("users", users);
+        model.addAttribute("adminUsers", adminUsers);
+        model.addAttribute("creatorUsers", employeeUsers);
+        model.addAttribute("users", regUsers);
         model.addAttribute("statics", statics);
+        model.addAttribute("userId", user.getId());
+
+        violations = new HashSet<>();
+        passwordViolations = new HashSet<>();
 
         return "usersAll";
     }
 
     @GetMapping("userAdd")
     public String userAdd(Model model) {
-        violations = new HashSet<>();
         List<Role> roles = roleDao.getAllRoles();
         List<Post> statics = postDao.getAllEnabledStatics();
 
         model.addAttribute("roles", roles);
         model.addAttribute("statics", statics);
         model.addAttribute("errors", violations);
+        model.addAttribute("errorsUsername", usernameViolations);
 
+//        violations = new HashSet<>();
+//        usernameViolations = true;
         return "userAdd";
     }
 
-    @PostMapping("userAdd")
-    public String userAdd(String username, String password, String email, String[] roleIds) {
+    @PostMapping(value = "userAdd")
+    public String userAdd(String username, String password, String email) {
         User user = new User();
         user.setUsername(username);
         user.setPassword(encoder.encode(password));
@@ -77,25 +90,33 @@ public class UserController {
         user.setEnabled(true);
 
         Set<Role> roles = new HashSet<>();
-        if (roleIds != null) {
-            for (int i = 0; i < roleIds.length; i++) {
-                roles.add(roleDao.getRoleById(parseInt(roleIds[i])));
-            }
-        } else {
-            roles.add(roleDao.getRoleByRole("USER"));
-        }
+        roles.add(roleDao.getRoleByRole("ROLE_USER"));
+
         user.setRoles(roles);
 
         Validator validate = Validation.buildDefaultValidatorFactory().getValidator();
         violations = validate.validate(user);
-
+    
         if (violations.isEmpty()) {
             user = userDao.addUser(user);
-            return "redirect:/user";
-        } else {
-            return "userAdd";
-        }
 
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            User loggedIn = userDao.getUserByLogin(authentication.getName());
+
+            if (user == null) {
+                usernameViolations = true;
+                return "userAdd";
+            }
+            
+            if (loggedIn != null) {
+                return "redirect:/usersAll";
+            }
+            return "redirect:/login";
+
+        }
+        
+        return "userAdd";
+       
     }
 
     @GetMapping("user")
@@ -107,7 +128,7 @@ public class UserController {
         User user = userDao.getUserByLogin(authentication.getName());
 
         model.addAttribute("statics", statics);
-        model.addAttribute("user", user);
+        model.addAttribute("userId", user.getId());
 
         return "user";
     }
@@ -115,8 +136,13 @@ public class UserController {
     @GetMapping("userEdit")
     public String editUserDisplay(Integer userId, Model model, Integer error) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userDao.getUserByLogin(authentication.getName());
-        User editUser = userDao.getUserById(userId);
+        User loggedIn = userDao.getUserByLogin(authentication.getName());
+        User user = userDao.getUserById(userId);
+
+        if (!loggedIn.getRoles().contains(roleDao.getRoleByRole("ROLE_ADMIN"))) {
+            user = loggedIn;
+        }
+
         List<Role> roleList = roleDao.getAllRoles();
         List<Post> statics = postDao.getAllEnabledStatics();
 
@@ -125,59 +151,104 @@ public class UserController {
 
         if (error != null) {
             if (error == 1) {
-                model.addAttribute("error", "Passwords did not match, password was not updated.");
+                model.addAttribute("errorPassword", "Passwords did not match, password was not updated.");
+            } else {
+                model.addAttribute("errorsPassword", passwordViolations);
             }
         }
-
-        if (user.getRoles().contains("ROLE_ADMIN")) {
-            model.addAttribute("user", user);
-        } else {
-            model.addAttribute("user", editUser);
-        }
+        
+        model.addAttribute("errors", violations);
+        model.addAttribute("user", user);
 
         return "userEdit";
 
     }
 
-    @PostMapping("userEdit")
-    public String editUserAction(String[] roleIdList, Boolean enabled, Integer id) {
-        User user = userDao.getUserById(id);
-        if (enabled != null) {
-            user.setEnabled(enabled);
-        } else {
-            user.setEnabled(false);
-        }
-
-        Set<Role> roleList = new HashSet<>();
-        for (String roleId : roleIdList) {
-            Role role = roleDao.getRoleById(Integer.parseInt(roleId));
-            roleList.add(role);
-        }
-        user.setRoles(roleList);
+    @PostMapping(value = "userEdit")
+    public String editUserAction(String email, Integer emailId) {
+        User user = userDao.getUserById(emailId);
+        user.setEmail(email);
         userDao.updateUser(user);
 
         return "redirect:/user";
     }
 
-    @PostMapping("editPassword")
-    public String editPassword(Integer id, String password, String confirmPassword) {
-        User user = userDao.getUserById(id);
+    /**
+     * The userId is listed a few times on the associated HTML page and it is
+     * easier to label the id's different names.
+     *
+     * @param passwordId
+     * @param password
+     * @param confirmPassword
+     * @return
+     */
+    @PostMapping(value = "/editPassword")
+    public String editPassword(Integer passwordId, String password, String confirmPassword) {
+        User user = userDao.getUserById(passwordId);
 
         if (password.equals(confirmPassword)) {
-            user.setPassword(encoder.encode(password));
-            userDao.updateUser(user);
-            return "redirect:/user";
+            Validator validate = Validation.buildDefaultValidatorFactory().getValidator();
+            passwordViolations = validate.validate(user);
+
+            if (violations.isEmpty()) {
+                user.setPassword(encoder.encode(password));
+                userDao.updateUser(user);
+                return "redirect:/user";
+            } else {
+                return "userEdit";
+            }
 
         } else {
             return "redirect:/userEdit?error=1";
         }
     }
 
-    @GetMapping("userDelete")
+    @PostMapping(value = "/userEditRoles")
+    public String userEditRoles(Integer userId, String[] roleIdList) {
+        User user = userDao.getUserById(userId);
+        Set<Role> roleList = new HashSet<>();
+
+        if (roleIdList == null) {
+            Role role = roleDao.getRoleByRole("ROLE_USER");
+            roleList.add(role);
+        } else {
+            for (String roleId : roleIdList) {
+                Role role = roleDao.getRoleById(Integer.parseInt(roleId));
+                roleList.add(role);
+            }
+        }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User loggedIn = userDao.getUserByLogin(authentication.getName());
+
+        boolean editSelf = loggedIn.equals(user);
+
+        user.setRoles(roleList);
+        userDao.updateUser(user);
+
+        if (editSelf) {
+            return "redirect:/user";
+        } else {
+            return "redirect:/usersAll";
+        }
+    }
+
+    @PostMapping(value = "/userEnableToggle")
+    public String userEnableToggle(Integer userId) {
+        User user = userDao.getUserById(userId);
+        boolean status = user.isEnabled();
+        user.setEnabled(!status);
+
+        userDao.updateUser(user);
+
+        return "redirect:/usersAll";
+    }
+
+    @PostMapping(value = "/userDelete")
     public String deleteUser(Integer id) {
         userDao.deleteUserById(id);
 
-        return "redirect:/userAll";
+        return "redirect:/usersAll";
     }
 
 }

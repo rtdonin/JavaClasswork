@@ -11,7 +11,6 @@ import java.util.Set;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class User {
@@ -19,16 +18,14 @@ public class User {
     private int id;
 
     @NotBlank
+    @Size(max = 25, message = "Username is too long.")
     private String username;
 
     @NotEmpty(message = "Password may not be empty.")
     @Size(max = 100, message = "Password is too long.")
-    @Pattern(regexp = "[A-Za-z0-9!@#$%^&*._-]", message = "Can only include "
-            + "alphanumeric characters and special characters !@#$%^&*.-_ .")
     private String password;
+    
     private boolean enabled;
-
-    @NotEmpty
     private Set<Role> roles;
     private BufferedImage img;
 

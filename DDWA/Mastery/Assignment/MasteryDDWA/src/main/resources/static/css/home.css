@@ -2,6 +2,12 @@ body {
     padding: 5% 10%;
 }
 
-header {
-    
+article.blog-listings {
+    max-height: 9em;
+    max-width: 500px;
+    overflow: hidden;
+}
+
+div.card-header > h5 > button {
+    color: black;
 }

@@ -13,7 +13,7 @@
     <script src="https://cdn.tiny.cloud/1/sktj216tt3a5c4ue3z7dck8gkfz01in2m25hz7hlpnmr4lsk/tinymce/5/tinymce.min.js"
         referrerpolicy="origin"></script>
     <link rel="stylesheet" th:href="@{/css/home.css}">
-    <title th:text="${post.title} + ' Edit '"></title>
+    <title>Edit Post</title>
 </head>
 
 <body>
@@ -38,17 +38,23 @@
 
         <div class="btn" sec:authorize="isAnonymous()"><a href="/login">Login</a></div>
         <div class="btn" sec:authorize="isAuthenticated()"><a href="/user">My Account</a></div>
-
+        <div class="btn" sec:authorize="isAuthenticated()">
+            <a>
+                <form class="form-inline" method="POST" action="/logout">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button class="btn btn-link" id="submit" type="submit">Logout</button>
+                </form>
+            </a>
+        </div>
     </nav>
 
-    <main>
+    <main class = "container m-2">
         <div class="col-12 m-1 text-center" th:if="${!errors.isEmpty()}">
             <p class="alert alert-danger" th:each="error : ${errors}" th:text="${error.message}">Error message</p>
         </div>
+        
         <form action="postEdit" method="POST">
-            <input type="hidden" 
-            th:name="${_csrf.parameterName}" 
-            th:value="${_csrf.token}"/>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <div class="form-group row">
                 <label for="title" class="col-3 col-form-label">Title</label>
                 <div class="col-9">
@@ -97,9 +103,9 @@
             </div>
             <div class="form-group row">
                 <label for="hashtags" class="col-3 col-form-label">Hashtags</label>
-                <select multiple th:each="hashtag : ${post.hashtags}" data-role = "tagsinput">
-                    <option th:value="${hashtag.id}" th:text="|#${hashtags.tag}|"></option>
-                </select>
+                <div class="col-9">
+                    <input class="form-control" type="text" id="hashtags" name="hashtags" th:value="${hashtags}" />
+                </div>
             </div>
             <input type="hidden" name="id" th:value="${post.id}" />
             <button type="submit" class="btn btn-primary">Save Changes</button>

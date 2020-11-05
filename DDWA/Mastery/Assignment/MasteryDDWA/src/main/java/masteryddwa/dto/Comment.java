@@ -9,18 +9,18 @@ package masteryddwa.dto;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class Comment {
     private int id;
     
-    @NotBlank
+    @NotNull
     private User user;
     
     @NotBlank
-    @Pattern(regexp="[^<,>]",message="Please do not use HTML tags.")
-    @Size(max = 255, message="Hashtag can not be longer than 255 characters.")
+    @Size(max = 255, message="Comment can not be longer than 255 characters.")
     private String text;
     
     private LocalDateTime ldt;

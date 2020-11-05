@@ -28,7 +28,7 @@ CREATE TABLE `UserRole`(
 
 CREATE TABLE `Post`(
 	`postId`	INT PRIMARY KEY AUTO_INCREMENT,
-    `title`		VARCHAR(20) NOT NULL,
+    `title`		VARCHAR(255) NOT NULL,
     `static`	BOOL,
     `enabled`	BOOL DEFAULT FALSE,
     `body`		TEXT NOT NULL,
@@ -93,9 +93,12 @@ insert into comment (text, userId, postId) values ("fjgherubuiirragrvrnhjadgvgnh
 
 SELECT
 	u.username,
+    u.enabled,
     r.`name`
 FROM `User` u
 JOIN `UserRole` ur
 	ON u.userId = ur.userId
 JOIN `Role` r
 	ON r.roleId = ur.roleId;
+
+Insert into userRole (userId, roleId) values (1, 1);

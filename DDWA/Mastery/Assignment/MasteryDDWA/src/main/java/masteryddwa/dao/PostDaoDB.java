@@ -119,9 +119,11 @@ public class PostDaoDB implements PostDao {
             final String GET_POSTS_BY_USER
                     = "SELECT * "
                     + "FROM Post "
-                    + "WHERE userId = ?;";
+                    + "WHERE userId = ?"
+                    + "     AND enabled =  TRUE"
+                    + "     AND ? BETWEEN start AND end;";
 
-            List<Post> posts = jdbc.query(GET_POSTS_BY_USER, new PostMapper(), userId);
+            List<Post> posts = jdbc.query(GET_POSTS_BY_USER, new PostMapper(), userId, LocalDate.now());
 
             return setUserListPost(setListHashtags(posts));
 
@@ -138,9 +140,11 @@ public class PostDaoDB implements PostDao {
                     + "FROM Post p "
                     + "JOIN PostHashtag ph "
                     + "     ON p.postId = ph.postId "
-                    + "WHERE ph.hashtagId = ?;";
+                    + "WHERE ph.hashtagId = ?"
+                    + "     AND p.enabled =  TRUE"
+                    + "     AND ? BETWEEN p.start AND p.end;";
 
-            List<Post> posts = jdbc.query(GET_HASHTAG_POSTS, new PostMapper(), hashtagId);
+            List<Post> posts = jdbc.query(GET_HASHTAG_POSTS, new PostMapper(), hashtagId, LocalDate.now());
 
             return setUserListPost(setListHashtags(posts));
 

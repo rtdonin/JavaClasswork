@@ -15,6 +15,7 @@ import masteryddwa.dto.Role;
 import masteryddwa.dto.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -32,7 +33,9 @@ public class UserDaoDB implements UserDao {
 //        SerialBlob image = convertImageToByteArray(user.getImg());
 //        final String ADD_USER = "INSERT INTO User (username, email, password, enabled, image VALUES (?,?,?,?,?);";
 
-        final String ADD_USER = "INSERT INTO User (username, email, password, enabled) VALUES (?,?,?,?);";
+        try {
+            final String ADD_USER = "INSERT INTO User (username, email, password, enabled) VALUES (?,?,?,?);";
+
         jdbc.update(ADD_USER, user.getUsername(), user.getEmail(), user.getPassword(), user.isEnabled());//, image);
 
         int newId = jdbc.queryForObject("SELECT LAST_INSERT_ID();", Integer.class);
@@ -44,6 +47,9 @@ public class UserDaoDB implements UserDao {
         }
 
         return user;
+        } catch (DuplicateKeyException ex) {
+            return null;
+        }
     }
 
     @Override
@@ -118,11 +124,11 @@ public class UserDaoDB implements UserDao {
         int userId = user.getId();
 //        SerialBlob image = convertImageToByteArray(user.getImg());
 
-        final String UPDATE_USER = "UPDATE User SET username = ?, password = ?, enabled = ? " + /*, image = ? */ "WHERE userId = ?;";
+        final String UPDATE_USER = "UPDATE User SET email = ?, password = ?, enabled = ? " + /*, image = ? */ "WHERE userId = ?;";
         final String DELETE_USER_ROLE = "DELETE FROM UserRole WHERE userId = ?;";
         final String INSERT_USER_ROLE = "INSERT INTO UserRole(userId, roleId) VALUES(?,?)";
 
-        jdbc.update(UPDATE_USER, user.getUsername(), user.getPassword(), user.isEnabled(), /*image, */ userId);
+        jdbc.update(UPDATE_USER, user.getEmail(), user.getPassword(), user.isEnabled(), /*image, */ userId);
         jdbc.update(DELETE_USER_ROLE, userId);
 
         for (Role role : user.getRoles()) {

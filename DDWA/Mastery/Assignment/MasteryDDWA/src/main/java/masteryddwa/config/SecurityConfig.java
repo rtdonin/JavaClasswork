@@ -36,19 +36,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers("/usersAll").hasRole("ADMIN")
+                .antMatchers("/usersAll", "/userEditRoles", "/userEnableToggle", "/userDelete").hasRole("ADMIN")
+                .antMatchers("/hashtagsAll", "/hashtagAdd", "/hashtagDelete").hasRole("ADMIN")
+                .antMatchers("/postDeleteExpired", "/postDelete").hasRole("ADMIN")
                 .antMatchers("/postsAll", "/postEdit", "/postAdd").hasAnyRole("EMPLOYEE")
-                .antMatchers("/user", "/userEdit", "/commentAdd").hasAnyRole("USER")
-                .antMatchers("/", "/home", "/post", "/userAdd").permitAll()
-                .antMatchers("/css/**").permitAll()
+                .antMatchers("/user", "/userEdit", "/commentAdd", "/editPassword").hasAnyRole("USER")
+                .antMatchers("/", "/home", "/post", "/userAdd", "/postsByHashtag", "/postsByCreator").permitAll()
+                .antMatchers("/css/**", "/js/**").permitAll()
                 .anyRequest().hasRole("ADMIN, EMPLOYEE, USER")
             .and()
-            .formLogin()
+                .formLogin()
                 .loginPage("/login")
                 .failureUrl("/login?login_error=1")
                 .permitAll()
             .and()
-            .logout()
+                .logout()
                 .logoutSuccessUrl("/")
                 .permitAll();
     }
