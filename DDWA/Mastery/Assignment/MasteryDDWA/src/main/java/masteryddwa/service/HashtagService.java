@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import masteryddwa.dao.HashtagDao;
 import masteryddwa.dto.Hashtag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,7 +39,7 @@ public class HashtagService {
                 h.setTag(s);
                 try {
                     h = hashtagDao.addHashtag(h);
-                } catch (Exception ex) {
+                } catch (DuplicateKeyException ex) {
                     h = hashtagDao.getAllHashtagByTag(s);
                 }
 

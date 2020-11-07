@@ -18,10 +18,12 @@ import javax.validation.Validator;
 import masteryddwa.dao.CommentDao;
 import masteryddwa.dao.HashtagDao;
 import masteryddwa.dao.PostDao;
+import masteryddwa.dao.RoleDao;
 import masteryddwa.dao.UserDao;
 import masteryddwa.dto.Comment;
 import masteryddwa.dto.Hashtag;
 import masteryddwa.dto.Post;
+import masteryddwa.dto.Role;
 import masteryddwa.dto.User;
 import masteryddwa.service.HashtagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,9 @@ public class PostController {
     private HashtagDao hashtagDao;
 
     @Autowired
+    private RoleDao roleDao;
+
+    @Autowired
     private HashtagService hashtagService;
 
     Set<ConstraintViolation<Post>> postViolations = new HashSet<>();
@@ -60,7 +65,8 @@ public class PostController {
 
         model.addAttribute("blogs", blogs);
         model.addAttribute("statics", statics);
-
+        commentViolations = new HashSet<>();
+        
         return "index";
     }
 
@@ -75,6 +81,8 @@ public class PostController {
         model.addAttribute("statics", statics);
         model.addAttribute("userId", user.getId());
 
+        postViolations = new HashSet<>();
+
         return "postsAll";
     }
 
@@ -88,11 +96,13 @@ public class PostController {
         model.addAttribute("hashtag", hashtag);
         model.addAttribute("blogs", blogs);
         model.addAttribute("statics", statics);
+        
+        commentViolations = new HashSet<>();
 
         return "postsByHashtag";
     }
 
-    @GetMapping("/postByCreator")
+    @GetMapping("/postsByCreator")
     public String postsByCreator(Integer userId, Model model) {
         List<Post> blogs = postDao.getAllPostsByUserId(userId);
         List<Post> statics = postDao.getAllEnabledStatics();
@@ -102,6 +112,8 @@ public class PostController {
         model.addAttribute("blogs", blogs);
         model.addAttribute("statics", statics);
         model.addAttribute("user", user);
+        
+        commentViolations = new HashSet<>();
 
         return "postsByCreator";
     }
@@ -117,14 +129,13 @@ public class PostController {
         model.addAttribute("comments", comments);
         model.addAttribute("errors", commentViolations);
 
-        commentViolations = new HashSet<>();
+        postViolations = new HashSet<>();
 
         return "post";
     }
 
     @GetMapping("postAdd")
     public String postAdd(Model model) {
-        postViolations = new HashSet<>();
 
         List<Post> statics = postDao.getAllEnabledStatics();
         model.addAttribute("statics", statics);
@@ -155,7 +166,7 @@ public class PostController {
             post.setStart(null);
         }
         try {
-            post.setEnd(LocalDate.parse(start, DateTimeFormatter.ISO_DATE));
+            post.setEnd(LocalDate.parse(end, DateTimeFormatter.ISO_DATE));
         } catch (DateTimeParseException ex) {
             post.setEnd(null);
         }
@@ -166,11 +177,9 @@ public class PostController {
         if (postViolations.isEmpty()) {
             postDao.addPost(post);
             return "redirect:/post?id=" + post.getId();
-        } else {
-
-            return "postAdd";
         }
-
+        
+        return "redirect:/postAdd";
     }
 
     @PostMapping(value = "/commentAdd")
@@ -186,18 +195,15 @@ public class PostController {
         commentViolations = validate.validate(comment);
 
         if (commentViolations.isEmpty()) {
+            
             commentDao.addComment(comment);
-            return "redirect:/post?id=" + postId;
-        } else {
-
-            return "redirect:/post?id=" + postId;
         }
-
+        
+        return "redirect:/post?id=" + postId;
     }
 
     @GetMapping("postEdit")
     public String postEdit(Integer id, Model model) {
-        postViolations = new HashSet<>();
         List<Post> statics = postDao.getAllEnabledStatics();
         Post post = postDao.getPostById(id);
         String hashtags = hashtagService.stringifyHashtags(post.getHashtags());
@@ -211,23 +217,30 @@ public class PostController {
     }
 
     @PostMapping(value = "/postEdit")
-    public String postEditAction(Integer id, String title, boolean enabled,
-            boolean staticPost, String text, String start,
-            String end, String hashtags, HttpServletRequest request) {
+    public String postEditAction(Integer id, String title, Boolean enabled,
+            Boolean staticPost, String text, String start,
+            String end, String hashtags) {
 
         List<Hashtag> tags = hashtagService.getHashtags(hashtags);
-
+        
         Post post = postDao.getPostById(id);
-        post.setStaticPost(staticPost);
         post.setBody(text);
         post.setStart(LocalDate.parse(start, DateTimeFormatter.ISO_DATE));
         post.setEnd(LocalDate.parse(end, DateTimeFormatter.ISO_DATE));
         post.setTitle(title);
         post.setHashtags(tags);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (staticPost != null) {
+            post.setStaticPost(staticPost);
+        } else {
+            post.setStaticPost(false);
+        }
 
-        if (authentication.getCredentials() == "ROLE_ADMIN") {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userDao.getUserByLogin(authentication.getName());
+        Role role = roleDao.getRoleByRole("ROLE_ADMIN");
+
+        if (user.getRoles().contains(role) && enabled != null) {
             post.setEnabled(enabled);
         } else {
             post.setEnabled(false);
@@ -241,7 +254,7 @@ public class PostController {
             return "redirect:/post?id=" + id;
         }
 
-        return "postEdit";
+        return "redirect:/postEdit?id=" + id;
     }
 
     @PostMapping(value = "/postDelete")
@@ -251,7 +264,7 @@ public class PostController {
         return "redirect:/postsAll";
     }
 
-    @PostMapping(value = "/postDeleteExpired")
+    @GetMapping("postDeleteExpired")
     public String postDelete() {
         postDao.deleteExpiredPosts();
 

@@ -52,8 +52,8 @@
         <div th:each="hashtag : ${post.hashtags}">
             <a th:href="@{/postsByHashtag(hashtagId=${hashtag.id})}" th:text=" '#' + ${hashtag.tag}|"></a>
         </div>
-        <h4>Written by <span th:href="@{/postsByCreator(userId=${post.user.id})}"
-                th:text="${post.user.username}"></span></h4>
+        <h4>Written by <a th:href="@{/postsByCreator(userId=${post.user.id})}"
+                th:text="${post.user.username}"></a></h4>
         <div sec:authorize="hasRole('ROLE_ADMIN')">
             <a href="#" th:href="@{/postEdit(id=${post.id})}">Edit</a>
         </div>
@@ -67,13 +67,13 @@
         </div>
     </section> <!-- END OF COMMENTS-->
 
-    <section th:if="${comments.isEmpty()}" sec:authorize="isAnonymous()">
-        <h3>Log in to leave a comment!</h3>
-    </section> <!-- END OF COMMENTS-->
+    <section sec:authorize="isAnonymous()">
+        <h3>Log in to leave a comment.</h3>
+    </section> <!-- Tells you to log in -->
 
     <section th:if="${comments.isEmpty()}" sec:authorize="isAuthenticated()">
-        <h3>Be the first to leave a comment!</h3>
-    </section> <!-- END OF COMMENTS-->
+        <h3>Be the first to leave a comment.</h3>
+    </section> <!-- Leave a comment -->
 
     <section sec:authorize="isAuthenticated()">
         <div class="col-12 m-1 text-center" th:if="${!errors.isEmpty()}">

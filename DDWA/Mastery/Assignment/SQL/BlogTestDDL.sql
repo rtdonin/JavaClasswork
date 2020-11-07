@@ -10,7 +10,7 @@ CREATE TABLE `Role`(
 
 CREATE TABLE `User`(
 	`userId`	INT PRIMARY KEY AUTO_INCREMENT,
-    `email`		VARCHAR(30) UNIQUE NOT NULL,
+    `email`		VARCHAR(100) UNIQUE NOT NULL,
     `username`	VARCHAR(25) UNIQUE NOT NULL,
     `password`	VARCHAR(100) NOT NULL,
     `enabled`	BOOL -- ,

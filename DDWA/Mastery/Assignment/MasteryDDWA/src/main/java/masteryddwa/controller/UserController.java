@@ -42,8 +42,6 @@ public class UserController {
     PasswordEncoder encoder;
 
     Set<ConstraintViolation<User>> violations = new HashSet<>();
-    Set<ConstraintViolation<User>> passwordViolations = new HashSet<>();
-    boolean usernameViolations = false;
 
     @GetMapping("usersAll")
     public String usersAll(Model model) {
@@ -60,29 +58,50 @@ public class UserController {
         model.addAttribute("statics", statics);
         model.addAttribute("userId", user.getId());
 
-        violations = new HashSet<>();
-        passwordViolations = new HashSet<>();
+        violations.clear();
 
         return "usersAll";
     }
 
     @GetMapping("userAdd")
-    public String userAdd(Model model) {
+    public String userAdd(Model model, Integer error) {
         List<Role> roles = roleDao.getAllRoles();
         List<Post> statics = postDao.getAllEnabledStatics();
 
         model.addAttribute("roles", roles);
         model.addAttribute("statics", statics);
-        model.addAttribute("errors", violations);
-        model.addAttribute("errorsUsername", usernameViolations);
+        model.addAttribute("errorSet", violations);
 
-//        violations = new HashSet<>();
-//        usernameViolations = true;
+        if (error != null) {
+            String message = "";
+
+            switch(error) {
+                case 2: message = "Username, password, and email can not be blank.";
+                    break;
+                case 3: message = "Username is taken. Select a different username.";
+                    break;
+                case 4: message = "Username is too long.";
+                    break;
+                default: message = "Could not save information please try again.";
+            }
+
+            model.addAttribute("errors", message);
+        }
+
         return "userAdd";
     }
 
     @PostMapping(value = "userAdd")
     public String userAdd(String username, String password, String email) {
+
+        if (password.isBlank() || username.isBlank() || email.isBlank()) {
+            return "redirect:/userAdd?error=2";
+        }
+
+        if (username.length() > 100) {
+            return "redirect:/userAdd?error=4";
+        }
+
         User user = new User();
         user.setUsername(username);
         user.setPassword(encoder.encode(password));
@@ -104,19 +123,19 @@ public class UserController {
             User loggedIn = userDao.getUserByLogin(authentication.getName());
 
             if (user == null) {
-                usernameViolations = true;
-                return "userAdd";
+
+                return "redirect:/userAdd?error=3";
             }
-            
+
             if (loggedIn != null) {
                 return "redirect:/usersAll";
             }
-            return "redirect:/login";
 
+            return "redirect:/login";
         }
         
         return "userAdd";
-       
+
     }
 
     @GetMapping("user")
@@ -129,6 +148,8 @@ public class UserController {
 
         model.addAttribute("statics", statics);
         model.addAttribute("userId", user.getId());
+
+        violations.clear();
 
         return "user";
     }
@@ -151,13 +172,13 @@ public class UserController {
 
         if (error != null) {
             if (error == 1) {
-                model.addAttribute("errorPassword", "Passwords did not match, password was not updated.");
-            } else {
-                model.addAttribute("errorsPassword", passwordViolations);
+                model.addAttribute("errors", "Passwords did not match, password was not updated.");
+            } else if (error == 2) {
+                model.addAttribute("errors", "Password can not be blank.");
             }
         }
-        
-        model.addAttribute("errors", violations);
+
+        model.addAttribute("errorEmail", violations);
         model.addAttribute("user", user);
 
         return "userEdit";
@@ -168,9 +189,16 @@ public class UserController {
     public String editUserAction(String email, Integer emailId) {
         User user = userDao.getUserById(emailId);
         user.setEmail(email);
-        userDao.updateUser(user);
 
-        return "redirect:/user";
+        Validator validate = Validation.buildDefaultValidatorFactory().getValidator();
+        violations = validate.validate(user);
+
+        if (violations.isEmpty()) {
+            userDao.updateUser(user);
+            return "redirect:/user";
+        }
+
+        return "redirect:/userEdit?userId=" + emailId;
     }
 
     /**
@@ -186,20 +214,17 @@ public class UserController {
     public String editPassword(Integer passwordId, String password, String confirmPassword) {
         User user = userDao.getUserById(passwordId);
 
-        if (password.equals(confirmPassword)) {
-            Validator validate = Validation.buildDefaultValidatorFactory().getValidator();
-            passwordViolations = validate.validate(user);
+        if (password.isBlank()) {
+            return "redirect:/userEdit?userId=" + passwordId + "&error=2";
 
-            if (violations.isEmpty()) {
-                user.setPassword(encoder.encode(password));
-                userDao.updateUser(user);
-                return "redirect:/user";
-            } else {
-                return "userEdit";
-            }
+        } else if (password.equals(confirmPassword)) {
+            user.setPassword(encoder.encode(password));
+            userDao.updateUser(user);
+            return "redirect:/user";
 
         } else {
-            return "redirect:/userEdit?error=1";
+            return "redirect:/userEdit?userId=" + passwordId + "&error=1";
+
         }
     }
 

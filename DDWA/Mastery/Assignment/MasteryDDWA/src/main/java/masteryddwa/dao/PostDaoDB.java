@@ -159,12 +159,12 @@ public class PostDaoDB implements PostDao {
 
         final String EDIT_POST
                 = "UPDATE Post "
-                + "SET title = ?, enabled = ?, body = ?, start = ?, end = ? "
+                + "SET title = ?, enabled = ?, static = ?, body = ?, start = ?, end = ? "
                 + "WHERE postId = ?;";
         final String DELETE_ALL_HASHTAGS = "DELETE FROM PostHashtag WHERE postId = ?;";
         final String ADD_HASHTAGS = "INSERT INTO PostHashtag (postId, hashtagId) VALUES (?,?);";
 
-        jdbc.update(EDIT_POST, post.getTitle(), post.isEnabled(), post.getBody(), Date.valueOf(post.getStart()), Date.valueOf(post.getEnd()), postId);
+        jdbc.update(EDIT_POST, post.getTitle(), post.isEnabled(), post.isStaticPost(), post.getBody(), Date.valueOf(post.getStart()), Date.valueOf(post.getEnd()), postId);
         jdbc.update(DELETE_ALL_HASHTAGS, postId);
 
         for (Hashtag h : post.getHashtags()) {

@@ -10,7 +10,6 @@ import java.util.Objects;
 import java.util.Set;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 public class User {
@@ -21,15 +20,13 @@ public class User {
     @Size(max = 25, message = "Username is too long.")
     private String username;
 
-    @NotEmpty(message = "Password may not be empty.")
-    @Size(max = 100, message = "Password is too long.")
     private String password;
-    
     private boolean enabled;
     private Set<Role> roles;
     private BufferedImage img;
 
     @Email
+    @Size(max = 100, message = "Email is too long.")
     private String email;
 
     public User() {

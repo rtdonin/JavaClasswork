@@ -10,7 +10,7 @@ CREATE TABLE `Role`(
 
 CREATE TABLE `User`(
 	`userId`	INT PRIMARY KEY AUTO_INCREMENT,
-    `email`		VARCHAR(30) UNIQUE NOT NULL,
+    `email`		VARCHAR(100) UNIQUE NOT NULL,
     `username`	VARCHAR(25) UNIQUE NOT NULL,
     `password`	VARCHAR(100) NOT NULL,
     `enabled`	BOOL -- ,
@@ -86,19 +86,21 @@ bgeh jrgb herg kjhrehe rherbgeh jrgb her gkjhrehe rherb gehjrgb hergkj
 hreher herbg ehjrgbh ergkj hreher herbgeh jrgbhergkjhhreh e rherbge hjr gbher gkjhrehe rherbgehj rgbh 
 ergkjhreher herb ge hjr gbh er g kj hreher herbge hjrgbhe rgkjh reherher 
 bgeh jrgb herg kjhrehe rherbgeh jrgb her gkjhrehe rherb gehjrgb hergkj 
-hreher herbg ehjrgbh ergkj hreher herbgeh jrgbhergkjh", '2020-10-05', '2100-10-05', 1),
-("static1", 1, 1, "furhfurdfgyufebuebgfhugfhldfjhjdhdgsuiyberygkjxfvhdafgfyEWGYUWGJSDHG HDSGFYGDYFBHGGHCXGFYPd", '2020-10-05', '2100-10-05', 1);
+hreher herbg ehjrgbh ergkj hreher herbgeh jrgbhergkjh", '2015-10-05', '2015-10-05', 1),
+("static1", 1, 1, "furhfurdfgyufebuebgfhugfhldfjhjdhdgsuiyberygkjxfvhdafgfyEWGYUWGJSDHG HDSGFYGDYFBHGGHCXGFYPd", '2015-10-05', '2015-10-05', 1);
 
 insert into comment (text, userId, postId) values ("fjgherubuiirragrvrnhjadgvgnh;a", 1, 1);
 
 SELECT
 	u.username,
-    u.enabled,
+    u.`password`,
     r.`name`
 FROM `User` u
 JOIN `UserRole` ur
 	ON u.userId = ur.userId
 JOIN `Role` r
 	ON r.roleId = ur.roleId;
+
+SELECT * FROM Post;
 
 Insert into userRole (userId, roleId) values (1, 1);

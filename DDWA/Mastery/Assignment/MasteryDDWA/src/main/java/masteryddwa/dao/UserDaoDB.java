@@ -139,9 +139,12 @@ public class UserDaoDB implements UserDao {
     @Override
     public void deleteUserById(int id) {
         final String DELETE_USER_ROLE = "DELETE FROM UserRole WHERE userId = ?;";
+        final String DELETE_USER_COMMENT = "DELETE FROM Comment WHERE userId = ?";
         final String DELETE_USER_POST = "DELETE FROM Post WHERE userId = ?;";
         final String DELETE_USER = "DELETE FROM User WHERE userId = ?;";
+        
         jdbc.update(DELETE_USER_ROLE, id);
+        jdbc.update(DELETE_USER_COMMENT, id);
         jdbc.update(DELETE_USER_POST, id);
         jdbc.update(DELETE_USER, id);
     }
