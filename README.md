@@ -1,3 +1,3 @@
 # JavaClasswork
 
-All assignments are property of the software guild.
+All assignments and exercises were completed as part of the Software Guild Java Full Stack Bootcamp.
